@@ -62,7 +62,7 @@
         <!-- <h4 class="nrml-head" ng-if="loginData.loginAccessLevel == '4'">My Distribution Network</h4> -->
 
         <!-- <h4 class="nrml-head" ng-if="dashboardData['drCountData'].length > 0 && !loginData.channelSalesLogin">My Leads</h4> -->
-        <div class="total-count" ng-if="dashboardData['drCountData'].length > 0 && !loginData.channelSalesLogin">
+        <div class="total-count" ng-if="dashboardData['drCountData'].length > 0 && !loginData.channelSalesLogin" >
             <a ng-click = "gotoDrPage(row.type_name)"  ng-repeat="row in dashboardData['drCountData']">
                 <p>{{row.typeCount}}</p>
                 <span>{{row.typeName}}</span>
