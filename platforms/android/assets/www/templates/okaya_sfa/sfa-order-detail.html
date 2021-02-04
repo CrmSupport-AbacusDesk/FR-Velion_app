@@ -1,0 +1,216 @@
+<ion-view view-title="Order Detail">
+    
+    <ion-nav-buttons side="left">
+        <a ng-click = "goToBackPageHandler()" class="cs-backbtn button button-icon icon ion-android-arrow-back font18 fff"></a>
+    </ion-nav-buttons>
+    
+    <ion-nav-buttons side="right" class="custom-right-btn">
+        
+        <div class="right-nav-btn nav-search" ng-if="orderDetail.created_by==loginData.loginId && orderDetail.order_status=='Pending'">
+            <a ng-click="edit_order(orderDetail.id,orderDetail)" menu-toggle="left"><i class="material-icons">edit</i></a>
+        </div>
+        
+    </ion-nav-buttons>
+    
+    <ion-content>
+        <div class="coman-list clrd-bg margin0 border-radius box-shadow-none">
+            <div class="center-item">
+                <div class="cs-icon">{{orderDetail.dr_name[0] ? orderDetail.dr_name[0] : '--'}}</div>
+                <div class="cs-content">
+                    <p>{{orderDetail.dr_name ? orderDetail.dr_name : 'N/A'}}</p>
+                    <span>{{orderDetail.dr_type_name ? orderDetail.dr_type_name : 'N/A'}}</span>
+                    <a class="dialer phone" href="tel: {{orderDetail.contact_mobile_no}}" ng-show="orderDetail.dr_contact_mobile_no">
+                        <i class="material-icons">phone</i> 
+                        {{orderDetail.dr_contact_mobile_no}}
+                    </a>
+                </div>
+                <!-- <a ng-if="orderDetail.contact_mobile_no"  class="dialer"><i class="material-icons">call</i></a> -->
+            </div>
+            
+            <div class="pdlr">
+                <div class="bdr-field">
+                    <span>Address</span>
+                    <p>{{orderDetail.dr_street}} {{orderDetail.dr_state_name ? orderDetail.dr_state_name:'N/A'}} {{orderDetail.dr_district_name ? ', '+orderDetail.dr_district_name : ''}} {{orderDetail.dr_city ? ', '+orderDetail.dr_city : ''}} {{orderDetail.dr_pincode ? ', '+orderDetail.dr_pincode : ''}}</p>
+                </div>
+            </div>
+            <div ng-show="orderDetail.order_remarks" class="pdlr">
+                <div class="bdr-field">
+                    <span>Remark</span>
+                    <p>{{orderDetail.order_remarks}}</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="cs-heading1 mb5">
+            <p>Order Information</p>
+        </div>
+        
+        <div class="pd-left-right16">
+            
+            <div class="cs-flex">
+                <div class="bdr-field wp100">
+                    <span>Date & Created By</span>
+                    <p>{{orderDetail.dateCreatedInFormat}} - {{orderDetail.created_by_name}}</p>
+                </div>
+                <div class="bdr-field" style="min-width: 90px; width: 90px;">
+                    <span>Order Type</span>
+                    <p>{{orderDetail.payment_type}}</p>
+                </div>
+            </div>
+            <div class="cs-flex" ng-if="orderDetail.order_type == 'secondary'">
+                <div class="bdr-field wp100">
+                    <span>Distributor Info</span>
+                    <p>{{orderDetail.disp_dr_name}}  {{orderDetail.disp_mobile ? '/ +91'+orderDetail.disp_mobile : ''}}</p>
+                </div>
+            </div>
+            
+            <div class="cs-flex">
+                
+                <div class="bdr-field wp100 " ng-repeat="user in orderDetail.approval" ng-class="{'pending-bg':user.status=='Pending','approved-bg':user.status=='Approved','reject-bg':user.status=='Reject'}">
+                    <span>{{user.designation}} Status</span>
+                    <p>{{user.approver_name}} / {{user.status}}</p>
+                    <!-- <a class="fix-icon-btn"><i class="material-icons">create</i></a> -->
+                </div>
+            </div>
+            
+            <!--  -->
+            <div class="cs-flex">
+                <div class="bdr-field wp100 mb0" ng-if="orderDetail.order_status == 'Reject'">
+                    <div class="df">
+                        <span>Reason Information</span>
+                        <span class="date-bg">12 Jan 2020</span>
+                    </div>
+                    <p>{{orderDetail.reason_reject}}</p>
+                </div>
+                
+                
+            </div>
+            
+            
+            
+            <!-- <div class="summary-table">
+                <table>
+                    <tr>
+                        <td class="w130">Total Item</td>
+                        <td class="text-right" style="font-size: 14px;">{{orderDetail.item_count}}</td>
+                    </tr>
+                    <tr>
+                        <td>Sub Total</td>
+                        <td class="text-right" style="font-size: 14px;">Rs. {{orderDetail.sub_total}}</td>
+                    </tr>                                       
+                    <tr>
+                        <td>Discount Amount</td>
+                        <td class="text-right" style="font-size: 14px;">Rs. {{orderDetail.dis_amt}}</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>Pre Tax Total</td>
+                        <td class="text-right" style="font-size: 14px;">{{orderDetail.item_total}}</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>GST Amount</td>
+                        <td class="text-right" style="font-size: 14px;">Rs. {{(orderDetail.igst_amt+orderDetail.sgst_amt+orderDetail.cgst_amt)}}</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>Final Amount </td>
+                        <td class="text-right" style="font-size: 14px;">Rs. {{orderDetail.net_total}}</td>
+                    </tr>
+                </table>
+            </div> -->
+            
+        </div>
+        
+        <div class="cs-heading1" style="margin-bottom: -10px;">
+            <p>Item Information</p>
+        </div>
+        
+        <div ng-repeat="row in orderDetail.itemData" class="coman-list">
+            <div class="center-item">
+                <div class="cs-content">
+                    <p>{{row.category}}, {{row.sub_category}}, {{row.product_name}}</p>
+                    <span>#{{row.product_code}}</span>
+                </div>
+            </div>
+            <div class="pdlr">
+                <div class="cs-flex">
+                    <div class="bdr-field wp100">
+                        <span>QTY</span>
+                        <p>{{row.qty}}</p>
+                    </div>
+                    <div ng-show="row.warranty" class="bdr-field wp100">
+                        <span>Warranty</span>
+                        <p>{{row.warranty ? row.warranty : '0'}}</p>
+                    </div>
+                    <!-- <div class="bdr-field wp100">
+                        <span>Rate</span>
+                        <p> &#8377;  {{row.rate}} </p>
+                    </div>
+                    <div class="bdr-field wp100">
+                        <span>Amount</span>
+                        <p>{{row.qty * row.rate}}</p>
+                    </div> -->
+                </div>
+                <!-- <div class="cs-flex">
+                    <div class="bdr-field wp100">
+                        <span>Discount</span>
+                        <p> &#8377;  {{row.dis_amt}} ({{row.dis_percent}} %) </p>
+                    </div>
+                    
+                    <div class="bdr-field wp100">
+                        <span>GST ({{row.igst_percent}} %)</span>
+                        <p>{{row.cgst_amount + row.sgst_amount + row.igst_amount}}</p>
+                    </div>
+                    <div class="bdr-field wp100">
+                        <span>Item Total</span>
+                        <p>{{row.item_net_total}}</p>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+        <div class="h70">&nbsp;</div>
+    </ion-content>
+    <div class="footer-bar">
+        <button class="edit-btn" ng-repeat="user in orderDetail.approval" ng-if="user.assign_user_id==loginData.loginId && user.status=='Pending'" ng-click="orderData.approvalId = user.approvalId;orderData.status=user.status;changeStatus()">
+            <img src="img/edit.svg" ><p>Changes Status <span>Click here to change order status</span></p>
+        </button>
+    </div>
+    <script id="add-status" type="text/ng-template">
+        <ion-modal-view style="background: rgba(0, 0, 0, 0.7);">
+            <ion-content class="padding">
+                <div class="modal-outer">
+                    <div class="modal-cs">
+                        <div class="modal-head">
+                            <h2 class="title">Status</h2>
+                            <button class="button button-clear button-primary" ng-click="data.statusModel.hide()"><i class="material-icons">clear</i></button>
+                        </div>
+                        <form>
+                            <div class="ledmd">
+                                <div class="cs-add-form">
+                                    <select class="browser-default" name="status" ng-model="orderData.status" required>
+                                        <option value="Pending">Pending</option>
+                                        <option value="Approved">Approved</option>
+                                        <option value="Reject">Reject</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="ledmd" ng-if="orderData.status=='Reject'">
+                                <div class="cs-add-form">
+                                    <div class="input-field field-input mt0">
+                                        <textarea ng-model="orderData.reason" placeholde="Reject Reason" name="reason" class="validate" style="height: 100px !important;" required></textarea>
+                                        <label for="last_name">Remark</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="sgsave">
+                                <button ng-click="orderData.orderId=orderDetail.id;saveStatus(orderDetail.id)" ng-disabled = "!orderData.status" >SUBMIT<i class="material-icons">arrow_right_alt</i></button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </ion-content>
+        </ion-modal-view>
+    </script>
+</ion-view>

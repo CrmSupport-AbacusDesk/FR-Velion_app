@@ -1,0 +1,184 @@
+<ion-view view-title="{{data.drId ? 'Update Lead' : 'Add Lead'}}">
+    <ion-nav-buttons side="left">
+        <a ng-click="goToBackPageHandler()"
+        class="cs-backbtn button button-icon icon ion-android-arrow-back font18 fff"></a>
+    </ion-nav-buttons>
+    
+    <!-- commented -->
+    <!-- <ion-nav-buttons side="right" class="custom-right-btn">
+        <div ng-click="popover.show($event)" class="right-nav-btn nav-search">
+            <a ><i class="material-icons">more_vert</i></a>
+        </div>
+    </ion-nav-buttons> -->
+    <ion-content>
+        <div class="padding16">
+            <form name="Addform" novalidate ng-submit="!Addform.$invalid && getleadAdd()">
+                <div class="cs-add-form">
+                    <div class="field-input" ng-class="{'has-error': Addform.typeId.$invalid && Addform.$submitted}">
+                        <select class="browser-default" ng-model="data.typeId" name="typeId" required>
+                        <option value="" disabled selected>Select Type <span>*</span></option>
+                        <option value="12">Dealer</option>
+                        <option value="6">Distributor</option>
+                        <option value="3">End User</option>
+                        <option value="26">Channel Partner</option>
+                        <option value="13">Retailer</option>
+                    </select>
+                </div>
+                
+                <div class="input-field field-input">
+                    <input name="companyName" ng-model="data.companyName" id="companyName" type="text"
+                    class="validate" replace="[^a-zA-Z]" with="">
+                    <label>Firm Name</label>
+                </div>
+                
+                <div class="input-field field-input"
+                ng-class="{'has-error': Addform.customerName.$invalid && Addform.$submitted}">
+                <input ng-model="data.customerName" name="customerName" id="customerName" type="text"
+                class="validate" required>
+                <label>Customer Name <span>*</span></label>
+            </div>
+            
+            <div class="input-field field-input"
+            ng-class="{'has-error': Addform.customerMobile.$invalid && Addform.$submitted}">
+            <input id="customerMobile" ng-model="data.customerMobile" type="number" name="customerMobile"
+            minlength="10" maxlength="10" limit-to="10" class="validate" string-to-number required>
+            <label>Mobile<span>*</span></label>
+            <span class="error-left relative"
+            ng-show="Addform.$submitted && Addform.customerMobile.$error.minlength">* Mobile No. Must be
+            10 Digit</span>
+        </div>
+        
+        <div class="input-field field-input"
+        ng-class="{'has-error': Addform.email.$invalid && Addform.$submitted}">
+        <input class="validate" id="email" type="email" ng-model="data.email" name="email">
+        <label>Email<span>*</span></label>
+        <span class="error-left relative"
+        ng-show="Addform.$submitted && Addform.email.$invalid && Addform.email.$error.required">*
+        Email Invalid</span>
+    </div>
+</div>
+
+<div class="cs-bg-heading padding0">
+    <h2>Address Information</h2>
+</div>
+
+<div class="cs-add-form">
+    <div class="input-field field-input"
+    ng-class="{'has-error': addressForm.pincode.$invalid && addressForm.$submitted}">
+    <input name="pincode" type="number" ng-model="data.pincode" id="pincode" class="validate"
+    limit-to="6" maxlength="6" minlength="6" string-to-number
+    ng-change="getPincodeAddess(data.pincode)" required>
+    <label class="fix-label">Pincode <span>*</span></label>
+    <span class="error-left relative"
+    ng-show="addressForm.$submitted && addressForm.pincode.$invalid && !addressForm.pincode.$error.required">*
+    Pincode Must be 6 Digit!</span>
+</div>
+
+<div class="input-field field-input"
+ng-class="{'has-error': addressForm.state_name.$invalid && addressForm.$submitted}">
+<label class="fix-label">State<span>*</span></label>
+<input name="state_name" type="text" ng-model="data.state_name" id="state_name" class="validate"
+readonly required>
+</div>
+
+<div class="input-field field-input"
+ng-class="{'has-error': addressForm.district_name.$invalid && addressForm.$submitted}">
+<label class="fix-label">District<span>*</span></label>
+<input name="district_name" ng-model="data.district_name" id="district_name" type="text"
+class="validate" readonly required>
+</div>
+
+<div class="input-field field-input"
+ng-class="{'has-error': addressForm.city.$invalid && addressForm.$submitted}">
+<label class="fix-label">City <span>*</span></label>
+<input ng-model="data.city" name="city" id="city" type="text" class="validate"
+replace="[^a-zA-Z]" with="" required>
+</div>
+
+<div class="input-field field-input"
+ng-class="{'has-error': addressForm.area.$invalid && addressForm.$submitted}">
+<textarea ng-model="data.area" name="area" style="height: 80px !important;"></textarea>
+<label class="fix-label">Street</label>
+</div>
+</div>
+
+<div class="cs-bg-heading padding0">
+    <h2>Requirment Information</h2>
+</div>
+
+<div class="cs-add-form">
+    
+    <div class="field-input mt20"
+    ng-class="{'has-error': Addform.category.$invalid && Addform.$submitted}">
+    <labelclass="fix-label">Select Category</label>
+    <select class="browser-default" ng-model="data.category" name="category"
+    ng-change="getProductSubCategoryList(data.category)"
+    ng-options="itemRow.category as itemRow.category for itemRow in ProductCategoryList"
+    required>
+    <option value="" disabled selected>Select Category<span>*</span></option>
+</select>
+</div>
+
+<div class="field-input mt20" ng-if="data.category"
+ng-class="{'has-error': Addform.sub_category.$invalid && Addform.$submitted}">
+<label class="fix-label">Select Sub Category</label>
+<select class="browser-default" ng-model="data.sub_category" name="sub_category"
+ng-change="getProductList(data.category,data.sub_category,data.product_name)"
+ng-options="itemRow.sub_category as itemRow.sub_category for itemRow in ProductSubCategoryList"
+required>
+<option value="" disabled selected>Select Sub Category<span>*</span></option>
+</select>
+</div>
+
+<div class="field-input mt20" ng-if="data.sub_category"
+ng-class="{'has-error': Addform.product_name.$invalid && Addform.$submitted}">
+<label class="fix-label">Select Product</label>
+<select class="browser-default" ng-model="data.id" name="product_name"
+ng-change="productDetails(data.id)"
+ng-options="itemRow.id as itemRow.product_name for itemRow in ProductList">
+<option value="" disabled selected>Select Product<span>*</span></option>
+</select>
+</div>
+
+<div class="flex-input" style="margin-top: -10px;">
+    <div class="input-field field-input wp100">
+        <input ng-model="data.qty" name="qty" id="qty" type="number" class="validate">
+        <label for="last_name">QTY</label>
+    </div>
+    
+    <button class="cs-btn" ng-disabled="!data.qty || !data.id" ng-click="onRequirementAddToList()">
+        <i class="material-icons">add</i>
+    </button>
+</div>
+</div>
+
+
+<div class="cart-card">
+    <div class="cs-count-list cart-list" ng-repeat="row in requiredata">
+        <div class="cs-content">
+            <p class="mb0">{{row.categoryName}} / {{row.subcategoryName}} / {{row.productName}}</p>
+            <!-- <span>{{requiredata.product_code}}</span> -->
+        </div>
+        
+        <div class="action-item">
+            <span class="qty">{{row.qty}}</span>
+            <a class="action-btn" ng-click="listdelete($index)"><i
+                class="material-icons">delete_sweep</i></a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="input-field field-input mt30"
+    ng-class="{'has-error': addressForm.description.$invalid && addressForm.$submitted}">
+    <textarea ng-model="data.description" name="description"
+    style="height: 80px !important;"></textarea>
+    <label class="fix-label">Description</label>
+</div>
+
+<div class="cs-save-btn space-btn mt20">
+    <button class="outline">Save</button>
+</div>
+</form>
+</div>
+</ion-content>
+</ion-view>

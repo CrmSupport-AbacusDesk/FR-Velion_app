@@ -1,0 +1,146 @@
+<ion-view view-title="My FollowUp">
+    <ion-nav-buttons side="left">
+        <a href="#/tab/dashboard" class="cs-backbtn button button-icon icon ion-android-arrow-back font18 fff"></a>
+    </ion-nav-buttons>
+
+    <ion-nav-buttons side="right" class="custom-right-btn">
+        <div ng-click = "onSeachActionHandler('open', 'followUp')" class="right-nav-btn nav-search">
+            <a menu-toggle="left"><i class="material-icons">search</i></a>
+        </div>
+        <div ng-class="isSearchBarOpen ? 'active' : ''" class="search-filter">
+            <input ng-model = "data.search" type="text" id = "searchData" ng-change = "onSetCurrentPageHandler(); getFollowUpListData('onLoad')">
+            <a ng-click = "onSeachActionHandler('close', 'followUp')" placeholder = "Search" class="close-filter"><i class="material-icons">keyboard_backspace</i></a>
+
+        </div>
+    </ion-nav-buttons>
+
+    <ion-content>
+
+        <!-- <ion-refresher on-refresh="data.search = '';onSetCurrentPageHandler();getFollowUpListData('onRefresh')">
+            <ion-refresher-content
+            pullingIcon="arrow-dropdown"
+            pullingText="Pull to refresh"
+            refreshingSpinner="circles"
+            refreshingText="Refreshing...">
+        </ion-refresher-content>
+    </ion-refresher> -->
+
+        <div class="sticky bg-white">
+            <div class="cs-month">
+                <ul>
+                    <li ng-click = "onDateChangeHandler('previous', 'followUp')" class="mw45">
+                        <button class="previous-btn"><i class="material-icons">keyboard_arrow_left</i></button>
+                    </li>
+                    <li ng-if="selectedDate == currentDate">Today - {{selectedDate | date: 'dd MMM yyyy'}}</li>
+                    <li ng-if="selectedDate != currentDate">{{selectedDate | date: 'dd MMM yyyy'}}</li>
+                    <li  ng-click = "onDateChangeHandler('next', 'followUp')" class="mw45">
+                        <button class="next-btn"><i class="material-icons">keyboard_arrow_right</i></button>
+                    </li>
+                </ul>
+            </div>
+
+            <div ng-if="loginData.loginTeamExist == 'Yes'" class="round-tab">
+                <ul>
+                    <li ng-click = "onModifyTypeHandler(1, 'followUp')" ng-class = "currentActiveTabForFollowUp == 1 ? 'active' : ''" >
+                        <a>My FollowUp </a>
+                    </li>
+                    <li ng-click = "onModifyTypeHandler(2, 'followUp')" ng-class = "currentActiveTabForFollowUp == 2 ? 'active' : ''">
+                        <a>Team FollowUp </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+
+        <div ng-repeat = "row in followUpList" class="coman-list">
+
+            <div class="top-head">
+                <ul>
+                    <li ng-if="currentActiveTabForFollowUp == '2'" >
+                        <p>{{row.created_by_name ? row.created_by_name : 'N/A'}}</p>
+                        <span>Created By</span>
+                    </li>
+                    <li>
+                        <p>{{row.followUpDateInFormat ? row.followUpDateInFormat : 'N/A'}}</p>
+                        <span>Followup Date</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="center-item">
+                <div class="cs-icon">{{row.dr_name[0] ? row.dr_name[0] : '--'}}</div>
+                <div class="cs-content">
+                    <p>{{row.dr_name ? row.dr_name : 'N/A'}} {{row.dr_code ? '('+row.dr_code+')' : ''}}</p>
+                    <span>{{row.dr_type_name ? row.dr_type_name : 'N/A'}}</span>
+                </div>
+
+                <a ng-if="row.mobile" href="tel: {{row.mobile}}" class="dialer"><i class="material-icons">call</i></a>
+
+                <a ng-click="onShowFollowUpOptionModelHandler($event, row.id, row.dr_id)" class="dialer"><i class="material-icons" style="color: #888888;">more_vert</i></a>
+            </div>
+
+            <div class="pdlr pb1">
+                <div ng-if="row.followup_remark"class="bdr-field">
+                    <span>Remark</span>
+                    <p>{{row.followup_remark ? row.followup_remark : 'N/A'}}</p>
+                </div>
+            </div>
+
+            <div class="pdlr pb1">
+                <div class="bdr-field">
+                    <span>Address</span>
+                    <p>{{row.street}} {{row.state_name ? row.state_name : 'N/A'}} {{row.district_name ? ', '+row.district_name : ''}} {{row.city ? ', '+row.city : ''}}
+                        {{row.pincode ? '- '+row.pincode : ''}}
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="data-not-found" ng-if="!isRequestInProcess && followUpList.length == 0">
+            <div class="outer">
+                <div class="innear">
+                    <img src="img/data-not-found.svg" alt="">
+                    <h2>Temporarily , No Data Available!</h2>
+                </div>
+            </div>
+        </div>
+        <ion-infinite-scroll immediate-check="false" ng-if="!noMoreListingAvailable" on-infinite="getFollowUpListData('scroll')" distance="20%" class="myspinner">
+
+        <div class="h50"></div>
+    </ion-content>
+
+
+    <div class="fix-add">
+        <a ng-click = "onGoToActionHandler('addFollowUp')">
+            <i class="material-icons">add</i>
+        </a>
+    </div>
+
+    <script id="add-remark" type="text/ng-template">
+        <ion-modal-view style="background: rgba(0, 0, 0, 0.7);">
+            <ion-content class="padding">
+                <div class="modal-outer">
+                    <div class="modal-cs">
+                        <div class="modal-head">
+                            <h2 class="title">Add Remark</h2>
+                            <button class="button button-clear button-primary" ng-click="data.remarkModel.hide()"><i class="material-icons">clear</i></button>
+                        </div>
+                        <form>
+                            <div class="ledmd">
+                                <div class="cs-add-form">
+                                    <div class="input-field field-input mt0">
+                                        <textarea ng-model = "data.remark"  name = "remark" class="validate" style="height: 100px !important;" required></textarea>
+                                        <label for="last_name">Remark</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="sgsave">
+                                <button ng-click="onSaveFollowUpRemarkHandler()" ng-disabled = "!data.remark" >SUBMIT<i class="material-icons">arrow_right_alt</i></button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </ion-content>
+        </ion-modal-view>
+    </script>
+</ion-view>

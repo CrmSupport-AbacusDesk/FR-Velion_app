@@ -1,0 +1,144 @@
+<ion-view view-title="Image & Document" ng-init="data.attachment_type='Document'">
+    
+    <!-- BACKBTN ICON START -->
+    <ion-nav-buttons side="left">
+        <a ng-click="goToBackPageHandler()" class="cs-backbtn button button-icon icon ion-android-arrow-back font18 fff"></a>
+    </ion-nav-buttons>
+    <!-- BACKBTN ICON END-->
+    
+    <!-- HOME ICON START -->
+    <ion-nav-buttons side="right">
+        <a href="#/home" class="cs-backbtn button button-icon icon ion-home font18 fff"></a>
+    </ion-nav-buttons>
+    <!-- HOME ICON END-->
+    
+    <ion-content class="padding16">
+        
+        <form name="imgform">
+            
+            <div class="cs-add-form">
+                <div class="input-field field-input" ng-class="{'has-error': travelform.startDate.$invalid && travelform.$submitted}" class="field-input">
+                    <input class="validate" type="text" ng-model="data.title" replace="[^a-zA-Z]" with="" required>
+                    <label for="last_name">Title</label>
+                </div>
+            </div>
+            
+
+            <div class="cs-radio cs-bodr mb16 csn-rd">
+                <h2>Attachment Type</h2>
+                
+                <ion-list>
+                    <ion-radio name="attachment_type" ng-model="data.attachment_type" value="Image">Image</ion-radio>
+                    <ion-radio name="attachment_type" ng-model="data.attachment_type" value="Document">Document</ion-radio>
+                </ion-list>
+            </div>
+            
+            <div class="upload-doc">
+                <p class="">Upload {{data.attachment_type}}</p>
+                <ul class="no-padding">
+                    
+                   
+                    
+                    
+                    <li ng-if="data.attachment_type == 'Image'" class="add-image" ng-click="camera_click(1);">
+                        <i class="material-icons">insert_photo</i>
+                    </li>
+                    
+                    
+                    <li ng-if="data.attachment_type == 'Document'" class="add-image">
+                        <label class="cs-lbl">
+                            <input type="file" file-model="data.myFile" multiple style="display: none;"> 
+                            <i class="material-icons">attachment</i>
+                        </label>
+                    </li>
+
+                    <li class="image-upload" ng-repeat="mediadatas in mediaData" >
+                        <img src="{{mediadatas.src}}">
+                        <button class="del" ng-click="delete_img($index)"><i class="material-icons">delete_sweep</i></button>
+                    </li>
+                    <li class="image-upload" ng-repeat="row in $root.documentFiles" >
+                        <img src="img/attachment.svg" class="w50 h50">
+                        <span class="doc-name">{{row.name}}</span>
+                        <button class="del" ng-click="delete_document($index)"><i class="material-icons">delete_sweep</i></button>
+                    </li>
+                   
+                </ul>
+            </div>
+            
+            <div class="input-submit padding-16 mt10">
+                <a ng-click="upload('1')">SUBMIT</a>
+                <!-- <a ng-click="mediaData[0].src?upload('1'):'';" ng-style="{'opacity':mediaData[0].src? 1 : 0.5}">SUBMIT</a> -->
+            </div>
+            
+        </form>
+        
+        
+        <div class="upload-doc" ng-if="dr_doc_imag.length">
+            <div ng-repeat="doc in dr_doc_imag">
+                <div class="doc-head">
+                    <p>{{doc.document_title}}</p>
+                    
+                    <span ng-if="doc.images.length > 0" ng-click = "onDownloadDocumentHandler(doc)">Download All</span>
+                    
+                </div>
+                
+                <ul class="no-padding">
+                    <li class="image-upload" ng-repeat="image in doc.images" ng-click="showImages(0,mediadatas.image_name)">
+                        <img class="w70 h70" ng-if="image.document_type=='csv' || image.document_type=='xlsx'" src="img/excel.svg">
+                        <img class="w70 h70" ng-if="image.document_type=='pdf'" src="img/pdf.svg">
+                        <img class="w70 h70" ng-if="image.document_type=='docx'" src="img/microsoft-word.svg">
+                        <img class="w70 h70" ng-if="image.document_type=='zip'" src="img/zip-format.svg">
+                        <img ng-if="image.document_type=='jpg' || image.document_type=='png' || image.document_type=='jpeg'" src="{{uploadURL + image.image_name}}">
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- <div class="upload-doc" ng-if="dr_doc_imag.length">
+            
+            <ul ng-repeat="doc in dr_doc_imag">
+                
+                <span style="float:left">{{doc.document_title}}</span>
+                <span ng-if="doc.images.length > 0" ng-click = "onDownloadDocumentHandler(doc)" style="float:right">Download All</span>
+                
+                <li class="image-upload" ng-repeat="image in doc.images" ng-click="showImages(0,mediadatas.image_name)">
+                    
+                    <img src="{{uploadurl + image.image_name}}">
+                    
+                </li>
+            </ul>
+            
+        </div> -->
+        
+        <div class="data-not-found" ng-hide="dr_doc_imag.length">
+            <div class="outer">
+                <div class="innear">
+                    <img src="img/data-not-found.svg" alt="">
+                    <h2>Temporarily , No Image & Document Available</h2>
+                </div>
+            </div>
+        </div>
+        
+        <!-- <div ng-click = "onDownloadDocumentHandler(doc)" class="album-type" ng-if="dr_doc_imag.length" ng-repeat="doc in dr_doc_imag">
+            
+            <a ng-click="dr_img_doc_details(drDetail.id, doc.document_title,'1');" class="ab-headeing" >
+                <div class="heading">
+                    <h2>{{doc.document_title}}</h2>
+                </div>
+                <i class="material-icons">keyboard_arrow_right</i>
+            </a>
+            
+            <a ng-click="dr_img_doc_details(drDetail.id, doc.document_title, '1');" class="last-upload">
+                <span class="counter">{{doc.count}}</span>
+                <div class="img-icon">
+                    <div class="outer">
+                        <div class="innear">
+                            <img src="{{uploadurl+doc.image_name}}" alt="">
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div> -->
+        
+    </ion-content>
+</ion-view>

@@ -1,0 +1,76 @@
+<ion-view view-title="Add Requirement">
+
+    <ion-nav-buttons side="left">
+        <a ng-click="goToBackPageHandler()" class="cs-backbtn button button-icon icon ion-android-arrow-back font18 fff"></a>
+    </ion-nav-buttons>
+
+    <ion-content>
+        <div class="coman-list clrd-bg sticky">
+            <div class="center-item">
+                <div class="cs-icon">{{drDetail.dr_name[0] ? drDetail.dr_name[0] : '--'}}</div>
+                <div class="cs-content">
+                    <p>{{drDetail.dr_name ? drDetail.dr_name : 'N/A'}}</p>
+                    <span>{{drDetail.contact_name ? drDetail.contact_name : 'N/A'}}</span>
+                    <a class="icon-content"><i class="material-icons">email</i> {{drDetail.email ? drDetail.email : 'N/A'}}</a>
+                </div>
+                <a ng-if="drDetail.contact_mobile_no" href="tel: {{drDetail.contact_mobile_no}}" class="dialer"><i class="material-icons">call</i></a>
+            </div>
+        </div>
+
+        <div class="padding16">
+
+            <form name="Addform" novalidate>
+                <div class="cs-add-form">
+                    <div class="field-input">
+                        <div class="add-css-select pt0 selectopt no-padding pb16 add2">
+                            <searchandselect selecteditem="search.categoryName" values="categoryList" key="Key"  totalrecords="totalCategoryRecords" onscroll="onGetCartItemDataHandler('fetchCategoryData', searchKey, pagenumber)"></searchandselect>
+                        </div>
+                    </div>
+                    <div class="field-input">
+                        <div class="add-css-select pt0 selectopt no-padding pb16 add2">
+                            <searchandselect selecteditem="search.subCategoryName" values="subCategoryList" key="Key"  totalrecords="totalSubCategoryRecords" onscroll="onGetCartItemDataHandler('fetchSubCategoryData', searchKey, pagenumber)"></searchandselect>
+                        </div>
+                    </div>
+                    <div class="field-input">
+                        <div class="add-css-select pt0 selectopt no-padding pb16 add2">
+                            <searchandselect selecteditem="search.product" values="productList" key="Key"  totalrecords="totalStateRecords" onscroll="onGetCartItemDataHandler('fetchProductData', searchKey, pagenumber)"></searchandselect>
+                        </div>
+                    </div>
+
+                    <div class="flex-input">
+                        <div class="input-field field-input wp100">
+                            <input ng-model="data.qty" name="qty" id="qty" type="number" class="validate">
+                            <label for="last_name">QTY</label>
+                        </div>
+                        <a ng-click = "onAddToCartHandler('Requirement')" class="cs-btn">
+                            <i class="material-icons">add</i>
+                        </a>
+                    </div>
+                </div>
+            </form>
+
+            <div ng-if="cartItemData.length > 0" class="cs-bg-heading">
+                <h2>Requirment Detail</h2>
+            </div>
+
+            <div class="cart-card">
+                <div ng-repeat = "row in cartItemData" class="cs-count-list cart-list">
+                    <div class="cs-content">
+                        <p>{{row.categoryName}}, {{row.subCategoryName}}, {{row.productName}}</p>
+                        <span>#{{row.productCode}}</span>
+                    </div>
+                    <div class="action-item">
+                        <span class="qty">{{row.qty}}</span>
+                        <a ng-click = "onDeleteFromCartHandler($index)" class="action-btn"><i class="material-icons">delete_sweep</i></a>
+                    </div>
+                </div>
+            </div>
+
+            <div ng-if="cartItemData.length > 0" class="cs-save-btn">
+                <button ng-click = "onSaveRequirementHandler()" class="">save</button>
+            </div>
+
+        </div>
+        <div class="h50"></div>
+    </ion-content>
+</ion-view>

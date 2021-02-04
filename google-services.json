@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "317183046550",
+    "project_id": "okaya-billing-account",
+    "storage_bucket": "okaya-billing-account.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:317183046550:android:061de7c34276d0726ea3b7",
+        "android_client_info": {
+          "package_name": "com.abacus.okaya"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "317183046550-ke8lvlo4r6kjcnp480cbi5avnhvcfe19.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBnB4FDjv8w3b5AFtDLhCeFeMSpth-KSX0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "317183046550-ke8lvlo4r6kjcnp480cbi5avnhvcfe19.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

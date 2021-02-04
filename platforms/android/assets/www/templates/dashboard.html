@@ -1,0 +1,135 @@
+
+
+<ion-view hide-nav-bar="true">
+    <ion-content has-header="false">
+        <div class="user-login">
+            <div class="company-logo">
+                <div class="logo">
+                    <img src="img/okaya-img/logo.png" alt="">
+                </div>
+                <!-- <div ng-click = "onActivateGPSLocationHandler('startAttend')" ng-if="data.isAttendanceDataReceived == 'Yes' && !attendData.start_time" class="work-time">
+                    <span class="time">Work Time Start</span>
+                </div>
+                <div ng-click = "onActivateGPSLocationHandler('stopAttend')" ng-if="data.isAttendanceDataReceived == 'Yes' && attendData.start_time && !attendData.stop_time" class="work-time">
+                    <span class="time">Stop Work Time</span>
+                </div> -->
+            </div>
+            <div class="user-column">
+                
+                <div class="user-profile pr-icon">
+                    <img ng-if="!loginData.loginImage" src="img/profile.svg" class="default">
+                    <img ng-if="loginData.loginImage" ng-src="{{uploadURL}}{{loginData.loginImage}}" class="add-img" style="width: 100%; height: 100%;">
+                </div>
+                <div class="name">
+                    <h2>{{loginData.loginName}}</h2>
+                    <p ng-if="attendData.start_time && !attendData.stop_time">Your Login Time Is <span>{{attendData.start_time}}</span></p>
+                </div>
+            </div>
+        </div>
+        
+        <h4 class="nrml-head" ng-if="dashboardData['drCountData'].length > 0 && !loginData.channelSalesLogin">My Leads</h4>
+        <div class="total-count" ng-if="dashboardData['drCountData'].length > 0 && !loginData.channelSalesLogin">
+            <a ng-click = "onGoToDrListHandler(row)" ng-repeat="row in dashboardData['drCountData']">
+                <p>{{row.typeCount}}</p>
+                <span>{{row.typeName}}</span>
+            </a>
+            <a ng-if="dashboardData['drCountData'].length > 0" class="more-count" href="#/tab/lead-counter">
+                <span>More</span>
+                <i class="material-icons vert">more_horiz</i>
+            </a>
+        </div>
+        <div class="bx-container mt20 mb0">
+            <h2>Today Records</h2>
+            
+            <div class="forword-page padding0 mt10">
+                <a ng-click = "onGoToRootPageHandler('CheckIn')">
+                    <p><span>{{dashboardData['todayMeetingCount'].allMeetings}}</span>Activity</p>
+                    <div class="info">{{dashboardData['todayMeetingCount'].completedMeetings ? dashboardData['todayMeetingCount'].completedMeetings : 'No' }} Activity <strong>Completed</strong></div>
+                </a>
+                <a ng-click = "onGoToRootPageHandler('FollowUp')">
+                    <p><span>{{dashboardData['todayFollowUpCount'].allFollowup}}</span> Followup</p>
+                    <div class="info">{{dashboardData['todayFollowUpCount'].completedFollowup ? dashboardData['todayFollowUpCount'].completedFollowup : 'No'}} Follow Up  <strong>Completed</strong></div>
+                </a>
+                <!-- commented imp -->
+                <!-- <a>
+                    <p><span>{{dashboardData['todayQuotationCount']}}</span> Quotation</p>
+                    <div class="info">Create Quotation</div>
+                </a> -->
+                <a >
+                    <p ng-click="loginData.loginAccessLevel == '3' ? onGoToRootPageHandler('Order-list') : onGoToRootPageHandler('sfaPriOrder-list')" ><span>{{dashboardData['sfaPriOrdCount'].total_ord}}</span>{{loginData.loginAccessLevel == '3' ? 'Order' : 'Primary'}}</p>
+                    <div class="info"> {{dashboardData['sfaPriOrdCount'].total_qty ? 'Item Qty : '+dashboardData['sfaPriOrdCount'].total_qty : 'No Orders'}} </div>
+                    <h1 ng-click="loginData.loginAccessLevel == '3' ? onGoToRootPageHandler('Order') : onGoToRootPageHandler('sfaPriOrder')" class="addorder-tab">ADD NEW</h1>
+                </a>
+                
+                <a ng-if="loginData.loginAccessLevel == '4'">
+                    <p ng-click="onGoToRootPageHandler('secondary-order-list')" ><span>{{dashboardData['sfaSecOrdCount'].total_ord}}</span> Secondary</p>
+                    <div class="info">{{dashboardData['sfaSecOrdCount'].total_qty ? 'Item Qty : '+dashboardData['sfaSecOrdCount'].total_qty : 'No Orders'}} </div>
+                    <h1 ng-click="onGoToRootPageHandler('sfaSecOrder')" class="addorder-tab">ADD NEW</h1>
+                </a>
+            </div>
+        </div>
+        
+        <!-- <h4 class="nrml-head" ng-if="loginData.loginAccessLevel == '4'">My Distribution Network</h4> -->
+        <div class="total-count" ng-if="loginData.loginAccessLevel == '4'">
+            <a ng-click = "gotoDrPage(row.type_name)" ng-repeat="row in dashboardData['distriCountData']">
+                <p>{{row.total_cn}}</p>
+                <span>{{row.type_name}}</span>
+            </a>
+        </div>
+        
+        <div class="pr16 pl16" ng-if="dashboardData.collectionPlan!=0">
+            <div class="target-bar">
+                
+                <h3>Today Outstanding Collection </h3>
+                
+                <span class="progress-bar">
+                    <span class="inside" style=" width: {{dashboardData.achive_percent}}%;">&nbsp;</span>
+                </span>
+                <div class="v-s">
+                    <h2>Target <span>&#8377; {{dashboardData.collectionPlan}} Lac.</span></h2>
+                    <h2>Achieve <span>&#8377; {{dashboardData.collectionAchivement ? dashboardData.collectionAchivement + ' Lac.' : 0}}</span></h2>
+                </div>
+            </div>
+        </div>
+        
+        
+        <div class="cs-space" style="padding:16px 20px;">
+            <a ng-if="loginData.loginAccessLevel == '4'" ng-click="loginData.startAttendance ? goToPage('tab.network-add') : loginAlert()" class="cs-btn">Add Dealer</a>
+            <a ng-if="loginData.loginAccessLevel == '4'" ng-click="loginData.startAttendance ? goToPage('tab.travel-add') : loginAlert()" class="cs-btn">Add Travel</a>
+            <a href="#/tab/lead-add" ng-if="loginData.loginAccessLevel == '3'" class="cs-btn">Add New Lead</a>
+            <a ng-click="loginData.startAttendance ? goToPage('tab.followup-add') : loginAlert()" class="cs-btn">Add Follow Up</a>
+        </div>
+        
+        <div class="h70">&nbsp;</div>
+        <!-- <button ng-click="loginData.startAttendance=!   loginData.startAttendance">test</button> -->
+    </ion-content>
+    
+    <ion-footer-bar class="ds_ion-footer-bar">
+        <div class="csm_work_time _start" ng-click = "onActivateGPSLocationHandler('startAttend')" ng-if="data.isAttendanceDataReceived == 'Yes' && !attendData.start_time">
+            <div class="cs-left">
+                <div class="icon"><img src="img/okaya-img/start_clock.png" alt=""></div>
+                <div class="info">
+                    <p>Your Login Time</p>
+                    <p>{{ clock  | date : 'hh:mm:ss a'}}</p>
+                </div>
+            </div>
+            <div class="cs-right">
+                <button>Start Work Time</button>
+            </div>
+        </div>
+        
+        <div class="csm_work_time _stop" ng-click = "onActivateGPSLocationHandler('stopAttend')" ng-if="data.isAttendanceDataReceived == 'Yes' && attendData.start_time && attendData.stop_time==''">
+            <div class="cs-left">
+                <div class="icon"><img src="img/okaya-img/Stop_clock.png" alt=""></div>
+                <div class="info">
+                    <p>Your Logout Time</p>
+                    <p>{{ clock  | date : 'hh:mm:ss a'}}</p>
+                </div>
+            </div>
+            <div class="cs-right">
+                <button>Stop Work Time</button>
+            </div>
+        </div>
+    </ion-footer-bar>
+    
+</ion-view>

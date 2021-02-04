@@ -1,0 +1,74 @@
+<ion-view view-title="My Leaves" ng-init = "onGetLeaveApplicationHandler()">
+    <ion-nav-buttons side="left">
+        <a href="#/tab/menu" class="cs-backbtn button button-icon icon ion-android-arrow-back font18 fff"></a>
+    </ion-nav-buttons>
+
+    <ion-content>
+        <div class="pd-left-right16 mb60 mt16">
+
+            <div class="list-box"  ng-repeat= "row in userLeaveList">
+                <div class="upper">
+                    <div class="left-date">
+                        <div class="date-section">
+                            <p>{{row.dateCreated}}</p>
+                            <p>Date Created</p>
+                        </div>
+                    </div>
+                    <div class="right-date" ng-if="row.status == 'Pending'">
+                        <button><p class="pending-color">{{row.status}}</p></button>
+                    </div>
+                    <div class="right-date" ng-if="row.status == 'Approved'">
+                        <button><p class="approved-color">{{row.status}}</p></button>
+                    </div>
+                    <div class="right-date" ng-if="row.status == 'Reject'">
+                        <button><p class="reject-color">{{row.status}}</p></button>
+                    </div>
+                </div>
+
+                <div class="three_boxes">
+                    <div class="lower">
+                        <p>Leave From</p>
+                        <p>{{row.dateFrom}}</p>
+                    </div>
+                    <div class="lower">
+                        <p>Leave To</p>
+                        <p>{{row.dateTo}}</p>
+                    </div>
+                    <div class="lower">
+                        <p>No Of Days</p>
+                        <p>{{row.days}}</p>
+                    </div>
+                </div>
+
+                <div class="three_boxes">
+                    <div class="lower">
+                        <p>Leave Type</p>
+                        <p>{{row.leave_type ? row.leave_type : 'N/A'}}</p>
+                    </div>
+                </div>
+
+                <div class="lower">
+                    <p>Leave Description</p>
+                    <p>{{!row.description ? 'N/A': row.description}}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- !isRequestInProcess && -->
+        <div class="data-not-found" ng-if=" userLeaveList.length == 0">
+            <div class="outer">
+                <div class="innear">
+                    <img src="img/data-not-found.svg" alt="">
+                    <h2>Temporarily , No Data Available!</h2>
+                </div>
+            </div>
+        </div>
+    </ion-content>
+
+    <div class="fix-add">
+        <a href="#/tab/SFA_LeaveApplicationadd">
+            <i class="material-icons">add</i>
+        </a>
+    </div>
+</ion-view>
+

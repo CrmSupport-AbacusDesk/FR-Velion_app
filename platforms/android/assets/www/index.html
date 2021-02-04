@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <title>Okaya</title>
+
+    <link rel="manifest" href="manifest.json">
+
+    <script src="js/dependancies/jquery.min.js"></script>
+    <script src="js/dependancies/angular-chart.min.js"></script>
+
+
+    <link href="css/icon.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="//code.ionicframework.com/ionicons/1.5.2/css/ionicons.min.css">
+    <link rel="stylesheet" href="css/angular-material.css">
+    <link rel="stylesheet" href="css/materialize.min.css">
+    <link href="css/animate.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/angular-chart.css"/>
+
+    <link href="css/angucomplete-alt.css" rel="stylesheet">
+    <link href="lib/ionic/css/ionic.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/orp_style.css" rel="stylesheet">
+
+
+
+    <script src="lib/ion-datetime-picker/release/ion-datetime-picker.min.js"></script>
+    <link href="lib/ion-datetime-picker/release/ion-datetime-picker.min.css" rel="stylesheet">
+
+    <script type="text/javascript" src="js/select-search.js"></script>
+    <script src="js/ion-autocomplete.js"></script>
+    <script type="text/javascript" src="js/autocomplete.directive.js"></script>
+
+    <script src="lib/ionic/js/ionic.bundle.js"></script>
+    <script src="lib/angular-material.js"></script>
+    <script src="lib/hammer.js"></script>
+    <script src="lib/angular-aria.min.js"></script>
+
+    <script src="cordova.js"></script>
+    <script src="lib/angular/ng-cordova.min.js"></script>
+
+    <script src="lib/angular/angucomplete-alt.js"></script>
+    <script src="lib/angular/angular-touch.min.js"></script>
+    <script src="lib/angular.dcb-img-fallback.min.js"></script>
+
+    <script src="js/notification/notification.js"></script>
+    <script src="js/app/global.js"></script>
+    <script src="js/services/services.js"></script>
+    <script src="js/controllers/loginControllers.js"></script>
+    <script src="js/controllers/dashControllers.js"></script>
+    <script src="js/controllers/customerControllers.js"></script>
+    <script src="js/controllers/activityControllers.js"></script>
+    <script src="js/controllers/orderControllers.js"></script>
+    <script src="js/controllers/leaveControllers.js"></script>
+    <script src="js/controllers/expenseControllers.js"></script>
+    <script src="js/controllers/okaya_sfa/orderControllers.js"></script>
+    <script src="js/controllers/okaya_sfa/networkController.js"></script>
+    <script src="js/controllers/Sfa_leadControllers.js"></script>
+    <script src="js/controllers/dashboardcontroller.js"></script>
+
+
+    <script src="js/app/notification.js"></script>
+    <script src="js/app/app.js"></script>
+    <script src="lib/materialize.min.js"></script>
+    <script type="text/javascript" src="lib/moment-with-locales.min.js"></script>
+
+    <script src="js/dependancies/angular-searchAndSelect.js"></script>
+    <script type="text/javascript" src="js/dependancies/searchDirective.js"></script>
+    <script
+        src="http://maps.google.com/maps/api/js?key=AIzaSyD9OoPX-RFRqkhIuRsWOPj4xKnVelhRRK8&sensor=true&libraries=geometry&libraries=places"></script>
+
+</head>
+
+<body ng-app="starter">
+
+    <ion-nav-bar class="bar-stable">
+        <ion-nav-back-button>
+        </ion-nav-back-button>
+    </ion-nav-bar>
+
+
+
+    <ion-nav-view>
+
+    </ion-nav-view>
+
+
+
+    <script id="network-popover.html" type="text/ng-template">
+        <ion-popover-view style="height: 100px;">
+            <ion-content>
+                <div class="list">
+                    <a class="item" ng-click="getNetworkList('Dealer','','Pending');network_popover.hide()" >Pending</a>
+                    <a class="item" ng-click="getNetworkList('Dealer','','Approved');network_popover.hide()" >Active</a>
+                    <!-- <a class="item" ng-click="onGoToActionHandler('editFollowUp')">Edit Follow Up</a> -->
+                </div>
+            </ion-content>
+        </ion-popover-view>
+    </script>
+
+
+    <script id="templates/popover.html" type="text/ng-template">
+        <ion-popover-view>
+            <ion-content>
+                <div class="list">
+                    <a class="item" ng-click="gotoPage(data.dr_id,data.dr_name,data.contact_mobile_no,'lead-activity-list',data.type_name)">Activities</a>
+                    <a class="item" ng-click="gotoPage(data.dr_id,data.dr_name,data.contact_mobile_no,'lead-requirement-list',data.type_name)">Requirements</a>
+                    <a class="item" ng-click="gotoPage(data.dr_id,data.dr_name,data.contact_mobile_no,'lead-quotation-list',data.type_name)">Quotation</a>
+                    <a class="item" ng-click="gotoPage(data.dr_id,data.dr_name,data.contact_mobile_no,'lead-followup-list',data.type_name)" >Followup</a>
+                    <a class="item" ng-click="gotoPage(data.dr_id,data.dr_name,data.contact_mobile_no,'lead-order-list',data.type_name)" >Order</a>
+                </div>
+            </ion-content>
+        </ion-popover-view>
+    </script>
+
+
+    <script id="followup-popover.html" type="text/ng-template">
+        <ion-popover-view style="height: 170px;">
+            <ion-content>
+                <div class="list">
+                    <a class="item" ng-click="onGoToActionHandler('followUpAddActivity')">Add Activity</a>
+                    <a class="item" ng-click="onGoToActionHandler('followUpAddRemark')">Close Followup</a>
+                    <a class="item" ng-click="onGoToActionHandler('editFollowUp')">Edit Follow Up</a>
+                </div>
+            </ion-content>
+        </ion-popover-view>
+    </script>
+
+
+
+
+    <script id="PJP-popover.html" type="text/ng-template">
+        <ion-popover-view ng-style="{height : data.pjpType=='Party' ? '200px' : '50px' }">
+            <ion-content>
+                <div class="list">
+                    <a ng-if="data.pjpType=='Area'" class="item" ng-click="closePJP(data.pjpType,'Close')">Close Visit</a>
+                    <a ng-if="data.pjpType=='Party'" class="item" ng-click="closePJP(data.pjpType,'Call')">Call</a>
+                    <a ng-if="data.pjpType=='Party'" class="item" ng-click="closePJP(data.pjpType,'SMS')">SMS</a>
+                    <a ng-if="data.pjpType=='Party'" class="item" ng-click="closePJP(data.pjpType,'Mail')">Mail</a>
+                    <a ng-if="data.pjpType=='Party' && data.canNewMeetingStart == 'Yes'" class="item" ng-click="closePJP(data.pjpType,'Meeting')">Meeting</a>
+                </div>
+            </ion-content>
+        </ion-popover-view>
+    </script>
+
+
+    <script id="travel-popover.html" type="text/ng-template">
+        <ion-popover-view style="height: 110px;">
+            <ion-content>
+                <div class="list">
+                    <a class="item" ng-click="goToPlan('myTravelPlan')">My Travel Plan</a>
+                    <a class="item" ng-click="goToPlan('teamTravelPlan')">Team Travel Plan</a>
+                </div>
+            </ion-content>
+        </ion-popover-view>
+    </script>
+
+    <script id="daily-plan-popover.html" type="text/ng-template">
+        <ion-popover-view style="height: 110px;">
+            <ion-content>
+                <div class="list">
+                    <a ng-click='planData.myplan=true;plan_popovers.hide();getDailyActivityPlan(selectedDate);' class="item">My Plan</a>
+                    <a ng-click='planData.myplan=false;plan_popovers.hide();getAssignUserList(selectedDate);' class="item">Team Plan</a>
+                </div>
+            </ion-content>
+        </ion-popover-view>
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,200 @@
+<ion-view view-title="Network Detail">
+    
+    <ion-nav-buttons side="left">
+        <a href="#/tab/distribution-network" class="cs-backbtn button button-icon icon ion-android-arrow-back font18 fff"></a>
+    </ion-nav-buttons>
+    
+    <ion-nav-buttons side="right" class="custom-right-btn">
+        <div ng-if="drDetail.drData.type_name=='Dealer'" class="right-nav-btn nav-search">
+            <a ng-click="goToEditPage()" ><i class="material-icons">edit</i></a>
+        </div>
+    </ion-nav-buttons>
+    
+    <ion-content>
+        <div ng-if="drDetail && drDetail.drData" class="coman-list clrd-bg">
+            <div class="center-item">
+                <div class="cs-icon large">
+                    <img ng-if="!drDetail.drData.profile_image" src="img/profile.svg" class="default wp70">
+                    <img ng-if="drDetail.drData.profile_image" ng-click="showImages(0,drDetail.drData.profile_image)" src="{{uploadURL}}{{drDetail.drData.profile_image}}">
+                </div>
+                <div class="cs-content">
+                    <p>{{drDetail.drData.dr_name ? drDetail.drData.dr_name : 'N/A'}}</p>
+                    <span>{{drDetail.drData.contact_name ? drDetail.drData.contact_name : 'N/A'}}</span>
+                    <a ng-if="drDetail.drData.email" class="icon-content"><i class="material-icons">email</i> {{drDetail.drData.email ? drDetail.drData.email : 'N/A'}}</a>
+                </div>
+                <a ng-if="drDetail.drData.sfa_contact_no" href="tel: {{drDetail.drData.sfa_contact_no}}" class="dialer"><i class="material-icons">call</i></a>
+            </div>
+            
+            <div class="top-head">
+                <ul>
+                    <li class="mw80">
+                        <p>{{drDetail.drData.createdDateInFormat ? drDetail.drData.createdDateInFormat : 'N/A'}}</p>
+                        <span>Created Date</span>
+                    </li>
+                    <li class="wp100">
+                        <p>{{drDetail.drData.created_by_name ? drDetail.drData.created_by_name : 'N/A'}}</p>
+                        <span>Created By</span>
+                    </li>
+                    <li class="wp100">
+                        <p>{{drDetail.drData.gst_no ? drDetail.drData.gst_no : 'N/A'}}</p>
+                        <span>GST No.</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="pdlr dflex-data mt10">
+                <div class="bdr-field wp100">
+                    <span>Contact Person</span>
+                    <p>{{drDetail.drData.contact_name ? drDetail.drData.contact_name : 'N/A'}}</p>
+                </div>
+                
+                <div class="bdr-field wp100">
+                    <span>Zone</span>
+                    <p>{{drDetail.drData.zone ? drDetail.drData.zone : 'N/A'}}</p>
+                </div>
+            </div>
+            <div class="pdlr dflex-data">
+                
+                <div class="bdr-field wp100">
+                    <span>Branch</span>
+                    <p>{{drDetail.drData.branch ? drDetail.drData.branch : 'N/A'}}</p>
+                </div>
+                <div class="bdr-field wp100">
+                    <span>Network Type</span>
+                    <p>{{drDetail.drData.type_name}}</p>
+                </div>
+            </div>
+            
+            <div class="pdlr dflex-data">
+                <div class="bdr-field wp100">
+                    <span>Email</span>
+                    <p>{{drDetail.drData.email ? drDetail.drData.email : 'N/A'}}</p>
+                </div>
+                
+                <div class="bdr-field wp100">
+                    <span>{{drDetail.drData.type_name}} code</span>
+                    <p>{{drDetail.drData.dr_code ? drDetail.drData.dr_code : 'N/A'}}</p>
+                </div>
+            </div>
+            
+            <div class="pdlr">
+                
+                <div class="bdr-field mr0">
+                    <span>Address</span>
+                    <p>
+                        {{drDetail.drData.street}} {{drDetail.drData.state_name ? drDetail.drData.state_name : 'N/A'}} {{drDetail.drData.district_name ? ', '+drDetail.drData.district_name : ''}} {{drDetail.drData.city ? ','+drDetail.drData.city : ''}} {{drDetail.drData.pincode? '- '+drDetail.drData.pincode : ''}}
+                    </p>
+                </div>
+                
+                <div class="bdr-field df ac" ng-click="showOnMap(drDetail.drData.lat,drDetail.drData.lng,drDetail.drData.gps_address)">
+                    <div class="wp100">
+                        <span>Point Location</span>
+                        <p>{{drDetail.drData.gps_address ? drDetail.drData.gps_address : 'N/A'}}</p>
+                    </div>
+                    <span class="ml5"><img src="img/google-maps.svg" alt="" class="h30"></span>
+                </div>
+            </div>
+        </div>
+        
+        
+        <div class="text-box" style="margin: 0px 16px;">
+            <h2>Deal With</h2>
+            <div class="text-box pb0">
+                <p>Select Category</p>
+                <span ng-repeat="var in drDetail.drData.assign_segment" class="cs-chips">{{var.category_name ? var.category_name : 'N/A'}}</span>
+            </div>
+            <div class="text-box mt10 pb0">
+                <p>Select Brand</p>
+                <span ng-repeat="var in drDetail.drData.assign_brand" class="cs-chips">{{var.brand_name ? var.brand_name : 'N/A'}}</span>
+            </div>
+        </div>
+        
+        
+        <div ng-if="drDetail && drDetail.drData" class="forword-page flat-item anchor-bdr padding16">
+                        
+            <a ng-if="drDetail.drData.type_name=='Dealer'" ng-click="gotoPage(drDetail.drData.id,drDetail.drData.dr_name,drDetail.drData.sfa_contact_no,'scheme_enroll')" class="no-height">
+                <p class="df jcc" ng-if="drDetail.scheme_enroll==true"><span class="df"><i class="material-icons">check_circle</i></span></p>
+                <p class="df jcc" ng-if="drDetail.scheme_enroll==false"><span class="df"><i class="material-icons red-text">cancel</i></span></p>
+                <div class="info">
+                    <h2 ng-class="{'mt0': drDetail.followUpData.length==0}"> Scheme Enroll</h2>
+                </div>
+            </a>
+            
+            <a href="#/tab/sfa_dr_activity" class="no-height">
+                <p><span>{{drDetail.checkInData.checkInData.length}}</span></p>
+                <div class="info">
+                    <h2 class="mt0"> Activity</h2>
+                </div>
+            </a>
+            
+            <a href="#/tab/sfa_dr_followup" class="no-height">
+                <p><span>{{drDetail.followUpData.length}}</span></p>
+                <div class="info">
+                    <h2 ng-class="{'mt0': drDetail.followUpData.length==0}"> Follow Up</h2>
+                    <span ng-if="drDetail.nextFollowUpData && drDetail.nextFollowUpData.followUpDateInFormat">Next Folllow Up - <strong>{{drDetail.nextFollowUpData.followUpDateInFormat}}</strong></span>
+                </div>
+            </a>
+            
+            
+            
+            <a ng-click="gotoOrder('primary',drDetail.drData.id,drDetail.drData.dr_name)" ng-if="drDetail.drData.type_name == 'Distributor'">
+                <p><span>{{drDetail.priOrderData.length}}</span></p>
+                <div class="info">Primary Order</div>
+            </a>
+            <a ng-click="gotoOrder('secondary',drDetail.drData.id,drDetail.drData.dr_name)" ng-if="drDetail.drData.type_name == 'Dealer'">
+                <p><span>{{drDetail.secOrderData.length}}</span></p>
+                <div class="info">Secondary Order</div>
+            </a>
+            
+            <a ng-click="dr_img_doc_list(drDetail.drData.id,'1')">
+                <P><span>{{drDetail.attachments.length}}</span></P>
+                <div class="info">Image & Document</div>
+            </a>
+            
+            <a ng-click="location()">
+                <div class="info">Point Location</div>
+            </a>
+            
+        </div>
+        
+        <div ng-if="drDetail.contactData.length > 0" style="padding: 0px 16px;">
+            
+            <div class="cs-bg-heading">
+                <h2>Contact Persons</h2>
+            </div>
+        </div>
+        <div class="cart-card padding16 mb10" ng-repeat="row in drDetail.contactData">
+            <div class="cs-flex">
+                <div class="bdr-field wp100">
+                    <span>Name</span>
+                    <p>{{row.name ? row.name : 'N/A'}}</p>
+                </div>
+                <div class="bdr-field wp100">
+                    <span>Mobile No</span>
+                    <p>{{row.mobile ? row.mobile : 'N/A'}}</p>
+                </div>
+            </div>
+            <div class="cs-flex">
+                <div class="bdr-field wp100">
+                    <span>Email ID</span>
+                    <p>{{row.email ? row.email : 'N/A'}}</p>
+                </div>
+                <div class="bdr-field wp100">
+                    <span>Designation No</span>
+                    <p>{{row.designation ? row.designation : 'N/A'}}</p>
+                </div>
+            </div>
+        </div>
+       
+        <div class="h70"></div>
+    </ion-content>
+    
+    <!-- ng-if="drDetail.checkInData.canNewMeetingStart && drDetail.checkInData.canNewMeetingStart == 'No'" -->
+    
+    <ion-footer  class="ft2_btns h50 pt0 cs-footerr cs-save-btn" ng-if="drDetail.checkInData.canNewMeetingStart && drDetail.checkInData.canNewMeetingStart == 'No'">
+        <a  class="wp100 h35 padding0"  style="line-height: 35px;"   href="#/tab/activity-meeting-end">
+            End Meeting with {{drDetail.checkInData.drName}}
+        </a>
+    </ion-footer>
+    
+</ion-view>

@@ -1,0 +1,138 @@
+<ion-view view-title="Menu" hide-nav-bar="true">
+
+    <ion-content class="cs-menu-page">
+        <div class="user-login">
+            <div class="page-name">
+                <p> Menus</p>
+            </div>
+            <div class="user-column">
+                <div class="profile-head">
+                    <div class="pr-icon">
+                        <div class="user-profile pr-icon">
+                            <img ng-if="!loginData.loginImage" src="img/profile.svg" class="default">
+                            <img ng-if="loginData.loginImage" ng-src="{{uploadURL}}{{loginData.loginImage}}"
+                                style="width: 100%; height: 100%;">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="name">
+                    <h2>{{loginData.loginName}}</h2>
+                    <p>+91 {{loginData.loginMobile}}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="menu-nav">
+            <div class="navigations">
+                <a href="#/tab/profile">
+                    <p><img src="img/menu-icon/man.svg" alt="">Profile</p>
+                    <i class="material-icons">keyboard_arrow_right</i>
+                </a>
+
+                <!-- <a href="#/tab/attendance">
+                    <p><img src="img/menu-icon/icon-calender.svg" alt="">Attendance</p>
+                    <i class="material-icons">keyboard_arrow_right</i>
+                </a> -->
+
+
+                <!-- <a ng-click="loginData.startAttendance ? goToPage('tab.all-order-list') : loginAlert()">
+                    <p><img src="img/menu-icon/lead-order.svg"
+                            alt="">{{loginData.loginAccessLevel == 3 ? 'Orders' : 'Lead Order'}}</p>
+                    <i class="material-icons">keyboard_arrow_right</i>
+                </a> -->
+
+                <!-- <div class="clcsd menu-changes">
+                    <ul class="collapsible">
+                        <li ng-click="leadTabActive = !leadTabActive" ng-class="{'active':leadTabActive==true}">
+                            <div class="collapsible-header">
+                                <p><img src="img/menu-icon/leadership.svg">Leads</p>
+                            </div>
+                            <div class="collapsible-body">
+                                <a ng-click="gotoPage(0,0,'','lead-followup-list')"><i class="material-icons">phone_forwarded</i> Followup</a>
+                                <a ng-click="gotoPage(0,0,'','lead-activity-list')"><i class="material-icons">directions_walk</i> Activity</a>
+                                <a ng-click="gotoPage(0,0,'','lead-order-list')"><i class="material-icons">widgets</i> Order</a>
+                                <a ng-click="gotoPage(0,0,'','lead-requirement-list')"><i class="material-icons">store</i> Requirement</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div> -->
+
+                <!-- ng-click="loginData.startAttendance ? goToPage('tab.travel') : loginAlert()" -->
+
+                <!-- <a href="#/tab/report-dashboard">
+                    <p><img src="img/menu-icon/followupl.svg" alt="">Report Dashboard</p>
+                    <i class="material-icons">keyboard_arrow_right</i>
+                </a> -->
+
+                <!-- <a ng-if="loginData.channelSalesLogin"
+                    ng-click="loginData.startAttendance ? goToPage('tab.all-followup-list') : loginAlert()">
+                    <p><img src="img/menu-icon/followupl.svg" alt="">Follow-up</p>
+                    <i class="material-icons">keyboard_arrow_right</i>
+                </a> -->
+
+                <!-- <a ng-if="loginData.loginAccessLevel == '4'"
+                    ng-click="loginData.startAttendance ? goToPage('tab.travel') : loginAlert()">
+                    <p><img src="img/menu-icon/track.svg" alt="">Travel Plan</p>
+                    <i class="material-icons">keyboard_arrow_right</i>
+                </a> -->
+
+                <!-- <a href="#/tab/daily-plan-report">
+                    <p><img src="img/menu-icon/daily-report.svg">Daily Work Plan</p>
+                    <i class="material-icons">keyboard_arrow_right</i>
+                </a> -->
+
+                <!-- <a href="#/tab/collection-plan">
+                    <p><img src="img/menu-icon/collection.svg">Collection Plan</p>
+                    <i class="material-icons">keyboard_arrow_right</i>
+                </a> -->
+
+                <!-- <a href="#/tab/collection-punch">
+                    <p><img src="img/menu-icon/collection.svg">Collection Punch</p>
+                    <i class="material-icons">keyboard_arrow_right</i>
+                </a> -->
+
+                <!-- <a href="#/tab/expense" ng-if="loginData.loginAccessLevel == '4'">
+                    <p><img src="img/menu-icon/expenses.svg" alt="">Expenses</p>
+                    <i class="material-icons">keyboard_arrow_right</i>
+                </a> -->
+
+                <a ng-if="loginData.loginAccessLevel == 4"
+                    ng-click="loginData.startAttendance ? orderRefresh('primary') : loginAlert()">
+                    <p><img src="img/menu-icon/pr-order.svg" alt="">Primary Orders</p>
+                    <i class="material-icons">keyboard_arrow_right</i>
+                </a>
+                <!-- loginData.startAttendance ? orderRefresh('secondary') : loginAlert() -->
+                <a ng-if="loginData.loginAccessLevel == 4" ng-click="orderRefresh('secondary')">
+                    <p><img src="img/menu-icon/delivery.svg" alt="">Secondary Orders</p>
+                    <i class="material-icons">keyboard_arrow_right</i>
+                </a>
+
+                <a ng-if="loginData.loginAccessLevel == '4'" href="#/tab/distribution-network">
+                    <p><img src="img/menu-icon/icon-customernetwork.svg" alt="">Distribution Network</p>
+                    <i class="material-icons">keyboard_arrow_right</i>
+                </a>
+
+                <a ng-if="loginData.loginAccessLevel == '4'" href="#/tab/stock">
+                    <p><img src="img/menu-icon/stock.svg" alt="">Stock</p>
+                    <i class="material-icons">keyboard_arrow_right</i>
+                </a>
+
+                <!-- <a ng-if="loginData.loginAccessLevel == '4'" href="#/tab/SFA_LeaveApplicationlist">
+                    <p><img src="img/beach.svg" alt="">Leave</p>
+                    <i class="material-icons">keyboard_arrow_right</i>
+                </a> -->
+
+                <!-- <a ng-if="!loginData.channelSalesLogin" href="#/tab/organisation-setting">
+                    <p><img src="img/menu-icon/organisation.svg" alt="">Organisation</p>
+                    <i class="material-icons">keyboard_arrow_right</i>
+                </a> -->
+
+                <button ng-click="logout()">
+                    <p><i class="material-icons">power_settings_new</i>LOGOUT</p>
+                </button>
+            </div>
+        </div>
+    </ion-content>
+
+</ion-view>

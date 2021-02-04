@@ -1,0 +1,45 @@
+<ion-view view-title="My Leads">
+
+    <ion-nav-buttons side="left" style="width: 20px;">
+        <a ng-click="goToBackPageHandler()" class="cs-backbtn button button-icon icon ion-android-arrow-back font18 fff"></a>
+    </ion-nav-buttons>
+
+    <ion-nav-buttons side="right" class="custom-right-btn">
+
+        <div ng-click = "isSearchActive = true"  class="right-nav-btn nav-search">
+            <a menu-toggle="left"><i class="material-icons">search</i></a>
+        </div>
+
+        <div ng-class="isSearchActive ? 'active' : ''" class="search-filter">
+            <div  angucomplete-alt id="ex5" placeholder="Search Product" pause="500" selected-object="itemSelected" remote-url="{{serverURL}}/App_Customer/onGetSearchLeadFromAllTypesData?loginId={{loginData.loginId}}&organisationId={{loginData.loginOrganisationId}}&searchData=" remote-url-request-formatter="remoteUrlRequestFn" remote-url-data-field="searchList" title-field="searchName" minlength="2" input-class="form-control form-control-small" match-class="highlight">
+            </div>
+            <a ng-click = "isSearchActive = false" placeholder = "Search" class="close-filter"><i class="material-icons">keyboard_backspace</i></a>
+        </div>
+
+    </ion-nav-buttons>
+
+    <ion-content>
+        <div class="cs-padding" ng-if="drStatusCountData.length">
+            <div ng-repeat = "row in drStatusCountData" class="cs-list">
+                <div ng-click = "onTypeClickHandler(row.typeId, row.typeName, row.typeStatusData[0].statusName, row.typeCount)" class="cs-tittle next-page">
+                    <p>My {{row.typeName}} <span>"{{row.typeCount}}"</span></p>
+                </div>
+                <div class="sm-box">
+                    <a ng-click = "onTypeClickHandler(row.typeId, row.typeName, statusRow.statusName, row.typeCount)" ng-class="statusRow.statusName.toLowerCase()" ng-repeat = "statusRow in row.typeStatusData" class="validate">
+                        <span>{{statusRow.statusTotalCount}}</span>
+                        <p>{{statusRow.statusName}}</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="data-not-found" ng-if="drStatusCountData.length == 0">
+            <div class="outer">
+                <div class="innear">
+                    <img src="img/data-not-found.svg" alt="">
+                    <h2>Temporarily , No Lead Assign !</h2>
+                </div>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

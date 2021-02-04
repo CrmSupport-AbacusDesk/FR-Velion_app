@@ -1,0 +1,78 @@
+
+<ion-view view-title="{{data.followUpId && data.followUpId != '0' ? 'Update FollowUp' : 'Add FollowUp'}}">
+    <ion-nav-buttons side="left">
+        <a  ng-click = "goToBackPageHandler()"  class="cs-backbtn button button-icon icon ion-android-arrow-back font18 fff"></a>
+    </ion-nav-buttons>
+    <ion-content>
+        <div ng-if="data.isInsideLead == 'Yes'" class="coman-list clrd-bg sticky">
+            <div class="center-item">
+                <div class="cs-icon">{{drDetail.drData.dr_name[0] ? drDetail.drData.dr_name[0] : '--'}}</div>
+                <div class="cs-content">
+                    <p>{{drDetail.drData.dr_name ? drDetail.drData.dr_name : 'N/A'}}</p>
+                    <span>{{drDetail.drData.contact_name ? drDetail.drData.contact_name : 'N/A'}}</span>
+                    <a class="icon-content"><i class="material-icons">email</i> {{drDetail.drData.email ? drDetail.drData.email : 'N/A'}}</a>
+                </div>
+
+                <a ng-if="drDetail.drData.contact_mobile_no" href="tel: {{drDetail.drData.contact_mobile_no}}" class="dialer"><i class="material-icons">call</i></a>
+            </div>
+        </div>
+
+        <div class="padding16">
+
+            <form name="Addform" novalidate ng-submit="!Addform.$invalid && onSaveFollowUpHandler()" >
+
+                <div class="cs-add-form">
+
+                    <div ng-if="data.isInsideLead=='No'">
+
+                        <div ng-if="loginData.loginAccessLevel==4" ng-class="{'has-error': Addform.networkType.$invalid && Addform.$submitted}" class="field-input">
+                            <select ng-model = "data.networkType" ng-change="checkNetworkType()" name = "networkType" class="browser-default" required>
+                                <option value="" disabled selected >Select Network Type</option>
+                                <option value=1>Lead Network</option>
+                                <option value=2>Distribution Network</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <div ng-class="{'has-error': Addform.typeId.$invalid && Addform.$submitted}" class="field-input">
+                                <select ng-model = "data.typeId" name = "typeId" ng-change="onDrTypeChangeHandler()" class="browser-default" required>
+
+                                    <option value="" disabled selected>Select Type *</option>
+                                    <option ng-repeat = "row in drTypeList" value="{{row.id}}">{{row.type}}</option>
+                                </select>
+                            </div>
+                            <div ng-show = "data.typeId" class="field-input">
+                                <div class="form-space">
+                                    <div class="add-css-select no-padding selectopt" >
+                                        <searchandselect selecteditem="search.drName" values="drList" key="Key"  totalrecords="totalDrRecords" onscroll="onGetDrTypeDataHandler('orderFor', searchKey, pagenumber)"></searchandselect>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div ng-class="{'has-error': Addform.followUpType.$invalid && Addform.$submitted}" class="field-input">
+                        <select ng-model = "data.followUpType" name = "followUpType" class="browser-default" required>
+                            <option value="" disabled selected>FollowUp Type</option>
+                            <option ng-repeat="row in activityTypeList" value="{{row.name}}">{{row.name}}</option>
+                        </select>
+                    </div>
+
+                    <div ng-class="{'has-error': Addform.followUpDate.$invalid && Addform.$submitted}"  class="input-field field-input">
+                        <input ng-model = "data.followUpDate"  name = "followUpDate" type="date" class="validate" min = "{{currentDate}}" required>
+                        <label class="active" for="last_name">Follow up Date</label>
+                    </div>
+
+                    <div ng-class="{'has-error': Addform.description.$invalid && Addform.$submitted}"  class="input-field field-input">
+                        <textarea ng-model = "data.description"  name = "description" class="validate" style="height: 100px !important;" required></textarea>
+                        <label for="last_name">Description</label>
+                    </div>
+                </div>
+
+                <div class="cs-save-btn mt20">
+                    <button type = "submit" class="wp100">Save FollowUp</button>
+                </div>
+            </form>
+        </div>
+    </ion-content>
+</ion-view>

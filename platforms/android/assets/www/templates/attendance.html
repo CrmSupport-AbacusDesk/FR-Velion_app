@@ -1,0 +1,74 @@
+<ion-view view-title="Menu" hide-nav-bar="true">
+
+    <ion-content class="cs-menu-page">
+        <div class="sticky bg-white">
+            <div class="user-login">
+                <div class="page-name">
+                    <a href="" class="back-arrow" ng-click = "onGoToRootPageHandler('Menu')"><i class="material-icons">arrow_back</i></a>
+                    <p>My Attendance</p>
+                </div>
+                <div class="user-column">
+                    <div class="user-profile">
+                        <i class="material-icons">person</i>
+                    </div>
+                    <div class="name">
+                        <h2>{{loginData.loginName}}</h2>
+                        <p>+91 {{loginData.loginMobile}}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cs-month flat-item">
+                <ul>
+                    <li ng-click = "onMonthChangeHandler('previous')" class="mw45">
+                        <button class="previous-btn"><i class="material-icons">keyboard_arrow_left</i></button>
+                    </li>
+
+                    <li>{{selectedMonth | date: 'MMM yyyy'}}</li>
+
+                    <li  ng-click = "onMonthChangeHandler('next')" class="mw45">
+                        <button class="next-btn"><i class="material-icons">keyboard_arrow_right</i></button>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+
+        <div class="padding16">
+
+            <div ng-repeat = "row in attendanceList" ng-class="row.applyClass" class="attandance-list">
+
+                <div class="attandance-day">
+                    <p><span>{{row.attend_Date | date: 'd'}}</span>{{row.attend_date | date: 'MM'}} <br><span>{{row.day}}</span></p>
+                </div>
+
+                <div ng-if = "selectedMonth == row.attend_Date" class="attandance-time">
+
+                    <p>Start Time : <span>{{row.attendStartTimeInFormat ? row.attendStartTimeInFormat : 'Not Started!'}}</span></p>
+
+                    <p ng-if="row.attendStartTimeInFormat">End Time : <span>{{row.attendStopTimeInFormat ? row.attendStopTimeInFormat : 'Continue.....'}}</span></p>
+
+                </div>
+
+                <div ng-if = "selectedMonth != row.attend_Date && row.status == 'Absent'" class="attandance-time">
+                    <p><span>Absent</span></p>
+                </div>
+
+                <div ng-if = "selectedMonth != row.attend_Date && row.status == 'Present'" class="attandance-time">
+
+                    <p>Start Time : <span>{{row.attendStartTimeInFormat}}</span></p>
+                    <p>End Time : <span>{{row.attendStopTimeInFormat}}</span></p>
+
+                </div>
+
+                <div ng-if = "selectedMonth != row.attend_Date && row.status == 'Holiday'" class="attandance-time">
+                    <p><span>Holiday</span></p>
+                </div>
+
+            </div>
+
+        </div>
+
+    </ion-content>
+
+</ion-view>

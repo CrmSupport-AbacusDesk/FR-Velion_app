@@ -1,0 +1,160 @@
+<ion-view view-title="Travel Plan Detail">
+    
+    <ion-nav-buttons side="left">
+        <a ng-click="goToBackPage()"  class="cs-backbtn button button-icon icon ion-android-arrow-back font18 fff"></a>
+    </ion-nav-buttons>
+    
+    <ion-nav-buttons side="right" class="custom-right-btn">
+        <div ng-if="travelPlanDetail.editTravel == '0' && loginData.loginId == travelPlanDetail.createdBy" class="right-nav-btn nav-search" ng-click="edit_plan(travelPlanDetail.id)">
+            <a menu-toggle="left"><i class="material-icons">create</i></a>
+        </div>
+    </ion-nav-buttons>
+    
+    <ion-content class="">
+        <div class="padding16">
+            <div class="">
+                <div  class="coman-list mt0 mb25 mr0 ml0">
+                    <div class="top-head">
+                        <ul>
+                            <li>
+                                <p>{{travelPlanDetail.dateCreated | date:'dd MMM y'}}</p>
+                                <span>Date Created - {{$root.modelPlanType}}</span>
+                            </li>
+                            
+                            <li>
+                                <p>{{travelPlanDetail.startDate | date:'dd MMM y'}} - {{travelPlanDetail.endDate | date:'dd MMM y'}}</p>
+                                <span>Travel Date</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="pdlr ">
+                        <div class="cs-text">
+                            <p>Created By: <strong>{{travelPlanDetail.createdByName}}</strong></p>
+                        </div>
+                        
+                        <div class="cs-grid pt10">
+                            <div class="bdr-field wp100" ng-repeat="row in travelPlanDetail.approval" ng-Class="{'approved-bg': row.status == 'Approved', 'pending-bg': row.status == 'Pending', 'reject-bg': row.status == 'Reject'}">
+                                <span>{{row.designation}} Status</span>
+                                <p>{{row.name}} / {{row.status}}</p>
+                                <!-- <a class="fix-icon-btn" ><i class="material-icons">create</i></a> -->
+                            </div>
+                        </div>
+                        
+                        <div class="cs-flex" ng-if="travelPlanDetail.seniorRemark">
+                            <div class="bdr-field wp100 ">
+                                <span>{{row.designation}} Remark</span>
+                                <p>{{travelPlanDetail.seniorRemark}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="round-tab padding0 mb35 border0">
+                <ul>
+                    <li ng-click = "change_detail_type('plan')" ng-class = "detail_type == 'plan' ? 'active' : ''" >
+                        <a>Plan Detail</a>
+                    </li>
+                    <li ng-click = "change_detail_type('journy')" ng-class = "detail_type == 'journy' ? 'active' : ''">
+                        <a>Journey Vs Actual</a>
+                    </li>
+                </ul>
+            </div>
+            
+            <section class="ac-container" ng-if="detail_type == 'plan'">
+                <figure ng-repeat = "row in sorted_arr;">
+                    <input id="ac-{{$index+1}}" name="accordion-1" type="checkbox" class="ds-none" ng-checked="{{$index == '0'}}">
+                    <label for="ac-{{$index+1}}" class="header-label">{{row.date | date:'d MMM y'}}</label>
+                    <article  ng-class="{'cs-art' : classActive==true}">
+                        <div class="plan-list box-shadow-none border1px" ng-repeat = "val in row.data">
+                            <h2>{{val.TravelType}}</h2>
+                            <div class="bg-column mt0">
+                                <p>{{val.city}} {{val.district}} {{val.state}} {{val.drName}}</p>
+                                <div class="cs-text-column">
+                                    <p>
+                                        <span>Purpose Of Visit :</span>{{val.remark}}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                </figure>
+            </section>
+            
+            <section class="ac-container" ng-if="detail_type == 'journy'">
+                <figure ng-repeat = "row in sorted_arr;">
+                    <input id="ac-{{$index+1}}" name="accordion-1" type="checkbox" class="ds-none" ng-checked="{{$index == '0'}}">
+                    <label for="ac-{{$index+1}}" class="header-label">{{row.date | date:'d MMM y'}}</label>
+                    <article  ng-class="{'cs-art' : classActive==true}">
+                        <div class="plan-list box-shadow-none border1px" ng-repeat = "val in row.data">
+                            <div class="df jcsb head-font">
+                                <span >Plan Details</span><span>Status : <strong ng-class="{'pending-clr':val.status=='Pending','approved-clr':val.status=='Done'}">{{val.status}}</strong></span>
+                            </div>
+                            <div class="cs-grid">
+                                <div class="bdr-field wp100 mt5">
+                                    <span>{{val.TravelType}}</span>
+                                    <p>{{val.city}} {{val.district}} {{val.state}} {{val.drName}}</p>
+                                </div>
+                            </div>
+                            <div ng-if="val.TravelType=='Party'" >
+                                <span style="font-size: 12px;">PJP Remark</span>
+                                <div class="cs-grid">
+                                    <div class="bdr-field wp100 mt5 mb0">
+                                        <p>{{val.pjp_remark ? val.pjp_remark : 'N/A'}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                </figure>
+            </section>
+        </div>
+        <div class="h70">&nbsp;</div>
+    </ion-content>
+    <div class="footer-bar">
+        <button class="edit-btn" ng-repeat="row in travelPlanDetail.approval" ng-if="row.status == 'Pending' && $root.modelPlanType == 'teamTravelPlan' && loginData.loginId == row.assign_user_id" ng-click="changeStatus('seniorStatus',row.approvalId)">
+            <img src="img/edit.svg" ><p>Changes Status <span>Click here to change travel status</span></p>
+        </button>
+    </div>
+    <script id="add-status" type="text/ng-template">
+        <ion-modal-view style="background: rgba(0, 0, 0, 0.7);">
+            <ion-content class="padding">
+                <div class="modal-outer">
+                    <div class="modal-cs">
+                        <div class="modal-head">
+                            <h2 class="title">Status</h2>
+                            <button class="button button-clear button-primary" ng-click="data.statusModel.hide()"><i class="material-icons">clear</i></button>
+                        </div>
+                        <form name="statusForm" novalidate ng-submit="statusForm.$valid && saveStatus(travelPlanDetail.id)">
+                            <div class="ledmd">
+                                <div class="cs-add-form">
+                                    <select class="browser-default" name="status" ng-model="travelStatus.status">
+                                        <option value="">Select Status</option>
+                                        <option value="Approved">Approved</option>
+                                        <option value="Reject">Reject</option>
+                                        <option value="Cancel">Cancel</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="ledmd" ng-if="travelStatus.status == 'Reject' || travelStatus.status == 'Cancel'">
+                                <div class="cs-add-form">
+                                    <div class="input-field field-input mt0">
+                                        <textarea ng-model="travelStatus.remark" name="remark" class="validate" style="height: 100px !important;" required></textarea>
+                                        <label for="last_name">Remark *</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="sgsave">
+                                <button  ng-disabled = "!travelStatus.status" >SUBMIT<i class="material-icons">arrow_right_alt</i></button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </ion-content>
+        </ion-modal-view>
+    </script>
+</ion-view>
+
+
+

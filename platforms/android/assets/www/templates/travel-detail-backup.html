@@ -1,0 +1,114 @@
+<ion-view view-title="Travel Plan Detail">
+    
+    <ion-nav-buttons side="left">
+        <a ng-click="goToBackPage()"  class="cs-backbtn button button-icon icon ion-android-arrow-back font18 fff"></a>
+    </ion-nav-buttons>
+    
+    <ion-content class="">
+        <div class="padding16">
+            <div class="sticky-bg">
+                <div  class="coman-list mt0 mb35 mr0 ml0">
+                    <div class="top-head">
+                        <ul>
+                            <li>
+                                <p>{{travelPlanDetail.dateCreated | date:'dd MMM y'}}</p>
+                                <span>Date Created - {{$root.modelPlanType}}</span>
+                            </li>
+                            
+                            <li>
+                                <p>{{travelPlanDetail.startDate | date:'dd MMM y'}} - {{travelPlanDetail.endDate | date:'dd MMM y'}}</p>
+                                <span>Travel Date</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="pdlr pt10">
+                        <div class="cs-grid">
+                            <div class="bdr-field wp100" ng-Class="{'approved-bg': travelPlanDetail.seniorStatus == 'Approved', 'pending-bg': travelPlanDetail.seniorStatus == 'Pending', 'reject-bg': travelPlanDetail.seniorStatus == 'Reject'}">
+                                <span>Senior Status</span>
+                                <p>{{travelPlanDetail.seniorStatus}}</p>
+                                <a class="fix-icon-btn" ng-if="travelPlanDetail.seniorStatus != 'Approved' && $root.modelPlanType == 'teamTravelPlan'" ng-click="changeStatus('seniorStatus')"><i class="material-icons">create</i></a>
+                            </div>
+                            
+                            <div class="bdr-field wp100" ng-Class="{'approved-bg': travelPlanDetail.acStatus == 'Approved', 'pending-bg': travelPlanDetail.acStatus == 'Pending', 'reject-bg': travelPlanDetail.acStatus == 'Reject'}">
+                                <span>A/C Status</span>
+                                <p>{{travelPlanDetail.acStatus}}</p>
+                                <a class="fix-icon-btn" ng-if="travelPlanDetail.acStatus != 'Approved' && $root.modelPlanType == 'teamTravelPlan'" ng-click="changeStatus('acStatus')"><i class="material-icons">create</i></a>
+                            </div>
+                            
+                            <div class="bdr-field wp100">
+                                <span>Advance Pay</span>
+                                <p>&#8377;  {{travelPlanDetail.advancePaymentAmt ? travelPlanDetail.advancePaymentAmt : '0'}}</p>
+                            </div>
+                        </div>
+                        <div class="cs-flex" ng-if="travelPlanDetail.seniorRemark">
+                            <div class="bdr-field wp100 ">
+                                <span>Senior Remark</span>
+                                <p>{{travelPlanDetail.seniorRemark}}</p>
+                            </div>
+                        </div>
+                        <div class="cs-flex" ng-if="travelPlanDetail.acRemark">
+                            <div class="bdr-field wp100 ">
+                                <span>A/C Remark</span>
+                                <p>{{travelPlanDetail.acRemark}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- loop data -->
+            <div class="plan-list outside" ng-repeat = "val in travelPlanDetail.travelArea">
+                <h2>{{val.TravelType}}</h2>
+                <div class="bg-column mt0">
+                    <p>{{val.city}} {{val.district}} {{val.state}} {{val.drName}}</p>
+                    <div class="cs-text-column">
+                        <p>
+                            <span>Purpose Of Visit :</span>{{val.remark}}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <!-- loop data -->
+        </div>
+    </ion-content>
+</ion-view>
+
+
+<script id="add-status" type="text/ng-template">
+    <ion-modal-view style="background: rgba(0, 0, 0, 0.7);">
+        <ion-content class="padding">
+            <div class="modal-outer">
+                <div class="modal-cs">
+                    <div class="modal-head">
+                        <h2 class="title">Status</h2>
+                        <button class="button button-clear button-primary" ng-click="data.statusModel.hide()"><i class="material-icons">clear</i></button>
+                    </div>
+                    <form>
+                        <div class="ledmd">
+                            <div class="cs-add-form">
+                                    <select class="browser-default" name="status" ng-model="travelStatus.status">
+                                        <option value="Pending">Pending</option>
+                                        <option value="Approved">Approved</option>
+                                        <option value="Reject">Reject</option>
+                                        <option value="Cancel">Cancel</option>
+                                    </select>
+                            </div>
+                        </div>
+
+                        <div class="ledmd">
+                            <div class="cs-add-form">
+                                <div class="input-field field-input mt0">
+                                    <textarea ng-model="travelStatus.remark" name="remark" class="validate" style="height: 100px !important;" required></textarea>
+                                    <label for="last_name">Remark</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="sgsave">
+                            <button ng-click="saveStatus(travelPlanDetail.id)" ng-disabled = "!travelStatus.status" >SUBMIT<i class="material-icons">arrow_right_alt</i></button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </ion-content>
+    </ion-modal-view>
+</script>

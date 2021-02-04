@@ -1,0 +1,239 @@
+<ion-view view-title="Order Detail">
+    <ion-nav-buttons side="left">
+        <a ng-click = "goToBackPageHandler()" class="cs-backbtn button button-icon icon ion-android-arrow-back font18 fff"></a>
+    </ion-nav-buttons>
+    
+    <ion-content>
+
+        <div class="sticky-column bdr-botm">
+            <div  class="coman-list margin0 radius0 no-shadow">
+                <div class="center-item padding10">
+                    <div class="cs-icon">{{leadOrderDetail.dr_name[0]}}</div>
+                    <div class="cs-content ellipsis">
+                        <p class="ellipsis">{{leadOrderDetail.dr_name}}</p>
+                        <span class="ellipsis">{{leadOrderDetail.dr_type_name}}</span>
+                    </div>
+                    <a href="tel: {{row.contact_mobile_no}}" class="dialer"><i class="material-icons">call</i></a>
+                </div>
+                <div class="top-head bdr-top1">
+                    <ul>
+                        <li>
+                            <p>{{dateFormat(leadOrderDetail.date_created)}}</p>
+                            <span>Date Created</span>
+                        </li>
+                        <li>
+                            <p>{{leadOrderDetail.created_by_name}}</p>
+                            <span>Created By</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="bottom-sec">
+                    <p><strong>Address</strong>: - - -</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="cs-bg-heading" style="padding: 16px 16px 0px 16px;">
+            <h2>Order Information</h2>
+        </div>
+
+        <div  class="coman-list">
+            <div class="top-head">
+                <ul>
+                    <li>
+                        <p>#ORDID-{{leadOrderDetail.id}}</p>
+                        <span>Order Id</span>
+                    </li>
+                    <li>
+                        <p>{{dateFormat(quoteDetail.order_date)}}</p>
+                        <span>Date</span>
+                    </li>
+                    <li>
+                        <p>{{leadOrderDetail.item_count}}</p>
+                        <span>Total Item</span>
+                    </li>
+                   
+                </ul>
+            </div>
+            <div class="cs-secation padding10">
+                <p style="font-size: 14px;"><span style="font-size: 12px;">Order Value :</span> &#8377; {{leadOrderDetail.item_total}}</p>
+            </div>
+            
+            <div class="top-head bdr-top1">
+                <ul>
+                    <li>
+                        <p>{{leadOrderDetail.created_by_name}}</p>
+                        <span>Created By</span>
+                    </li>
+                    <li>
+                        <p>{{leadOrderDetail.order_status}}</p>
+                        <span>Status</span>
+                    </li>
+                    <li  ng-if="leadOrderDetail.order_status == 'Delivered'">
+                        <p>- - -</p>
+                        <span>Delivered On</span>
+                    </li>
+                    <li  ng-if="leadOrderDetail.order_status == 'Delivered'">
+                        <p>{{leadOrderDetail.payment_mode}}</p>
+                        <span>Payment Mode</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="cs-secation padding10" ng-if="leadOrderDetail.order_status == 'Delivered' ">
+                <p><span>Dispatch By :</span> {{leadOrderDetail.dispatch_by}}</p>
+                <p><span>Dispatch By Name :</span> {{leadOrderDetail.dispatch_by_name}}</p>
+            </div>
+
+            <div class="cs-flex ml10 mr10" ng-if="leadOrderDetail.order_status == 'Reject'">
+                <div  class="bdr-field wp100">
+                    <span>Reason Reject</span>
+                    <p>{{leadOrderDetail.reason_reject ? leadOrderDetail.reason_reject : 'N/A'}}</p>
+                </div>
+                
+                
+                <div  class="bdr-field wp150">
+                    <span>Reject Date</span>
+                    <p>{{dateFormat(leadOrderDetail.reject_date)}}</p>
+                </div>
+            </div>
+            <div class="bottom-sec bdr-top1" ng-if="leadOrderDetail.order_status == 'Delivered'">
+                <p><strong>Shipping Address</strong>: {{leadOrderDetail.shipping_address ? leadOrderDetail.shipping_address : 'N/A'}}</p>
+            </div>
+        </div>
+
+        <div class="cs-bg-heading" style="padding: 0px 16px 0px 16px;">
+            <h2>Item Information</h2>
+        </div>
+
+        <div class="cart-card no-shadow">        
+            <div ng-repeat="row in leadOrderDetail.itemData" class="coman-list">
+                <div class="center-item">
+                    <div class="cs-content">
+                        <p>{{row.category}} {{row.sub_category ? ', '+row.sub_category : ''}} {{row.product_name ? ', '+row.product_name : ''}}</p>
+                        <span>#{{row.product_code ? row.product_code : ''}}</span>
+                    </div>
+                </div>
+                <div class="pdlr">
+                    <div class="cs-flex">
+                        <div class="bdr-field wp100">
+                            <span>QTY</span>
+                            <p>{{row.qty ? row.qty : '0'}}</p>
+                        </div>
+                        <div class="bdr-field wp100">
+                            <span>Rate</span>
+                            <p> &#8377;  {{row.rate ? row.rate : ''}} </p>
+                        </div>
+                        <div class="bdr-field wp100">
+                            <span>Amount</span>
+                            <p>{{row.qty * row.rate}}</p>
+                        </div>
+                        
+                    </div>
+                    
+                    <div class="cs-flex">
+                        <div class="bdr-field wp100">
+                            <span>Discount</span>
+                            <p> &#8377;  {{row.dis_amt ? row.dis_amt : '0'}} ({{row.dis_percent ? row.dis_percent : '0'}} %) </p>
+                        </div>
+                        
+                        <div class="bdr-field wp100">
+                            <span>GST (18%)</span>
+                            <p>{{row.cgst_amount + row.sgst_amount + row.igst_amount}}</p>
+                        </div>
+                        <div class="bdr-field wp100">
+                            <span>Item Total</span>
+                            <p>{{row.item_net_total ? row.item_net_total : '0'}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="summary-table padding10">
+            <table>
+                <tr>
+                    <td class="w130">Total Item</td>
+                    <td class="text-right" style="font-size: 14px;">{{leadOrderDetail.item_count ? leadOrderDetail.item_count : '0'}}</td>
+                </tr>
+                <tr>
+                    <td>Item Total</td>
+                    <td class="text-right" style="font-size: 14px;">{{leadOrderDetail.item_total ? leadOrderDetail.item_total : '0'}}</td>
+                </tr>
+                
+                <tr>
+                    <td>Discount Amount</td>
+                    <td class="text-right" style="font-size: 14px;">&#8377; {{leadOrderDetail.dis_amt ? leadOrderDetail.dis_amt : '0'}}</td>
+                </tr>
+                
+                <tr>
+                    <td>Sub Total</td>
+                    <td class="text-right" style="font-size: 14px;">&#8377; {{leadOrderDetail.sub_total ? leadOrderDetail.sub_total : '0'}}</td>
+                </tr>
+                
+                <tr>
+                    <td>GST Amount</td>
+                    <td class="text-right" style="font-size: 14px;">&#8377; {{leadOrderDetail.cgst_amt + leadOrderDetail.sgst_amt + leadOrderDetail.igst_amt}}</td>
+                </tr>
+                
+                <tr>
+                    <td>Final Amount </td>
+                    <td class="text-right" style="font-size: 14px;">&#8377; {{leadOrderDetail.net_total ? leadOrderDetail.net_total : '0'}}</td>
+                </tr>
+            </table>
+        </div>
+
+    </ion-content>
+</ion-view>
+
+<div class="coman-list clrd-bg" style="display: none;">
+    <div class="center-item">
+        <div class="cs-icon">{{leadOrderDetail.itemData.dr_name[0] ? leadOrderDetail.itemData.dr_name[0] : '--'}}</div>
+        <div class="cs-content">
+            <p>{{orderDetail.dr_name ? orderDetail.dr_name : 'N/A'}}</p>
+            <span>{{orderDetail.type_name ? orderDetail.type_name : 'N/A'}}</span>
+            <a class="icon-content"><i class="material-icons">email</i> {{orderDetail.email ? orderDetail.email : 'N/A'}}</a>
+        </div>
+        <a ng-if="orderDetail.contact_mobile_no" href="tel: {{orderDetail.contact_mobile_no}}" class="dialer"><i class="material-icons">call</i></a>
+    </div>
+    
+    <div class="pdlr">
+        <div class="bdr-field">
+            <span>Address</span>
+            <p>{{orderDetail.street}} {{orderDetail.state_name}} {{orderDetail.district_name ? ', '+orderDetail.district_name : ''}}{{orderDetail.city ? ', '+orderDetail.city : ''}} {{orderDetail.pincode ? '- '+orderDetail.pincode : ''}}</p>
+        </div>
+    </div>
+</div>
+
+<div class="pl16 pr16">
+    
+    <div class="cs-flex" style="display: none;">
+        <div class="bdr-field wp100">
+            <span>Distributor Info</span>
+            <p>{{orderDetail.deliveryFromName ? orderDetail.deliveryFromName : 'N/A'}} {{orderDetail.deliveryFromMobile ? ' / +91 '+orderDetail.deliveryFromMobile : ''}}</p>
+        </div>
+    </div>
+    
+    
+    <div class="cs-flex" style="display: none;">
+        <div class="bdr-field wp100">
+            <span>Date Created</span>
+            <p>{{orderDetail.dateCreatedInFormat ? orderDetail.dateCreatedInFormat : 'N/A'}}</p>
+        </div>
+        <div class="bdr-field w120 pending-bg">
+            <span>Status</span>
+            <p>{{orderDetail.order_status ? orderDetail.order_status : 'N/A'}}</p>
+        </div>
+        
+        <div ng-if="orderDetail.order_status == 'Reject'" class="bdr-field w120 pending-bg">
+            <span>Reason Reject</span>
+            <p>{{orderDetail.reason_reject ? orderDetail.reason_reject : 'N/A'}}</p>
+        </div>
+        
+        
+        <div ng-if="orderDetail.order_status == 'Reject'" class="bdr-field w120 pending-bg" >
+            <span>Reject Date</span>
+            <p>{{orderDetail.reject_date | date: 'd MMM y'}}</p>
+        </div>
+    </div>
+</div>

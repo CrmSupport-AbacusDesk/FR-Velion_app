@@ -1,0 +1,45 @@
+<ion-view view-title="Stock" name="Scan-view" hide-nav-bar="true" ng-init="search.selected='brand'" >
+    
+    <ion-header-bar class="opr_ion_header bg-black">
+        <div class="cs-left">
+            <button class="back-button" ng-click="goToBackPageHandler()"><i class="material-icons">arrow_back</i></button>
+            <h1 class="orp_title">Stock</h1>
+        </div>
+       
+    </ion-header-bar>
+    
+    
+    <ion-content >
+        
+        <div class="orp_seacrh search_height" ng-class="{'search_active':suggestiveList.length}">
+            <div class="figure">
+                <input type="text" placeholder="Search" name="master_search" ng-model="search.master_search" ng-change="getSuggestiveData()">
+                <button ng-click="search.product_code='';suggestiveList=[];getStockData();"><i class="material-icons">clear</i></button>
+
+                <div class="search-data">
+                    <ul>
+                        <li ng-repeat="row in suggestiveList" >
+                            <p ng-click="search.product_code=row.product_code;getStockData()" >{{row.product_name}} <span ng-if="row.brand">({{row.brand}})</span> ({{row.product_code}})</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="bx-listing">
+            
+            <a ng-repeat="row in productStock">
+                <div class="description">
+                    <div class="cs-left">
+                        <h1>{{row.product_name}} <span ng-if="row.brand">({{row.brand}})</span> - {{row.category}} </h1>
+                        <p>SR No. : {{row.product_code}}</p>
+                    </div>
+                    <div class="cs-right">
+                        <p class="price">{{row.stock}}</p>
+                    </div>
+                </div>
+            </a>
+            
+        </div>
+    </ion-content>
+</ion-view>
