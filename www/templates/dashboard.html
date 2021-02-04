@@ -27,17 +27,7 @@
             </div>
         </div>
         
-        <h4 class="nrml-head" ng-if="dashboardData['drCountData'].length > 0 && !loginData.channelSalesLogin">My Leads</h4>
-        <div class="total-count" ng-if="dashboardData['drCountData'].length > 0 && !loginData.channelSalesLogin">
-            <a ng-click = "onGoToDrListHandler(row)" ng-repeat="row in dashboardData['drCountData']">
-                <p>{{row.typeCount}}</p>
-                <span>{{row.typeName}}</span>
-            </a>
-            <a ng-if="dashboardData['drCountData'].length > 0" class="more-count" href="#/tab/lead-counter">
-                <span>More</span>
-                <i class="material-icons vert">more_horiz</i>
-            </a>
-        </div>
+       
         <div class="bx-container mt20 mb0">
             <h2>Today Records</h2>
             
@@ -70,12 +60,25 @@
         </div>
         
         <!-- <h4 class="nrml-head" ng-if="loginData.loginAccessLevel == '4'">My Distribution Network</h4> -->
-        <div class="total-count">
+
+        <!-- <h4 class="nrml-head" ng-if="dashboardData['drCountData'].length > 0 && !loginData.channelSalesLogin">My Leads</h4> -->
+        <div class="total-count" ng-if="dashboardData['drCountData'].length > 0 && !loginData.channelSalesLogin">
+            <a ng-click = "gotoDrPage(row.type_name)"  ng-repeat="row in dashboardData['drCountData']">
+                <p>{{row.typeCount}}</p>
+                <span>{{row.typeName}}</span>
+            </a>
+            <!-- <a ng-if="dashboardData['drCountData'].length > 0" class="more-count" href="#/tab/lead-counter">
+                <span>More</span>
+                <i class="material-icons vert">more_horiz</i>
+            </a> -->
+        </div>
+
+        <!-- <div class="total-count">
             <a ng-click = "gotoDrPage(row.type_name)" ng-repeat="row in dashboardData['distriCountData']">
                 <p>{{row.total_cn}}</p>
                 <span>{{row.type_name}}</span>
             </a>
-        </div>
+        </div> -->
         
         <!-- <div class="pr16 pl16" ng-if="dashboardData.collectionPlan!=0">
             <div class="target-bar">
