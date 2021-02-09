@@ -9,12 +9,12 @@
                 <ion-nav-view name="tab-dashboard"></ion-nav-view>
             </ion-tab>
 
-            <ion-tab ng-click = "onGoToRootPageHandler('Lead')"  title="Lead" icon-off="follow-icon" icon-on="follow-icon">
-                <ion-nav-view name="tab_lead_list"></ion-nav-view>
+            <ion-tab ng-click = "onGoToRootPageHandler('Distributor')"  title="Distributor" icon-off="distributor-icon" icon-on="distributor-icon">
+                <ion-nav-view name="tab.distribution-network"></ion-nav-view>
             </ion-tab>
             <!-- loginData.startAttendance ? onGoToRootPageHandler('CheckIn') : loginAlert() -->
-            <ion-tab ng-click="onGoToRootPageHandler('CheckIn')" title="Activity's" icon-off="order-icon" icon-on="order-icon">
-                <ion-nav-view name="tab-all-activity-list"></ion-nav-view>
+            <ion-tab ng-click="onGoToRootPageHandler('sfaPriOrder-list')" title="Order" icon-off="order-icon" icon-on="order-icon">
+                <ion-nav-view name="tab-primary-order"></ion-nav-view>
             </ion-tab>
             <!-- ng-click="loginData.startAttendance ? onGoToRootPageHandler('FollowUp') : loginAlert()" -->
             <!-- <ion-tab hidden={{loginData.channelSalesLogin}} ng-click="onGoToRootPageHandler('FollowUp')" title="Follow Up" icon-off="quotation-icon" icon-on="quotation-icon">
@@ -22,8 +22,8 @@
             </ion-tab> -->
 
             <!-- hidden={{!loginData.channelSalesLogin}} -->
-            <ion-tab  ng-click="onGoToRootPageHandler('PJP')" title="PJP" icon-off="pjp-icon" icon-on="pjp-icon">
-                <ion-nav-view name="tab-pjp"></ion-nav-view>
+            <ion-tab  ng-click="onGoToRootPageHandler('Stock')" title="Stock" icon-off="stock-icon" icon-on="stock-icon">
+                <ion-nav-view name="tab.stock"></ion-nav-view>
             </ion-tab>
 
             <ion-tab ng-click = "onGoToRootPageHandler('Menu')" title="Menu"  icon-off="menu-icon" icon-on="menu-icon">
