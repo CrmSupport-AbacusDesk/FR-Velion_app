@@ -101,11 +101,11 @@
             <h2>Account Details</h2>
             <div class="text-box">
                 <p>Credit Limit -</p>
-                <span class="cs-chips">₹ 1200</span>
+                <span class="cs-chips">₹ {{drDetail.drData.credit_limit ? drDetail.drData.credit_limit : '0'}}</span>
             </div>
             <div class="text-box mt10">
                 <p>Outstanding -</p>
-                <span class="cs-chips">₹ 15000</span>
+                <span class="cs-chips">₹ {{drDetail.drData.credit_exposure ? drDetail.drData.credit_exposure : 0}}</span>
             </div>
         </div>
         
@@ -141,11 +141,14 @@
                 <p><span>{{drDetail.priOrderData.length}}</span></p>
                 <div class="info">Primary Order</div>
             </a>
-            <a ng-click="gotoOrder('secondary',drDetail.drData.id,drDetail.drData.dr_name)" ng-if="drDetail.drData.type_name == 'Dealer'">
+            <a ng-click="gotoOrder('secondary',drDetail.drData.id,drDetail.drData.dr_name)" ng-if="drDetail.drData.type_name == 'Distributor'">
                 <p><span>{{drDetail.secOrderData.length}}</span></p>
                 <div class="info">Secondary Order</div>
             </a>
-            
+            <a ng-click="gotoOrder('primary',drDetail.drData.id,drDetail.drData.dr_name)" ng-if="drDetail.drData.type_name == 'Distributor'">
+                <p><span>{{drDetail.priOrderData.length}}</span></p>
+                <div class="info">Billing Details</div>
+            </a>
             <!-- <a ng-click="dr_img_doc_list(drDetail.drData.id,'1')">
                 <P><span>{{drDetail.attachments.length}}</span></P>
                 <div class="info">Image & Document</div>

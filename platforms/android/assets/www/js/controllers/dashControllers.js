@@ -4,10 +4,11 @@ app.controller('dashCtrl', function ($scope, $rootScope, searchSelect, $ionicMod
     $scope.isRequestInProcess;
     $scope.dashboardData = {};
     $scope.loginData = myAllSharedService.loginData;
+    console.log($scope.loginData);
     $scope.data = {};
     $scope.data.showMoreCustomerCount = false;
-    $rootScope.isAttendanceStart  = myAllSharedService.loginData.startAttendance;
-    console.log($rootScope.isAttendanceStart);
+    // $rootScope.isAttendanceStart  = myAllSharedService.loginData.startAttendance;
+    // console.log($rootScope.isAttendanceStart); $scope.orderList
     // myAllSharedService.loginData.startAttendance = false;
     // $rootScope.isAttendanceStart = false;
     $scope.uploadURL = uploadURL;
@@ -70,101 +71,108 @@ app.controller('dashCtrl', function ($scope, $rootScope, searchSelect, $ionicMod
         console.log($scope.loginData.startAttendance);
         
         
-        if($rootScope.isAttendanceStart && targetPage!="Menu" && targetPage!="Home")
-        {
-            console.log($scope.loginData.startAttendance);
-            console.log(targetPage);
-            if(targetPage == 'FollowUp') {
-                $state.go('tab.all-followup-list');
-            }
-            
-            if(targetPage == 'CheckIn') {
-                $state.go('tab.all-activity-list');
-            }
-            
-            if(targetPage == 'Order')
-            {
-                myAllSharedService.drTypeFilterData.isInsideLead = 'No';
-                myAllSharedService.drTypeFilterData.orderId = '';
-                myAllSharedService.drTypeFilterData.drId = '';
-                
-                $state.go('tab.order-add');
-            }
-            
-            if(targetPage == 'sfaPriOrder')
-            {
-                myAllSharedService.drTypeFilterData.isInsideLead = 'No';
-                myAllSharedService.drTypeFilterData.orderId = '';
-                
-                myAllSharedService.drTypeFilterData.dr_name = '';
-                myAllSharedService.drTypeFilterData.dr_id = '';
-                myAllSharedService.drTypeFilterData.orderCreatedBy = 'me';
-                myAllSharedService.drTypeFilterData.order_type = 'primary';
-                $state.go('tab.sfa-order-add');
-            }
-            
-            if(targetPage == 'sfaSecOrder')
-            {
-                myAllSharedService.drTypeFilterData.isInsideLead = 'No';
-                myAllSharedService.drTypeFilterData.orderId = '';
-                myAllSharedService.drTypeFilterData.dr_name = '';
-                myAllSharedService.drTypeFilterData.dr_id = '';
-                myAllSharedService.drTypeFilterData.orderCreatedBy = 'me';
-                myAllSharedService.drTypeFilterData.order_type = 'secondary';
-                $state.go('tab.sfa-order-add');
-            }
-            
-            if(targetPage == 'Order-list')
-            {
-                $state.go('tab.all-order-list');
-            }
-            
-            if(targetPage == 'sfaPriOrder-list')
-            {
-                myAllSharedService.drTypeFilterData.orderCreatedBy = 'me';
-                myAllSharedService.drTypeFilterData.order_type = 'primary';
-                
-                myAllSharedService.drTypeFilterData.referFrom ='dashboard';
-                
-                
-                $state.go('tab.sfa-order-list');
-            }
-            
-            if(targetPage == 'secondary-order-list')
-            {
-                myAllSharedService.drTypeFilterData.orderCreatedBy = 'me';
-                myAllSharedService.drTypeFilterData.order_type = 'secondary';
-                myAllSharedService.drTypeFilterData.dr_name = '';
-                myAllSharedService.drTypeFilterData.dr_id = '';
-                myAllSharedService.drTypeFilterData.referFrom ='dashboard';
-                
-                
-                $state.go('tab.sfa-order-list');
-            }
-            
-            if(targetPage == 'PJP')
-            {
-                $state.go('tab.PJP');
-            }
-            if (targetPage == 'Lead') {
-                $state.go('tab.lead-list');
-            }
+        // if($rootScope.isAttendanceStart && targetPage!="Menu" && targetPage!="Home")
+        // {
+        // console.log($scope.loginData.startAttendance);
+        // console.log(targetPage);
+        // if(targetPage == 'FollowUp') {
+        //     $state.go('tab.all-followup-list');
+        // }
+        
+        if(targetPage == 'CheckIn') {
+            $state.go('tab.all-activity-list');
         }
-        else if(targetPage=="Menu" || targetPage=="Home")
+        
+        // if(targetPage == 'Order')
+        // {
+        //     myAllSharedService.drTypeFilterData.isInsideLead = 'No';
+        //     myAllSharedService.drTypeFilterData.orderId = '';
+        //     myAllSharedService.drTypeFilterData.drId = '';
+            
+        //     $state.go('tab.order-add');
+        // }
+        
+        if(targetPage == 'sfaPriOrder')
         {
+            myAllSharedService.drTypeFilterData.isInsideLead = 'No';
+            myAllSharedService.drTypeFilterData.orderId = '';
+            
+            myAllSharedService.drTypeFilterData.dr_name = '';
+            myAllSharedService.drTypeFilterData.dr_id = '';
+            myAllSharedService.drTypeFilterData.orderCreatedBy = 'me';
+            myAllSharedService.drTypeFilterData.order_type = 'primary';
+            $state.go('tab.sfa-order-add');
+        }
+        
+        if(targetPage == 'sfaSecOrder')
+        {
+            myAllSharedService.drTypeFilterData.isInsideLead = 'No';
+            myAllSharedService.drTypeFilterData.orderId = '';
+            myAllSharedService.drTypeFilterData.dr_name = '';
+            myAllSharedService.drTypeFilterData.dr_id = '';
+            myAllSharedService.drTypeFilterData.orderCreatedBy = 'me';
+            myAllSharedService.drTypeFilterData.order_type = 'secondary';
+            $state.go('tab.sfa-order-add');
+        }
+        
+        // if(targetPage == 'Order-list')
+        // {
+        //     $state.go('tab.all-order-list');
+        // }
+        
+        if(targetPage == 'sfaPriOrder-list')
+        {
+            myAllSharedService.drTypeFilterData.orderCreatedBy = 'me';
+            myAllSharedService.drTypeFilterData.order_type = 'primary';
+            
+            myAllSharedService.drTypeFilterData.referFrom ='dashboard';
+            
+            
+            $state.go('tab.sfa-order-list');
+        }
+        
+        if(targetPage == 'secondary-order-list')
+        {
+            myAllSharedService.drTypeFilterData.orderCreatedBy = 'me';
+            myAllSharedService.drTypeFilterData.order_type = 'secondary';
+            myAllSharedService.drTypeFilterData.dr_name = '';
+            myAllSharedService.drTypeFilterData.dr_id = '';
+            myAllSharedService.drTypeFilterData.referFrom ='dashboard';
+            
+            
+            $state.go('tab.sfa-order-list');
+        }
+        
+        if(targetPage == 'Stock')
+        {
+            $state.go('tab.stock');
+        }
+        if (targetPage == 'Distributor') {
+            $state.go('tab.distribution-network');
+        }
+        if (targetPage == 'Dealer') {
+            $state.go('tab.distribution-network');
+        }
+        // }
+        if(targetPage == 'Home')
+        {
+        $state.go('tab.dashboard');
+        }
+        // else if(targetPage=="Menu" || targetPage=="Home")
+        // {
             if(targetPage == 'Menu') {
                 $state.go('tab.menu');
             }
-            if(targetPage == 'Home')
-            {
-                $state.go('tab.dashboard');
-            }
-            
-        }
-        else
-        {
-            $scope.loginAlert();
-        }
+        //     if(targetPage == 'Home')
+        //     {
+        //         $state.go('tab.dashboard');
+        //     }
+        
+        // }
+        // else
+        // {
+        //     $scope.loginAlert();
+        // }
     }
     
     
@@ -208,40 +216,40 @@ app.controller('dashCtrl', function ($scope, $rootScope, searchSelect, $ionicMod
     }
     
     
-    $scope.getAttendanceStatus = function() 
-    {
-        myAllSharedService.loginData.startAttendance = false;
-        
-        $scope.data.isAttendanceDataReceived = 'No';
-        myRequestDBService.getAttendanceStatus()
-        .then(function (result)
-        {
-            
-            console.log(result);
-            
-            if(result.start_time && !result.stope_time)
-            {
-                myAllSharedService.loginData.startAttendance = true;
-                $scope.loginData.startAttendance = true;
-                $rootScope.isAttendanceStart = true;
-            }
-            
-            console.log($scope.loginData.startAttendance);
-            
-            
-            $scope.data.isAttendanceDataReceived = 'Yes';
-            myAllSharedService.drTypeFilterData.isAttendanceDataReceived = 'Yes';
-            
-            $scope.attendData = result;
-            myAllSharedService.drTypeFilterData.attendData = result;
-            
-            console.log($scope.attendData);
-            
-        }, function (err) {
-            
-            console.error(err);
-        });
-    }
+    // $scope.getAttendanceStatus = function() 
+    // {
+    //     myAllSharedService.loginData.startAttendance = false;
+    
+    //     $scope.data.isAttendanceDataReceived = 'No';
+    //     myRequestDBService.getAttendanceStatus()
+    //     .then(function (result)
+    //     {
+    
+    //         console.log(result);
+    
+    //         if(result.start_time && !result.stope_time)
+    //         {
+    //             myAllSharedService.loginData.startAttendance = true;
+    //             $scope.loginData.startAttendance = true;
+    //             $rootScope.isAttendanceStart = true;
+    //         }
+    
+    //         console.log($scope.loginData.startAttendance);
+    
+    
+    //         $scope.data.isAttendanceDataReceived = 'Yes';
+    //         myAllSharedService.drTypeFilterData.isAttendanceDataReceived = 'Yes';
+    
+    //         $scope.attendData = result;
+    //         myAllSharedService.drTypeFilterData.attendData = result;
+    
+    //         console.log($scope.attendData);
+    
+    //     }, function (err) {
+    
+    //         console.error(err);
+    //     });
+    // }
     
     
     $scope.goToPage = function(URL)
@@ -268,7 +276,7 @@ app.controller('dashCtrl', function ($scope, $rootScope, searchSelect, $ionicMod
         $scope.loginData.channelSalesLogin = myAllSharedService.loginData.channelSalesLogin;
         
         $scope.getDashboardData();
-        $scope.getAttendanceStatus();
+        // $scope.getAttendanceStatus();
         // $scope.getCurrentTime();
     }
     console.log($scope.loginData.startAttendance);
@@ -380,7 +388,8 @@ app.controller('dashCtrl', function ($scope, $rootScope, searchSelect, $ionicMod
         $state.go('tab.sfa-order-list');
     }
     
-    $scope.onStartAttendHandler = function(lat, lng) {
+    $scope.onStartAttendHandler = function(lat, lng) 
+    {
         
         $ionicLoading.show({
             template: '<ion-spinner icon="android"></ion-spinner><p>Loading...</p>'
@@ -447,14 +456,28 @@ app.controller('dashCtrl', function ($scope, $rootScope, searchSelect, $ionicMod
     
     $scope.gotoDrPage = function(type)
     {
+        console.log(type);
+        // console.log(value);
+
         if(type == "Distributor")
         {
             myAllSharedService.drTypeFilterData.networkTabActive = 1;
+            myAllSharedService.drTypeFilterData.networkTabActive = false;
+
         }
         if(type == "Dealer")
         {
             myAllSharedService.drTypeFilterData.networkTabActive = 2;
+            myAllSharedService.drTypeFilterData.networkTabActive = false;
+
         }
+        if(type == "outstanding")
+        {
+            myAllSharedService.drTypeFilterData.networkTabActive = 1;
+            myAllSharedService.drTypeFilterData.networkTabActive = true;
+
+        }
+
         $state.go("tab.distribution-network");
     }
     

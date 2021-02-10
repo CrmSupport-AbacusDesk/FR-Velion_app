@@ -45,15 +45,15 @@
               "count": 1
             },
             {
-              "xml": "<feature name=\"ImagePicker\"><param name=\"android-package\" value=\"com.synconset.ImagePicker\" /></feature>",
-              "count": 1
-            },
-            {
               "xml": "<feature name=\"SplashScreen\"><param name=\"android-package\" value=\"org.apache.cordova.splashscreen.SplashScreen\" /><param name=\"onload\" value=\"true\" /></feature>",
               "count": 1
             },
             {
               "xml": "<feature name=\"StatusBar\"><param name=\"android-package\" value=\"org.apache.cordova.statusbar.StatusBar\" /><param name=\"onload\" value=\"true\" /></feature>",
+              "count": 1
+            },
+            {
+              "xml": "<feature name=\"ImagePicker\"><param name=\"android-package\" value=\"com.synconset.ImagePicker\" /></feature>",
               "count": 1
             },
             {
@@ -66,10 +66,6 @@
             },
             {
               "xml": "<feature name=\"SQLitePlugin\"><param name=\"android-package\" value=\"io.sqlc.SQLitePlugin\" /></feature>",
-              "count": 1
-            },
-            {
-              "xml": "<feature name=\"PushNotification\"><param name=\"android-package\" value=\"com.adobe.phonegap.push.PushPlugin\" /></feature>",
               "count": 1
             }
           ]
@@ -113,7 +109,7 @@
               "count": 1
             },
             {
-              "xml": "<uses-feature android:name=\"android.hardware.location.gps\" />",
+              "xml": "<uses-feature android:name=\"android.hardware.location.gps\" android:required=\"true\" />",
               "count": 1
             }
           ],
@@ -125,7 +121,7 @@
           ],
           "/manifest/application": [
             {
-              "xml": "<activity android:label=\"@string/multi_app_name\" android:name=\"com.synconset.MultiImageChooserActivity\" android:theme=\"@android:style/Theme.Holo.Light\"></activity>",
+              "xml": "<activity android:label=\"@string/multi_app_name\" android:name=\"com.synconset.MultiImageChooserActivity\" android:theme=\"@style/Theme.AppCompat.Light\"></activity>",
               "count": 1
             },
             {
@@ -135,48 +131,24 @@
             {
               "xml": "<receiver android:name=\"cordova.plugins.Diagnostic$NFCStateChangedReceiver\"><intent-filter><action android:name=\"android.nfc.action.ADAPTER_STATE_CHANGED\" /></intent-filter></receiver>",
               "count": 1
-            },
-            {
-              "xml": "<activity android:exported=\"true\" android:name=\"com.adobe.phonegap.push.PushHandlerActivity\" android:permission=\"${applicationId}.permission.PushHandlerActivity\" />",
-              "count": 1
-            },
-            {
-              "xml": "<receiver android:name=\"com.adobe.phonegap.push.BackgroundActionButtonHandler\" />",
-              "count": 1
-            },
-            {
-              "xml": "<receiver android:name=\"com.adobe.phonegap.push.PushDismissedHandler\" />",
-              "count": 1
-            },
-            {
-              "xml": "<service android:name=\"com.adobe.phonegap.push.FCMService\"><intent-filter><action android:name=\"com.google.firebase.MESSAGING_EVENT\" /></intent-filter></service>",
-              "count": 1
-            },
-            {
-              "xml": "<service android:name=\"com.adobe.phonegap.push.PushInstanceIDListenerService\"><intent-filter><action android:name=\"com.google.firebase.INSTANCE_ID_EVENT\" /></intent-filter></service>",
-              "count": 1
             }
           ],
           "/manifest": [
             {
               "xml": "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" />",
               "count": 1
-            },
+            }
+          ]
+        }
+      },
+      "app/src/main/AndroidManifest.xml": {
+        "parents": {
+          "/manifest/application": [
             {
-              "xml": "<uses-permission android:name=\"android.permission.INTERNET\" />",
-              "count": 1
-            },
-            {
-              "xml": "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\" />",
-              "count": 1
-            },
-            {
-              "xml": "<uses-permission android:name=\"android.permission.WAKE_LOCK\" />",
-              "count": 1
-            },
-            {
-              "xml": "<uses-permission android:name=\"android.permission.VIBRATE\" />",
-              "count": 1
+              "xml": "<application android:requestLegacyExternalStorage=\"true\" />",
+              "count": 1,
+              "mode": "merge",
+              "plugin": "cordova-plugin-telerik-imagepicker"
             }
           ]
         }
@@ -186,69 +158,67 @@
   "installed_plugins": {
     "cordova-android-support-gradle-release": {
       "ANDROID_SUPPORT_VERSION": "27.+",
-      "PACKAGE_NAME": "com.abacus.okaya"
+      "PACKAGE_NAME": "com.abacus.microtek"
     },
     "cordova-plugin-actionsheet": {
-      "PACKAGE_NAME": "com.abacus.okaya"
+      "PACKAGE_NAME": "com.abacus.microtek"
     },
     "cordova-plugin-app-version": {
-      "PACKAGE_NAME": "com.abacus.okaya"
+      "PACKAGE_NAME": "com.abacus.microtek"
     },
     "cordova-plugin-appversion": {
-      "PACKAGE_NAME": "com.abacus.okaya"
+      "PACKAGE_NAME": "com.abacus.microtek"
     },
     "cordova-plugin-camera": {
-      "PACKAGE_NAME": "com.abacus.okaya"
+      "PACKAGE_NAME": "com.abacus.microtek"
     },
     "cordova-plugin-device": {
-      "PACKAGE_NAME": "com.abacus.okaya"
+      "PACKAGE_NAME": "com.abacus.microtek"
     },
     "cordova-plugin-dialogs": {
-      "PACKAGE_NAME": "com.abacus.okaya"
+      "PACKAGE_NAME": "com.abacus.microtek"
     },
     "cordova-plugin-file": {
-      "PACKAGE_NAME": "com.abacus.okaya"
+      "PACKAGE_NAME": "com.abacus.microtek"
     },
     "cordova-plugin-file-transfer": {
-      "PACKAGE_NAME": "com.abacus.okaya"
+      "PACKAGE_NAME": "com.abacus.microtek"
     },
     "cordova-plugin-geolocation": {
-      "PACKAGE_NAME": "com.abacus.okaya"
-    },
-    "cordova-plugin-image-picker": {
-      "PACKAGE_NAME": "com.abacus.okaya"
+      "GPS_REQUIRED": "true",
+      "PACKAGE_NAME": "com.abacus.microtek"
     },
     "cordova-plugin-ionic-keyboard": {
-      "PACKAGE_NAME": "com.abacus.okaya"
+      "PACKAGE_NAME": "com.abacus.microtek"
     },
     "cordova-plugin-ionic-webview": {
-      "PACKAGE_NAME": "com.abacus.okaya"
+      "PACKAGE_NAME": "com.abacus.microtek"
     },
     "cordova-plugin-request-location-accuracy": {
       "PLAY_SERVICES_LOCATION_VERSION": "16.+",
-      "PACKAGE_NAME": "com.abacus.okaya"
+      "PACKAGE_NAME": "com.abacus.microtek"
     },
     "cordova-plugin-splashscreen": {
-      "PACKAGE_NAME": "com.abacus.okaya"
+      "PACKAGE_NAME": "com.abacus.microtek"
     },
     "cordova-plugin-statusbar": {
-      "PACKAGE_NAME": "com.abacus.okaya"
+      "PACKAGE_NAME": "com.abacus.microtek"
+    },
+    "cordova-plugin-telerik-imagepicker": {
+      "ANDROID_SUPPORT_V7_VERSION": "27.+",
+      "PACKAGE_NAME": "com.abacus.microtek"
     },
     "cordova-plugin-whitelist": {
-      "PACKAGE_NAME": "com.abacus.okaya"
+      "PACKAGE_NAME": "com.abacus.microtek"
     },
     "cordova-plugin-x-toast": {
-      "PACKAGE_NAME": "com.abacus.okaya"
+      "PACKAGE_NAME": "com.abacus.microtek"
     },
     "cordova-sqlite-storage": {
-      "PACKAGE_NAME": "com.abacus.okaya"
+      "PACKAGE_NAME": "com.abacus.microtek"
     },
     "cordova.plugins.diagnostic": {
-      "PACKAGE_NAME": "com.abacus.okaya"
-    },
-    "phonegap-plugin-push": {
-      "FCM_VERSION": "11.6.2",
-      "PACKAGE_NAME": "com.abacus.okaya"
+      "PACKAGE_NAME": "com.abacus.microtek"
     }
   },
   "dependent_plugins": {},
@@ -537,14 +507,6 @@
       "runs": true
     },
     {
-      "id": "cordova-plugin-image-picker.ImagePicker",
-      "file": "plugins/cordova-plugin-image-picker/www/imagepicker.js",
-      "pluginId": "cordova-plugin-image-picker",
-      "clobbers": [
-        "plugins.imagePicker"
-      ]
-    },
-    {
       "id": "cordova-plugin-ionic-keyboard.keyboard",
       "file": "plugins/cordova-plugin-ionic-keyboard/www/android/keyboard.js",
       "pluginId": "cordova-plugin-ionic-keyboard",
@@ -577,6 +539,14 @@
       ]
     },
     {
+      "id": "cordova-plugin-telerik-imagepicker.ImagePicker",
+      "file": "plugins/cordova-plugin-telerik-imagepicker/www/imagepicker.js",
+      "pluginId": "cordova-plugin-telerik-imagepicker",
+      "clobbers": [
+        "plugins.imagePicker"
+      ]
+    },
+    {
       "id": "cordova-plugin-x-toast.Toast",
       "file": "plugins/cordova-plugin-x-toast/www/Toast.js",
       "pluginId": "cordova-plugin-x-toast",
@@ -599,14 +569,6 @@
       "clobbers": [
         "cordova.plugins.diagnostic"
       ]
-    },
-    {
-      "id": "phonegap-plugin-push.PushNotification",
-      "file": "plugins/phonegap-plugin-push/www/push.js",
-      "pluginId": "phonegap-plugin-push",
-      "clobbers": [
-        "PushNotification"
-      ]
     }
   ],
   "plugin_metadata": {
@@ -619,17 +581,16 @@
     "cordova-plugin-dialogs": "2.0.2",
     "cordova-plugin-file": "6.0.2",
     "cordova-plugin-file-transfer": "1.7.1",
-    "cordova-plugin-geolocation": "4.0.2",
-    "cordova-plugin-image-picker": "1.1.1",
+    "cordova-plugin-geolocation": "4.1.0",
     "cordova-plugin-ionic-keyboard": "2.1.3",
     "cordova-plugin-ionic-webview": "1.2.1",
     "cordova-plugin-request-location-accuracy": "2.3.0",
     "cordova-plugin-splashscreen": "5.0.2",
     "cordova-plugin-statusbar": "2.4.2",
+    "cordova-plugin-telerik-imagepicker": "2.3.5",
     "cordova-plugin-whitelist": "1.3.4",
     "cordova-plugin-x-toast": "2.7.2",
     "cordova-sqlite-storage": "3.3.0",
-    "cordova.plugins.diagnostic": "3.9.2",
-    "phonegap-plugin-push": "2.1.3"
+    "cordova.plugins.diagnostic": "3.9.2"
   }
 }

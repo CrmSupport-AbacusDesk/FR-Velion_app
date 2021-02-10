@@ -284,14 +284,6 @@ module.exports = [
     "runs": true
   },
   {
-    "id": "cordova-plugin-image-picker.ImagePicker",
-    "file": "plugins/cordova-plugin-image-picker/www/imagepicker.js",
-    "pluginId": "cordova-plugin-image-picker",
-    "clobbers": [
-      "plugins.imagePicker"
-    ]
-  },
-  {
     "id": "cordova-plugin-ionic-keyboard.keyboard",
     "file": "plugins/cordova-plugin-ionic-keyboard/www/android/keyboard.js",
     "pluginId": "cordova-plugin-ionic-keyboard",
@@ -324,6 +316,14 @@ module.exports = [
     ]
   },
   {
+    "id": "cordova-plugin-telerik-imagepicker.ImagePicker",
+    "file": "plugins/cordova-plugin-telerik-imagepicker/www/imagepicker.js",
+    "pluginId": "cordova-plugin-telerik-imagepicker",
+    "clobbers": [
+      "plugins.imagePicker"
+    ]
+  },
+  {
     "id": "cordova-plugin-x-toast.Toast",
     "file": "plugins/cordova-plugin-x-toast/www/Toast.js",
     "pluginId": "cordova-plugin-x-toast",
@@ -346,14 +346,6 @@ module.exports = [
     "clobbers": [
       "cordova.plugins.diagnostic"
     ]
-  },
-  {
-    "id": "phonegap-plugin-push.PushNotification",
-    "file": "plugins/phonegap-plugin-push/www/push.js",
-    "pluginId": "phonegap-plugin-push",
-    "clobbers": [
-      "PushNotification"
-    ]
   }
 ];
 module.exports.metadata = 
@@ -368,18 +360,17 @@ module.exports.metadata =
   "cordova-plugin-dialogs": "2.0.2",
   "cordova-plugin-file": "6.0.2",
   "cordova-plugin-file-transfer": "1.7.1",
-  "cordova-plugin-geolocation": "4.0.2",
-  "cordova-plugin-image-picker": "1.1.1",
+  "cordova-plugin-geolocation": "4.1.0",
   "cordova-plugin-ionic-keyboard": "2.1.3",
   "cordova-plugin-ionic-webview": "1.2.1",
   "cordova-plugin-request-location-accuracy": "2.3.0",
   "cordova-plugin-splashscreen": "5.0.2",
   "cordova-plugin-statusbar": "2.4.2",
+  "cordova-plugin-telerik-imagepicker": "2.3.5",
   "cordova-plugin-whitelist": "1.3.4",
   "cordova-plugin-x-toast": "2.7.2",
   "cordova-sqlite-storage": "3.3.0",
-  "cordova.plugins.diagnostic": "3.9.2",
-  "phonegap-plugin-push": "2.1.3"
+  "cordova.plugins.diagnostic": "3.9.2"
 };
 // BOTTOM OF METADATA
 });

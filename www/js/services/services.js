@@ -1920,7 +1920,55 @@ angular.module('starter.services', [])
             return promise;
         },
         /*  One post request function end */
-        
+      
+      
+        // orp post request
+
+        orpPostServiceRequest: function(fn_name,data)
+        {
+            
+            var deferred = $q.defer();
+            var promise = deferred.promise;
+            
+            $http.post(orpServerUrl+fn_name,{
+                
+                loginData: myAllSharedService.loginData,
+                data: data,
+                
+            }, {timeout: 30000}).then(function (response) {
+                
+                console.log(response);
+                deferred.resolve(response.data);
+                
+            }, function (error) {
+                
+                $ionicLoading.hide();
+                
+                $ionicPopup.alert({
+                    title: 'Error!',
+                    template: 'Check Internet Connection, Try Again!'
+                });
+                
+                console.log("Server Error on 1st login: " + JSON.stringify(error));
+                deferred.reject(error);
+            });
+            
+            promise.success = function (fn)
+            {
+                promise.then(fn);
+                return promise;
+            };
+            promise.error = function (fn)
+            {
+                promise.then(null, fn);
+                return promise;
+            };
+            
+            return promise;
+        },
+
+
+
         /* Get Leave Application Start */
         onGetLeaveApplicationHandler: function() {
             var deferred = $q.defer();
