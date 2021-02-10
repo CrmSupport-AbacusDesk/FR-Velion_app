@@ -69,12 +69,12 @@
             <div class="cs-grid">
                 <div class="bdr-field wp100">
                     <span>Outstanding</span>
-                    <p>₹ 12000</p>
+                    <p>₹ {{row.credit_exposure ? row.credit_exposure : '0'}}</p>
                 </div>
                 
                 <div class="bdr-field wp100">
                     <span>Credit Limit</span>
-                    <p>₹ 13000</p>
+                    <p>₹ {{row.credit_limit ? row.credit_limit : '0'}}</p>
                 </div>
             </div>
         </div>

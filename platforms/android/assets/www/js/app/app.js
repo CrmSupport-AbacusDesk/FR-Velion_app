@@ -14,7 +14,7 @@ angularApp.run(function ($ionicPlatform, myRequestDBService, myAllSharedService,
         if (window.StatusBar) {
             
             StatusBar.show();
-            StatusBar.backgroundColorByHexString("#469e50");
+            StatusBar.backgroundColorByHexString("#0f215e");
             StatusBar.overlaysWebView(false);
         }
         
@@ -90,39 +90,39 @@ angularApp.run(function ($ionicPlatform, myRequestDBService, myAllSharedService,
                     
                     loginData.loginId = result.loginData.id;
                     loginData.loginName = result.loginData.name;
-                    loginData.loginType = result.loginData.loginType;
-                    loginData.loginSubType = result.loginData.sales_user_type;
-                    loginData.software_access = result.loginData.software_access;
-                    loginData.designation = result.loginData.designation;
-                    loginData.designation_id = result.loginData.designation_id;
+                    // loginData.loginType = result.loginData.loginType;
+                    // loginData.loginSubType = result.loginData.sales_user_type;
+                    // loginData.software_access = result.loginData.software_access;
+                    // loginData.designation = result.loginData.designation;
+                    // loginData.designation_id = result.loginData.designation_id;
                     loginData.emp_code = result.loginData.emp_code;
                     loginData.loginMobile = result.loginData.contact_01;
                     loginData.loginImage = result.loginData.image;
-                    loginData.loginAccessLevel = result.loginData.access_level;
-                    loginData.loginOrganisationId = res.rows.item(0).organisationId;
-                    loginData.loginTeamExist = result.loginData.isTeamExist;
-                    loginData.department = result.loginData.department;
+                    // loginData.loginAccessLevel = result.loginData.access_level;
+                    // loginData.loginOrganisationId = res.rows.item(0).organisationId;
+                    // loginData.loginTeamExist = result.loginData.isTeamExist;
+                    // loginData.department = result.loginData.department;
                     
-                    if(result.loginData.department.includes("CHANNEL SALE"))
-                    {
-                        loginData.channelSalesLogin = true;
-                    }
-                    else
-                    {
-                        loginData.channelSalesLogin = false;
-                    }
+                    // if(result.loginData.department.includes("CHANNEL SALE"))
+                    // {
+                    //     loginData.channelSalesLogin = true;
+                    // }
+                    // else
+                    // {
+                    //     loginData.channelSalesLogin = false;
+                    // }
                     
-                    if (window.cordova && ionic.Platform.isAndroid()) {
-                        console.log("Android");
-                        init(loginData.loginId);
-                    }
+                    // if (window.cordova && ionic.Platform.isAndroid()) {
+                    //     console.log("Android");
+                    //     init(loginData.loginId);
+                    // }
                     
-                    if (window.cordova && ionic.Platform.isIOS()) {
-                        console.log("IOS");
-                        init(loginData.loginId);
-                    }
+                    // if (window.cordova && ionic.Platform.isIOS()) {
+                    //     console.log("IOS");
+                    //     init(loginData.loginId);
+                    // }
                     
-                    console.log(loginData.loginOrganisationId);
+                    // console.log(loginData.loginOrganisationId);
                     myAllSharedService.loginData = loginData;
                     $state.go('tab.dashboard');
                     
@@ -460,7 +460,7 @@ angularApp.run(function ($ionicPlatform, myRequestDBService, myAllSharedService,
         url: '/sfa-order-list',
         cache:false,
         views: {
-            'tab-menu': {
+            'tab-primary-order': {
                 templateUrl: 'templates/okaya_sfa/sfa-order-list.html',
                 controller: 'sfaOrderCtrl'
             }
@@ -537,21 +537,6 @@ angularApp.run(function ($ionicPlatform, myRequestDBService, myAllSharedService,
         }
     })
     
-///ankit
-
-.state('tab.report-dashboard', {
-    url: '/report-dashboard',
-    cache:false,
-    views: {
-        'tab-menu': {
-            templateUrl: 'templates/report-dashboard.html',
-            controller: 'dashboardCtrl'
-        }
-    }
-})
-
-///ankit
-
     .state('tab.order-detail', {
         url: '/order-detail',
         cache:false,
@@ -655,6 +640,23 @@ angularApp.run(function ($ionicPlatform, myRequestDBService, myAllSharedService,
             }
         }
     })
+
+
+    ///ankit
+
+.state('tab.report-dashboard', {
+    url: '/report-dashboard',
+    cache:false,
+    views: {
+        'tab-menu': {
+            templateUrl: 'templates/report-dashboard.html',
+            controller: 'dashboardCtrl'
+        }
+    }
+})
+
+///ankit
+
     .state('tab.travel-add', {
         url: '/travel-add',
         cache:false,
@@ -743,7 +745,7 @@ angularApp.run(function ($ionicPlatform, myRequestDBService, myAllSharedService,
         url: '/distribution-network',
         cache:false,
         views: {
-            'tab-menu': {
+            'tab.distribution-network': {
                 templateUrl: 'templates/okaya_sfa/distribution-network-list.html',
                 controller: 'networkController'
             }
@@ -754,7 +756,7 @@ angularApp.run(function ($ionicPlatform, myRequestDBService, myAllSharedService,
         url: '/stock',
         cache:false,
         views: {
-            'tab-menu': {
+            'tab.stock': {
                 templateUrl: 'templates/okaya_sfa/stock.html',
                 controller: 'networkController'
             }

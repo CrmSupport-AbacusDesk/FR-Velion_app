@@ -92,8 +92,9 @@ ext {
 }
 
 // PLUGIN GRADLE EXTENSIONS START
-apply from: "cordova-android-support-gradle-release/okaya-cordova-android-support-gradle-release.gradle"
-apply from: "phonegap-plugin-push/okaya-push.gradle"
+apply from: "cordova-android-support-gradle-release/microtek-cordova-android-support-gradle-release.gradle"
+apply from: "cordova-plugin-telerik-imagepicker/microtek-ignorelinterrors.gradle"
+apply from: "cordova-plugin-telerik-imagepicker/microtek-androidtarget.gradle"
 // PLUGIN GRADLE EXTENSIONS END
 
 def hasBuildExtras = file('build-extras.gradle').exists()
@@ -255,12 +256,10 @@ dependencies {
     // SUB-PROJECT DEPENDENCIES START
     implementation(project(path: "CordovaLib"))
     compile "com.android.support:support-v4:24.1.1+"
-    compile "com.google.android.gms:play-services-location:11.6.2"
+    compile "com.google.android.gms:play-services-location:16.+"
+    compile "com.android.support:appcompat-v7:27.+"
     compile "com.android.support:support-v4:26.+"
     compile "com.android.support:appcompat-v7:26.+"
-    compile "com.android.support:support-v13:26.+"
-    compile "me.leolin:ShortcutBadger:1.1.17@aar"
-    compile "com.google.firebase:firebase-messaging:11.6.2"
     // SUB-PROJECT DEPENDENCIES END
 }
 

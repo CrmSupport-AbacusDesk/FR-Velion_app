@@ -164,8 +164,10 @@ app.controller('networkController', function ($http,$scope, $rootScope, searchSe
     $scope.myNetworkList = [];
     $scope.tmpMyNetworkList = [];
     $scope.data = {};
-    $scope.getNetworkList = function(type, actionType,status)
+    $scope.getNetworkList = function(type, actionType,status,value)
     {
+        $scope.myNetworkList = [];
+        
         console.log($scope.networkTabActive);
         if($scope.data.type != type)
         {
@@ -190,7 +192,7 @@ app.controller('networkController', function ($http,$scope, $rootScope, searchSe
             template: '<ion-spinner icon="android"></ion-spinner><p>Loading...</p>'
         });
         
-        var data = {limit:$scope.myNetworkList.length};
+        var data = {limit:$scope.myNetworkList.length,outstanding:value};
         
         console.log(data);
         
@@ -220,7 +222,7 @@ app.controller('networkController', function ($http,$scope, $rootScope, searchSe
                 
             }
             
-            $scope.$broadcast('scroll.infiniteScrollComplete');
+            // $scope.$broadcast('scroll.infiniteScrollComplete');
             
             $ionicLoading.hide();
             
@@ -1922,16 +1924,16 @@ app.controller('networkController', function ($http,$scope, $rootScope, searchSe
     
     if($location.path() == '/tab/distribution-network')
     {
-        
+        console.log(myAllSharedService);
         console.log(myAllSharedService.drTypeFilterData.networkTabActive);
-        
+        console.log(myAllSharedService.drTypeFilterData.outstanding);
         if($scope.networkTabActive==1)
         {
-            $scope.getNetworkList('Distributor', '','');
+            $scope.getNetworkList('Distributor', '','',myAllSharedService.drTypeFilterData.outstanding);
         }
         else
         {
-            $scope.getNetworkList('Dealer', '','Pending');
+            $scope.getNetworkList('Dealer', '','Pending','');
         }
     }
     
@@ -2057,6 +2059,7 @@ app.controller('networkController', function ($http,$scope, $rootScope, searchSe
                 if(response.status=='Success')
                 {
                     $scope.suggestiveList = response.data;
+                    console.log($scope.suggestiveList);
                 }  
             }, 
             function (err) 

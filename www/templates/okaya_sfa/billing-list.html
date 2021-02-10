@@ -1,7 +1,7 @@
-<ion-view view-title="{{order_type}} Order List">
+<ion-view view-title="Billing Details">
     
     <ion-nav-buttons side="left">
-        <a href="#/tab/menu" class="cs-backbtn button button-icon icon ion-android-arrow-back font18 fff"></a>
+        <a href="#/tab/dashboard" class="cs-backbtn button button-icon icon ion-android-arrow-back font18 fff"></a>
     </ion-nav-buttons>
     
     <ion-nav-buttons side="right" class="custom-right-btn">
@@ -9,7 +9,7 @@
             <a menu-toggle="left"><i class="material-icons">search</i></a>
         </div>
         <div ng-class="isSearchBarOpen ? 'active' : ''" class="search-filter">
-            <input ng-model = "data.search" type="text" id = "searchData" ng-change = "filterOrderListList(data.search)">
+            <input ng-model = "data.search" type="text" id = "searchData" ng-change = "filterBillingList(data.search)">
             <a ng-click = "onSeachActionHandler('close')" placeholder = "Search" class="close-filter"><i class="material-icons">keyboard_backspace</i></a>
         </div>
     </ion-nav-buttons>
@@ -24,34 +24,21 @@
         </ion-refresher-content>
     </ion-refresher>
     
-    <!-- <div ng-if="loginData.loginTeamExist == 'Yes'" class="sticky bg-white">
-        
-        <div  class="round-tab" ng-if="loginData.designation_id > 1">
-            <ul>
-                <li ng-click = "onModifyTypeHandler('me')" ng-class = "data.orderCreatedBy == 'me' ? 'active' : ''">
-                    <a>My Order </a>
-                </li>
-                <li ng-click = "onModifyTypeHandler('myTeam')" ng-class = "data.orderCreatedBy == 'myTeam' ? 'active' : ''">
-                    <a>Team Order </a>
-                </li>
-            </ul>
-        </div>
-    </div> -->
     
-    <div ng-click = "onGoToOrderDetailPage(row.id)" ng-repeat= "row in orderList" class="coman-list">
+    <div  class="coman-list" ng-click = "onGoToBillingDetailPage(row.bill_doc)" ng-repeat= "row in billinglist">
         <div class="top-head">
             <ul>
                 <li>
-                    <p>#ORD{{row.id}}</p>
-                    <span>Order ID</span>
+                    <p>{{row.sale_order_no}}</p>
+                    <span>Order No</span>
                 </li>
                 <li>
-                    <p>{{row.item_count}}</p>
-                    <span>Total Item</span>
+                    <p>{{row.bill_doc}}</p>
+                    <span>Bill No</span>
                 </li>
                 <li>
-                    <p>{{row.dateCreatedInFormat}} - {{row.created_by_name}}</p>
-                    <span>Date & Created By</span>
+                    <p>{{row.bill_date | date: 'dd MMM yyyy'}}</p>
+                    <span>Bill Date</span>
                 </li>
             </ul>
             
@@ -63,23 +50,27 @@
         </div>
         
         <div class="center-item">
-            <div class="cs-icon">{{row.dr_name[0]}}</div>
+            <div class="cs-icon">{{row.customr_name[0]}}</div>
             <div class="cs-content">
-                <p>{{row.dr_name}}</p>
-                <span>{{row.dr_type_name}}</span>
+                <span>{{row.customr_name}}</span>
+                <p>{{row.customer_code}}</p>
             </div>
             <a class="dialer"><i class="material-icons">keyboard_arrow_right</i></a>
         </div>
         
         <div class="pdlr">
             <div class="cs-flex">
-                <!-- <div class="bdr-field wp100">
-                    <span>Amount</span>
-                    <p> &#8377;  {{row.net_total}}</p>
-                </div> -->
-                <div class="bdr-field wp100" ng-repeat="user in row.approval" ng-class="{'pending-bg':user.status=='Pending','approved-bg':user.status=='Approved','reject-bg':user.status=='Reject'}" >
-                    <span>{{user.designation}} Status</span>
-                    <p>{{user.status}}</p>
+                <div class="bdr-field wp100">
+                    <span>Total Item</span>
+                    <p>{{row.total_item}}</p>
+                </div>
+                <div class="bdr-field wp100">
+                    <span>Total item Qty</span>
+                    <p>{{row.total_qty}}</p>
+                </div>
+                <div class="bdr-field wp100">
+                    <span>Total Amount</span>
+                    <p>&#8377; {{row.total_amt | number : 2 }}</p>
                 </div>
             </div>
         </div>
@@ -87,7 +78,7 @@
     
     
     
-    <div class="data-not-found" ng-if="!isRequestInProcess && orderList.length == 0" >
+    <div class="data-not-found" ng-if="!isRequestInProcess && billinglist.length == 0" >
         <div class="outer">
             <div class="innear">
                 <img src="img/data-not-found.svg" alt="">
@@ -104,10 +95,10 @@
 </ion-content>
 
 
-
-<div class="fix-add">
-    <a ng-click="clear_data();onGoToOrderAddHandler()">
-        <i class="material-icons">add</i>
-    </a>
-</div>
+<!-- 
+    <div class="fix-add">
+        <a ng-click="clear_data();onGoToOrderAddHandler()">
+            <i class="material-icons">add</i>
+        </a>
+    </div> -->
 </ion-view>

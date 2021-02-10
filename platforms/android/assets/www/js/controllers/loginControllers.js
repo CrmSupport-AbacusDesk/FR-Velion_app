@@ -28,7 +28,7 @@ app.controller('loginCtrl', function ($scope, $rootScope, searchSelect, $ionicMo
             .then(function (result) {
                   console.log(result);
                   var query = "INSERT INTO " + dbTableName + " (username,password,organisationId) VALUES (?,?,?)";
-                  $cordovaSQLite.execute(db, query, [$scope.loginData.username, $scope.loginData.password, result.loginData.organisationId]).then(function (resultData) {
+                  $cordovaSQLite.execute(db, query, [$scope.loginData.username, $scope.loginData.password, 0]).then(function (resultData) {
                         $ionicLoading.hide();
                         console.log(resultData);
                         const loginData = {};
@@ -36,25 +36,25 @@ app.controller('loginCtrl', function ($scope, $rootScope, searchSelect, $ionicMo
                         loginData.loginId = result.loginData.id;
                         loginData.loginName = result.loginData.name;
                         loginData.emp_code = result.loginData.emp_code;
-                        loginData.loginType = result.loginData.loginType;
+                        // loginData.loginType = result.loginData.loginType;
                         loginData.loginSubType = result.loginData.sales_user_type;
-                        loginData.software_access = result.loginData.software_access;
-                        loginData.designation = result.loginData.designation;
-                        loginData.designation_id = result.loginData.designation_id;
+                        // loginData.software_access = result.loginData.software_access;
+                        // loginData.designation = result.loginData.designation;
+                        // loginData.designation_id = result.loginData.designation_id;
                         loginData.loginMobile = result.loginData.contact_01;
                         loginData.loginImage = result.loginData.image;
                         loginData.loginAccessLevel = result.loginData.access_level;
-                        loginData.loginOrganisationId = result.loginData.organisationId;
-                        loginData.loginTeamExist = result.loginData.isTeamExist;
-                        loginData.department = result.loginData.department;
-                        if(result.loginData.department.includes("CHANNEL SALE"))
-                        {
+                        // loginData.loginOrganisationId = result.loginData.organisationId;
+                        // loginData.loginTeamExist = result.loginData.isTeamExist;
+                        // loginData.department = result.loginData.department;
+                        // if(result.loginData.department.includes("CHANNEL SALE"))
+                        // {
                               loginData.channelSalesLogin = true;
-                        }
-                        else
-                        {
-                              loginData.channelSalesLogin = false;
-                        }
+                        // }
+                        // else
+                        // {
+                        //       loginData.channelSalesLogin = false;
+                        // }
                         myAllSharedService.loginData = loginData;
                         $state.go('tab.dashboard');
                         

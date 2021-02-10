@@ -77,6 +77,18 @@ app.controller('dashCtrl', function ($scope, $rootScope, searchSelect, $ionicMod
         // if(targetPage == 'FollowUp') {
         //     $state.go('tab.all-followup-list');
         // }
+            console.log(targetPage);
+        if(targetPage=='billing-list'){
+            console.log(targetPage);
+
+            $state.go('billing-list');
+        }
+
+        if(targetPage=='billing-detail'){
+            console.log(targetPage);
+
+            $state.go('billing-detail');
+        }
         
         if(targetPage == 'CheckIn') {
             $state.go('tab.all-activity-list');
@@ -91,56 +103,56 @@ app.controller('dashCtrl', function ($scope, $rootScope, searchSelect, $ionicMod
         //     $state.go('tab.order-add');
         // }
         
-        // if(targetPage == 'sfaPriOrder')
-        // {
-        //     myAllSharedService.drTypeFilterData.isInsideLead = 'No';
-        //     myAllSharedService.drTypeFilterData.orderId = '';
+        if(targetPage == 'sfaPriOrder')
+        {
+            myAllSharedService.drTypeFilterData.isInsideLead = 'No';
+            myAllSharedService.drTypeFilterData.orderId = '';
             
-        //     myAllSharedService.drTypeFilterData.dr_name = '';
-        //     myAllSharedService.drTypeFilterData.dr_id = '';
-        //     myAllSharedService.drTypeFilterData.orderCreatedBy = 'me';
-        //     myAllSharedService.drTypeFilterData.order_type = 'primary';
-        //     $state.go('tab.sfa-order-add');
-        // }
+            myAllSharedService.drTypeFilterData.dr_name = '';
+            myAllSharedService.drTypeFilterData.dr_id = '';
+            myAllSharedService.drTypeFilterData.orderCreatedBy = 'me';
+            myAllSharedService.drTypeFilterData.order_type = 'primary';
+            $state.go('tab.sfa-order-add');
+        }
         
-        // if(targetPage == 'sfaSecOrder')
-        // {
-        //     myAllSharedService.drTypeFilterData.isInsideLead = 'No';
-        //     myAllSharedService.drTypeFilterData.orderId = '';
-        //     myAllSharedService.drTypeFilterData.dr_name = '';
-        //     myAllSharedService.drTypeFilterData.dr_id = '';
-        //     myAllSharedService.drTypeFilterData.orderCreatedBy = 'me';
-        //     myAllSharedService.drTypeFilterData.order_type = 'secondary';
-        //     $state.go('tab.sfa-order-add');
-        // }
+        if(targetPage == 'sfaSecOrder')
+        {
+            myAllSharedService.drTypeFilterData.isInsideLead = 'No';
+            myAllSharedService.drTypeFilterData.orderId = '';
+            myAllSharedService.drTypeFilterData.dr_name = '';
+            myAllSharedService.drTypeFilterData.dr_id = '';
+            myAllSharedService.drTypeFilterData.orderCreatedBy = 'me';
+            myAllSharedService.drTypeFilterData.order_type = 'secondary';
+            $state.go('tab.sfa-order-add');
+        }
         
         // if(targetPage == 'Order-list')
         // {
         //     $state.go('tab.all-order-list');
         // }
         
-        // if(targetPage == 'sfaPriOrder-list')
-        // {
-        //     myAllSharedService.drTypeFilterData.orderCreatedBy = 'me';
-        //     myAllSharedService.drTypeFilterData.order_type = 'primary';
+        if(targetPage == 'sfaPriOrder-list')
+        {
+            myAllSharedService.drTypeFilterData.orderCreatedBy = 'me';
+            myAllSharedService.drTypeFilterData.order_type = 'primary';
             
-        //     myAllSharedService.drTypeFilterData.referFrom ='dashboard';
+            myAllSharedService.drTypeFilterData.referFrom ='dashboard';
             
             
-        //     $state.go('tab.sfa-order-list');
-        // }
+            $state.go('tab.sfa-order-list');
+        }
         
-        // if(targetPage == 'secondary-order-list')
-        // {
-        //     myAllSharedService.drTypeFilterData.orderCreatedBy = 'me';
-        //     myAllSharedService.drTypeFilterData.order_type = 'secondary';
-        //     myAllSharedService.drTypeFilterData.dr_name = '';
-        //     myAllSharedService.drTypeFilterData.dr_id = '';
-        //     myAllSharedService.drTypeFilterData.referFrom ='dashboard';
+        if(targetPage == 'secondary-order-list')
+        {
+            myAllSharedService.drTypeFilterData.orderCreatedBy = 'me';
+            myAllSharedService.drTypeFilterData.order_type = 'secondary';
+            myAllSharedService.drTypeFilterData.dr_name = '';
+            myAllSharedService.drTypeFilterData.dr_id = '';
+            myAllSharedService.drTypeFilterData.referFrom ='dashboard';
             
             
-        //     $state.go('tab.sfa-order-list');
-        // }
+            $state.go('tab.sfa-order-list');
+        }
         
         if(targetPage == 'Stock')
         {
@@ -197,14 +209,14 @@ app.controller('dashCtrl', function ($scope, $rootScope, searchSelect, $ionicMod
             $scope.dashboardData = result;
             
             console.log($scope.dashboardData);
-            $scope.dashboardData.achive_percent = (parseFloat($scope.dashboardData.collectionAchivement) * 100 / parseFloat($scope.dashboardData.collectionPlan)).toFixed(2);
+            // $scope.dashboardData.achive_percent = (parseFloat($scope.dashboardData.collectionAchivement) * 100 / parseFloat($scope.dashboardData.collectionPlan)).toFixed(2);
             
-            // $scope.dashboardData['todayMeetingCount'] = result.todayMeetingCount;
-            // $scope.dashboardData['todayFollowUpCount'] = result.todayFollowUpCount;
-            // $scope.dashboardData['todayQuotationCount'] = result.todayQuotationCount;
+            $scope.dashboardData['invoice_billing'] = result.invoice_billing.billing_qty;
+            $scope.dashboardData['pending_order'] = result.pending_order.pending_order_qty;
+            $scope.dashboardData['drCountData'] = result.drCountData;
+            $scope.dashboardData['total_outstanding'] = result.total_outstanding.total_outstanding;
             // $scope.dashboardData['sfaPriOrdCount'] = result.sfaPriOrdCount;
             // $scope.dashboardData['sfaSecOrdCount'] = result.sfaSecOrdCount;
-            // $scope.dashboardData['distriCountData'] = result.distriCountData;
             
         }, function (err) {
             
@@ -453,15 +465,28 @@ app.controller('dashCtrl', function ($scope, $rootScope, searchSelect, $ionicMod
         $state.go('tab.customer-list');
     }
     
-    $scope.gotoDrPage = function(type)
+    $scope.gotoDrPage = function(type,value)
     {
+        console.log(type);
+        console.log(value);
+
         if(type == "Distributor")
         {
             myAllSharedService.drTypeFilterData.networkTabActive = 1;
+            myAllSharedService.drTypeFilterData.outstanding = value;
+
         }
         if(type == "Dealer")
         {
             myAllSharedService.drTypeFilterData.networkTabActive = 2;
+            myAllSharedService.drTypeFilterData.outstanding = false;
+
+        }
+        if(type == "outstanding")
+        {
+            myAllSharedService.drTypeFilterData.networkTabActive = 1;
+            myAllSharedService.drTypeFilterData.outstanding = true;
+
         }
         $state.go("tab.distribution-network");
     }

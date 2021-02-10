@@ -309,16 +309,7 @@ app.controller('sfaOrderCtrl', function ($scope, $rootScope, searchSelect, $ioni
     
     if($location.path() == '/tab/sfa-order-add')
     {
-        if(!$rootScope.isAttendanceStart)
-        {
-            $ionicHistory.goBack();
-            
-            $ionicPopup.alert({
-                title: 'Error!',
-                template: 'To continue, Start Work Time !'
-            });
-        }
-        else
+       
         {
             
             

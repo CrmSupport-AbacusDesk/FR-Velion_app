@@ -8,7 +8,6 @@
             <div class="user-column">
                 <div class="profile-head">
                     <div class="pr-icon">
-
                         <div class="user-profile pr-icon">
                             <img ng-if="!loginData.loginImage" src="img/profile.svg" class="default">
                             <img ng-if="loginData.loginImage" ng-src="{{uploadURL}}{{loginData.loginImage}}"
@@ -31,10 +30,10 @@
                     <i class="material-icons">keyboard_arrow_right</i>
                 </a>
 
-                <a href="#/tab/attendance">
+                <!-- <a href="#/tab/attendance">
                     <p><img src="img/menu-icon/icon-calender.svg" alt="">Attendance</p>
                     <i class="material-icons">keyboard_arrow_right</i>
-                </a>
+                </a> -->
 
 
                 <!-- <a ng-click="loginData.startAttendance ? goToPage('tab.all-order-list') : loginAlert()">
@@ -43,7 +42,7 @@
                     <i class="material-icons">keyboard_arrow_right</i>
                 </a> -->
 
-                <div class="clcsd menu-changes">
+                <!-- <div class="clcsd menu-changes">
                     <ul class="collapsible">
                         <li ng-click="leadTabActive = !leadTabActive" ng-class="{'active':leadTabActive==true}">
                             <div class="collapsible-header">
@@ -57,36 +56,41 @@
                             </div>
                         </li>
                     </ul>
-                </div>
+                </div> -->
 
                 <!-- ng-click="loginData.startAttendance ? goToPage('tab.travel') : loginAlert()" -->
 
-                <a ng-if="loginData.channelSalesLogin"
+                <!-- <a href="#/tab/report-dashboard">
+                    <p><img src="img/menu-icon/followupl.svg" alt="">Report Dashboard</p>
+                    <i class="material-icons">keyboard_arrow_right</i>
+                </a> -->
+
+                <!-- <a ng-if="loginData.channelSalesLogin"
                     ng-click="loginData.startAttendance ? goToPage('tab.all-followup-list') : loginAlert()">
                     <p><img src="img/menu-icon/followupl.svg" alt="">Follow-up</p>
                     <i class="material-icons">keyboard_arrow_right</i>
-                </a>
+                </a> -->
 
-                <a ng-if="loginData.loginAccessLevel == '4'"
+                <!-- <a ng-if="loginData.loginAccessLevel == '4'"
                     ng-click="loginData.startAttendance ? goToPage('tab.travel') : loginAlert()">
                     <p><img src="img/menu-icon/track.svg" alt="">Travel Plan</p>
                     <i class="material-icons">keyboard_arrow_right</i>
-                </a>
+                </a> -->
 
-                <a href="#/tab/daily-plan-report">
+                <!-- <a href="#/tab/daily-plan-report">
                     <p><img src="img/menu-icon/daily-report.svg">Daily Work Plan</p>
                     <i class="material-icons">keyboard_arrow_right</i>
-                </a>
+                </a> -->
 
-                <a href="#/tab/collection-plan">
+                <!-- <a href="#/tab/collection-plan">
                     <p><img src="img/menu-icon/collection.svg">Collection Plan</p>
                     <i class="material-icons">keyboard_arrow_right</i>
-                </a>
+                </a> -->
 
-                <a href="#/tab/collection-punch">
+                <!-- <a href="#/tab/collection-punch">
                     <p><img src="img/menu-icon/collection.svg">Collection Punch</p>
                     <i class="material-icons">keyboard_arrow_right</i>
-                </a>
+                </a> -->
 
                 <!-- <a href="#/tab/expense" ng-if="loginData.loginAccessLevel == '4'">
                     <p><img src="img/menu-icon/expenses.svg" alt="">Expenses</p>
@@ -119,10 +123,10 @@
                     <i class="material-icons">keyboard_arrow_right</i>
                 </a> -->
 
-                <a ng-if="!loginData.channelSalesLogin" href="#/tab/organisation-setting">
+                <!-- <a ng-if="!loginData.channelSalesLogin" href="#/tab/organisation-setting">
                     <p><img src="img/menu-icon/organisation.svg" alt="">Organisation</p>
                     <i class="material-icons">keyboard_arrow_right</i>
-                </a>
+                </a> -->
 
                 <button ng-click="logout()">
                     <p><i class="material-icons">power_settings_new</i>LOGOUT</p>

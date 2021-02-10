@@ -1,12 +1,20 @@
-<ion-view view-title="Stock" name="Scan-view" hide-nav-bar="true" ng-init="search.selected='brand'" >
+<ion-view view-title="Stock">
     
-    <ion-header-bar class="opr_ion_header bg-black">
-        <div class="cs-left">
-            <button class="back-button" ng-click="goToBackPageHandler()"><i class="material-icons">arrow_back</i></button>
-            <h1 class="orp_title">Stock</h1>
+    
+
+    <ion-nav-buttons side="left">
+        <a ng-click="goToBackPageHandler()" class="cs-backbtn button button-icon icon ion-android-arrow-back font18 fff"></a>
+    </ion-nav-buttons>
+    
+    <!-- <ion-nav-buttons side="right" class="custom-right-btn">
+        <div ng-click = "onSeachActionHandler('open')" class="right-nav-btn nav-search">
+            <a menu-toggle="left"><i class="material-icons">search</i></a>
         </div>
-       
-    </ion-header-bar>
+        <div ng-class="isSearchBarOpen ? 'active' : ''" class="search-filter">
+            <input ng-model = "data.search" type="text" id = "searchData" ng-change = "filterNetworkList(data.search)">
+            <a ng-click = "onSeachActionHandler('close')" placeholder = "Search" class="close-filter"><i class="material-icons">keyboard_backspace</i></a>
+        </div>
+    </ion-nav-buttons> -->
     
     
     <ion-content >

@@ -98,42 +98,42 @@
         
         
         <div class="text-box" style="margin: 0px 16px;">
-            <h2>Deal With</h2>
-            <div class="text-box pb0">
-                <p>Select Category</p>
-                <span ng-repeat="var in drDetail.drData.assign_segment" class="cs-chips">{{var.category_name ? var.category_name : 'N/A'}}</span>
+            <h2>Account Details</h2>
+            <div class="text-box">
+                <p>Credit Limit -</p>
+                <span class="cs-chips">₹ {{drDetail.drData.credit_limit ? drDetail.drData.credit_limit : '0'}}</span>
             </div>
-            <div class="text-box mt10 pb0">
-                <p>Select Brand</p>
-                <span ng-repeat="var in drDetail.drData.assign_brand" class="cs-chips">{{var.brand_name ? var.brand_name : 'N/A'}}</span>
+            <div class="text-box mt10">
+                <p>Outstanding -</p>
+                <span class="cs-chips">₹ {{drDetail.drData.credit_exposure ? drDetail.drData.credit_exposure : 0}}</span>
             </div>
         </div>
         
         
         <div ng-if="drDetail && drDetail.drData" class="forword-page flat-item anchor-bdr padding16">
                         
-            <a ng-if="drDetail.drData.type_name=='Dealer'" ng-click="gotoPage(drDetail.drData.id,drDetail.drData.dr_name,drDetail.drData.sfa_contact_no,'scheme_enroll')" class="no-height">
+            <!-- <a ng-if="drDetail.drData.type_name=='Dealer'" ng-click="gotoPage(drDetail.drData.id,drDetail.drData.dr_name,drDetail.drData.sfa_contact_no,'scheme_enroll')" class="no-height">
                 <p class="df jcc" ng-if="drDetail.scheme_enroll==true"><span class="df"><i class="material-icons">check_circle</i></span></p>
                 <p class="df jcc" ng-if="drDetail.scheme_enroll==false"><span class="df"><i class="material-icons red-text">cancel</i></span></p>
                 <div class="info">
                     <h2 ng-class="{'mt0': drDetail.followUpData.length==0}"> Scheme Enroll</h2>
                 </div>
-            </a>
+            </a> -->
             
-            <a href="#/tab/sfa_dr_activity" class="no-height">
+            <!-- <a href="#/tab/sfa_dr_activity" class="no-height">
                 <p><span>{{drDetail.checkInData.checkInData.length}}</span></p>
                 <div class="info">
                     <h2 class="mt0"> Activity</h2>
                 </div>
-            </a>
+            </a> -->
             
-            <a href="#/tab/sfa_dr_followup" class="no-height">
+            <!-- <a href="#/tab/sfa_dr_followup" class="no-height">
                 <p><span>{{drDetail.followUpData.length}}</span></p>
                 <div class="info">
                     <h2 ng-class="{'mt0': drDetail.followUpData.length==0}"> Follow Up</h2>
                     <span ng-if="drDetail.nextFollowUpData && drDetail.nextFollowUpData.followUpDateInFormat">Next Folllow Up - <strong>{{drDetail.nextFollowUpData.followUpDateInFormat}}</strong></span>
                 </div>
-            </a>
+            </a> -->
             
             
             
@@ -146,14 +146,14 @@
                 <div class="info">Secondary Order</div>
             </a>
             
-            <a ng-click="dr_img_doc_list(drDetail.drData.id,'1')">
+            <!-- <a ng-click="dr_img_doc_list(drDetail.drData.id,'1')">
                 <P><span>{{drDetail.attachments.length}}</span></P>
                 <div class="info">Image & Document</div>
-            </a>
+            </a> -->
             
-            <a ng-click="location()">
+            <!-- <a ng-click="location()">
                 <div class="info">Point Location</div>
-            </a>
+            </a> -->
             
         </div>
         
