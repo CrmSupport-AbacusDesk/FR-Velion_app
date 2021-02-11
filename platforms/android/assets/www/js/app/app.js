@@ -98,6 +98,8 @@ angularApp.run(function ($ionicPlatform, myRequestDBService, myAllSharedService,
                     loginData.emp_code = result.loginData.emp_code;
                     loginData.loginMobile = result.loginData.contact_01;
                     loginData.loginImage = result.loginData.image;
+                    loginData.user_branch = result.loginData.user_branch;
+
                     // loginData.loginAccessLevel = result.loginData.access_level;
                     // loginData.loginOrganisationId = res.rows.item(0).organisationId;
                     // loginData.loginTeamExist = result.loginData.isTeamExist;
@@ -218,6 +220,29 @@ angularApp.run(function ($ionicPlatform, myRequestDBService, myAllSharedService,
         }
     })
     
+    // .state('tab.mis_report', {
+    //     url: '/mis_report',
+    //     cache: false,
+    //     views: {
+    //         'mis_report': {
+    //             templateUrl: 'templates/okaya_sfa/MisReport.html',
+    //             controller: 'leadController'
+    //         }
+    //     }
+    // })
+    
+
+        .state('tab.mis_report', {
+            url: '/mis_report',
+            cache: false,
+            views: {
+                'tab-menu': {
+                    templateUrl: 'templates/okaya_sfa/MisReport.html',
+                    controller: 'activityCtrl'
+                }
+            }
+        })
+
     .state('tab.lead-detail', {
         url: '/lead-detail',
         cache:false,
@@ -240,29 +265,29 @@ angularApp.run(function ($ionicPlatform, myRequestDBService, myAllSharedService,
         }
     })
     
-        .state('tab.sfa_dr_activity', {
-            url: '/sfa_dr_activity',
-            cache: false,
-            views: {
-                'tab_lead_list': {
-                    templateUrl: 'templates/okaya_sfa/sfa_dr_activity.html',
-                    controller: 'customerCtrl'
-                }
+    .state('tab.sfa_dr_activity', {
+        url: '/sfa_dr_activity',
+        cache: false,
+        views: {
+            'tab_lead_list': {
+                templateUrl: 'templates/okaya_sfa/sfa_dr_activity.html',
+                controller: 'customerCtrl'
             }
-        })
-
-        .state('tab.sfa_dr_followup', {
-            url: '/sfa_dr_followup',
-            cache: false,
-            views: {
-                'tab_lead_list': {
-                    templateUrl: 'templates/okaya_sfa/sfa_dr_followup.html',
-                    controller: 'customerCtrl'
-                }
+        }
+    })
+    
+    .state('tab.sfa_dr_followup', {
+        url: '/sfa_dr_followup',
+        cache: false,
+        views: {
+            'tab_lead_list': {
+                templateUrl: 'templates/okaya_sfa/sfa_dr_followup.html',
+                controller: 'customerCtrl'
             }
-        })
-
-
+        }
+    })
+    
+    
     .state('tab.lead-meeting-end', {
         url: '/lead-meeting-end',
         cache: false,
@@ -387,6 +412,7 @@ angularApp.run(function ($ionicPlatform, myRequestDBService, myAllSharedService,
             }
         }
     })
+
     
     
     .state('tab.all-followup-list', {
@@ -465,6 +491,20 @@ angularApp.run(function ($ionicPlatform, myRequestDBService, myAllSharedService,
                 controller: 'sfaOrderCtrl'
             }
         }
+    })
+
+    .state('billing-list', {
+        url: '/billing-list',
+        cache:false,
+        templateUrl: 'templates/okaya_sfa/billing-list.html',
+        controller: 'sfaOrderCtrl'
+    })
+
+    .state('billing-detail', {
+        url: '/billing-detail',
+        cache:false,
+        templateUrl: 'templates/okaya_sfa/billing-detail.html',
+        controller: 'sfaOrderCtrl'
     })
     
     .state('tab.sfa-order-add', {
@@ -570,7 +610,7 @@ angularApp.run(function ($ionicPlatform, myRequestDBService, myAllSharedService,
             }
         }
     })
-
+    
     .state('tab.lead-edit', {
         url: '/lead-edit',
         cache:false,
@@ -640,23 +680,23 @@ angularApp.run(function ($ionicPlatform, myRequestDBService, myAllSharedService,
             }
         }
     })
-
-
+    
+    
     ///ankit
-
-.state('tab.report-dashboard', {
-    url: '/report-dashboard',
-    cache:false,
-    views: {
-        'tab-menu': {
-            templateUrl: 'templates/report-dashboard.html',
-            controller: 'dashboardCtrl'
+    
+    .state('tab.report-dashboard', {
+        url: '/report-dashboard',
+        cache:false,
+        views: {
+            'tab-menu': {
+                templateUrl: 'templates/report-dashboard.html',
+                controller: 'dashboardCtrl'
+            }
         }
-    }
-})
-
-///ankit
-
+    })
+    
+    ///ankit
+    
     .state('tab.travel-add', {
         url: '/travel-add',
         cache:false,
@@ -894,6 +934,8 @@ angularApp.run(function ($ionicPlatform, myRequestDBService, myAllSharedService,
             }
         }
     })
+    
+    
     
     
     // $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';

@@ -18,30 +18,110 @@
                 <div class="cs-icon">{{orderDetail.dr_name[0] ? orderDetail.dr_name[0] : '--'}}</div>
                 <div class="cs-content">
                     <p>{{orderDetail.dr_name ? orderDetail.dr_name : 'N/A'}}</p>
-                    <span>{{orderDetail.dr_type_name ? orderDetail.dr_type_name : 'N/A'}}</span>
-                    <a class="dialer phone" href="tel: {{orderDetail.contact_mobile_no}}" ng-show="orderDetail.dr_contact_mobile_no">
+                    <span>{{orderDetail.dr_code ? orderDetail.dr_code : 'N/A'}}</span>
+
+                    <!-- <span>{{orderDetail.dr_type_name ? orderDetail.dr_type_name : 'N/A'}}</span> -->
+                    <!-- <a class="dialer phone" href="tel: {{orderDetail.contact_mobile_no}}" ng-show="orderDetail.dr_contact_mobile_no">
                         <i class="material-icons">phone</i> 
                         {{orderDetail.dr_contact_mobile_no}}
-                    </a>
+                    </a> -->
                 </div>
                 <!-- <a ng-if="orderDetail.contact_mobile_no"  class="dialer"><i class="material-icons">call</i></a> -->
             </div>
+            <div class="top-head">
+                <ul>
+                    <li>
+                        <p>{{orderDetail.order_no}}</p>
+                        <span>Order No</span>
+                    </li>
+                    <li>
+                        <p>{{orderDetail.order_date | date: 'dd MMM yyyy'}}</p>
+                        <span>Order Date</span>
+                    </li>
+                    <!-- <li>
+                        <p>&#8377; {{orderDetail.net_total}}</p>
+                        <span>Order Value</span>
+                    </li> -->
+                </ul>
             
-            <div class="pdlr">
+            </div>
+
+            <div class="top-head">
+                <ul>
+                    <li>
+                        <p>{{orderDetail.net_item_vale}}</p>
+                        <span>Net Item Value</span>
+                    </li>
+                    <li>
+                        <p>{{orderDetail.total_tax_amount}}</p>
+                        <span>Tax Amount</span>
+                    </li>
+                    <li>
+                        <p>&#8377; {{orderDetail.gross_value}}</p>
+                        <span>Gross Item Value</span>
+                    </li>
+                </ul>
+            
+            </div>
+            <!-- <div class="pdlr">
                 <div class="bdr-field">
                     <span>Address</span>
                     <p>{{orderDetail.dr_street}} {{orderDetail.dr_state_name ? orderDetail.dr_state_name:'N/A'}} {{orderDetail.dr_district_name ? ', '+orderDetail.dr_district_name : ''}} {{orderDetail.dr_city ? ', '+orderDetail.dr_city : ''}} {{orderDetail.dr_pincode ? ', '+orderDetail.dr_pincode : ''}}</p>
                 </div>
-            </div>
-            <div ng-show="orderDetail.order_remarks" class="pdlr">
+            </div> -->
+            <!-- <div ng-show="orderDetail.order_remarks" class="pdlr">
                 <div class="bdr-field">
                     <span>Remark</span>
                     <p>{{orderDetail.order_remarks}}</p>
                 </div>
-            </div>
+            </div> -->
         </div>
         
-        <div class="cs-heading1 mb5">
+
+        <div class="coman-list">
+            <div class="top-head">
+                <ul>
+                    <li>
+                    <p>{{orderDetail.item_count}}</p>
+                    <span>Total Item</span>
+                </li>
+                    <li>
+                        <p>{{orderDetail.order_qty}}</p>
+                        <span>Order Qty</span>
+                    </li>
+                    <li>
+                        <p>{{orderDetail.delivery_qty}}</p>
+                        <span>Delivered Qty</span>
+                    </li>
+                    <li>
+                        <p>{{orderDetail.remaining_qty}}</p>
+                        <span>Remaining Qty</span>
+                    </li>
+                </ul>
+            
+            </div>
+        </div>
+
+        <!-- <div class="coman-list">
+        <div class="top-head">
+            <ul>
+                <li>
+                    <p>{{orderDetail.order_no}}</p>
+                    <span>Net Item Value</span>
+                </li>
+                <li>
+                    <p>{{orderDetail.order_date | date: 'dd MMM yyyy'}}</p>
+                    <span>Tax Amount</span>
+                </li>
+                <li>
+                    <p>&#8377; {{orderDetail.net_total}}</p>
+                    <span>Gross Item Value</span>
+                </li>
+            </ul>
+        
+        </div>
+        </div> -->
+        <!-- <div class="cs-heading1 mb5">
             <p>Order Information</p>
         </div>
         
@@ -49,32 +129,32 @@
             
             <div class="cs-flex">
                 <div class="bdr-field wp100">
-                    <span>Date & Created By</span>
-                    <p>{{orderDetail.dateCreatedInFormat}} - {{orderDetail.created_by_name}}</p>
+                    <span>Order Date</span>
+                    <p>{{orderDetail.order_date | date: 'dd MMM yyyy'}}</p>
                 </div>
                 <div class="bdr-field" style="min-width: 90px; width: 90px;">
                     <span>Order Type</span>
                     <p>{{orderDetail.payment_type}}</p>
                 </div>
-            </div>
-            <div class="cs-flex" ng-if="orderDetail.order_type == 'secondary'">
+            </div> -->
+            <!-- <div class="cs-flex" ng-if="orderDetail.order_type == 'secondary'">
                 <div class="bdr-field wp100">
                     <span>Distributor Info</span>
                     <p>{{orderDetail.disp_dr_name}}  {{orderDetail.disp_mobile ? '/ +91'+orderDetail.disp_mobile : ''}}</p>
                 </div>
-            </div>
+            </div> -->
             
-            <div class="cs-flex">
+            <!-- <div class="cs-flex">
                 
                 <div class="bdr-field wp100 " ng-repeat="user in orderDetail.approval" ng-class="{'pending-bg':user.status=='Pending','approved-bg':user.status=='Approved','reject-bg':user.status=='Reject'}">
                     <span>{{user.designation}} Status</span>
                     <p>{{user.approver_name}} / {{user.status}}</p>
-                    <!-- <a class="fix-icon-btn"><i class="material-icons">create</i></a> -->
+                     <a class="fix-icon-btn"><i class="material-icons">create</i></a>
                 </div>
-            </div>
+            </div> -->
             
             <!--  -->
-            <div class="cs-flex">
+            <!-- <div class="cs-flex">
                 <div class="bdr-field wp100 mb0" ng-if="orderDetail.order_status == 'Reject'">
                     <div class="df">
                         <span>Reason Information</span>
@@ -84,91 +164,71 @@
                 </div>
                 
                 
-            </div>
-            
-            
-            
-            <!-- <div class="summary-table">
-                <table>
-                    <tr>
-                        <td class="w130">Total Item</td>
-                        <td class="text-right" style="font-size: 14px;">{{orderDetail.item_count}}</td>
-                    </tr>
-                    <tr>
-                        <td>Sub Total</td>
-                        <td class="text-right" style="font-size: 14px;">Rs. {{orderDetail.sub_total}}</td>
-                    </tr>                                       
-                    <tr>
-                        <td>Discount Amount</td>
-                        <td class="text-right" style="font-size: 14px;">Rs. {{orderDetail.dis_amt}}</td>
-                    </tr>
-                    
-                    <tr>
-                        <td>Pre Tax Total</td>
-                        <td class="text-right" style="font-size: 14px;">{{orderDetail.item_total}}</td>
-                    </tr>
-                    
-                    <tr>
-                        <td>GST Amount</td>
-                        <td class="text-right" style="font-size: 14px;">Rs. {{(orderDetail.igst_amt+orderDetail.sgst_amt+orderDetail.cgst_amt)}}</td>
-                    </tr>
-                    
-                    <tr>
-                        <td>Final Amount </td>
-                        <td class="text-right" style="font-size: 14px;">Rs. {{orderDetail.net_total}}</td>
-                    </tr>
-                </table>
             </div> -->
+  
             
-        </div>
+        <!-- </div> -->
         
         <div class="cs-heading1" style="margin-bottom: -10px;">
             <p>Item Information</p>
         </div>
         
-        <div ng-repeat="row in orderDetail.itemData" class="coman-list">
-            <div class="center-item">
-                <div class="cs-content">
-                    <p>{{row.category}}, {{row.sub_category}}, {{row.product_name}}</p>
-                    <span>#{{row.product_code}}</span>
-                </div>
+        <div ng-repeat="row in orderDetail.order_item" class="coman-list">
+            <!-- <div ng-click = "onGoToBillingDetailPage(row.bill_doc)" ng-repeat= "row in billinglist" class="coman-list">  -->
+          
+                
+                 <div class="center-item">
+                    <div class="cs-icon">{{row.material_description[0]}}</div>
+                    <div class="cs-content">
+                        <p>{{row.material_no}}</p>
+                        <span>{{row.material_description}}</span>
+                    </div>
+                    <!-- <a class="dialer"><i class="material-icons">keyboard_arrow_right</i></a> -->
+                </div> 
+                
+                 <div class="coman-list">
+                    <div class="top-head">
+                        <ul>
+                            <li>
+                                <p>{{row.total_qty}}</p>
+                                <span>Total Qty</span>
+                            </li>
+                            <li>
+                                <p>{{row.delivery_qty}}</p>
+                                <span>Delivered Qty</span>
+                            </li>
+                            <li>
+                                <p>{{row.remaining_qty}}</p>
+                                <span>Remaining Qty</span>
+                            </li>
+                        </ul>
+                       
+                    </div> 
+                 <!-- </div>   -->
+             </div>
+
+             <div class="coman-list">
+                <div class="top-head">
+                    <ul>
+                        <li>
+                            <p>{{row.item_total}}</p>
+                            <span>Net Item Value</span>
+                        </li>
+                        <li>
+                            <p>{{row.gst_amt}}</p>
+                            <span>Tax Amount</span>
+                        </li>
+                        <li>
+                            <p>&#8377; {{row.net_total}}</p>
+                            <span>Gross Item Value</span>
+                        </li>
+                    </ul>
+                   
+                </div> 
+             <!-- </div>   -->
+         </div>
+    
             </div>
-            <div class="pdlr">
-                <div class="cs-flex">
-                    <div class="bdr-field wp100">
-                        <span>QTY</span>
-                        <p>{{row.qty}}</p>
-                    </div>
-                    <div ng-show="row.warranty" class="bdr-field wp100">
-                        <span>Warranty</span>
-                        <p>{{row.warranty ? row.warranty : '0'}}</p>
-                    </div>
-                    <!-- <div class="bdr-field wp100">
-                        <span>Rate</span>
-                        <p> &#8377;  {{row.rate}} </p>
-                    </div>
-                    <div class="bdr-field wp100">
-                        <span>Amount</span>
-                        <p>{{row.qty * row.rate}}</p>
-                    </div> -->
-                </div>
-                <!-- <div class="cs-flex">
-                    <div class="bdr-field wp100">
-                        <span>Discount</span>
-                        <p> &#8377;  {{row.dis_amt}} ({{row.dis_percent}} %) </p>
-                    </div>
-                    
-                    <div class="bdr-field wp100">
-                        <span>GST ({{row.igst_percent}} %)</span>
-                        <p>{{row.cgst_amount + row.sgst_amount + row.igst_amount}}</p>
-                    </div>
-                    <div class="bdr-field wp100">
-                        <span>Item Total</span>
-                        <p>{{row.item_net_total}}</p>
-                    </div>
-                </div> -->
-            </div>
-        </div>
         <div class="h70">&nbsp;</div>
     </ion-content>
     <div class="footer-bar">

@@ -44,6 +44,7 @@ app.controller('loginCtrl', function ($scope, $rootScope, searchSelect, $ionicMo
                         loginData.loginMobile = result.loginData.contact_01;
                         loginData.loginImage = result.loginData.image;
                         loginData.loginAccessLevel = result.loginData.access_level;
+                        loginData.user_branch = result.loginData.user_branch;
                         // loginData.loginOrganisationId = result.loginData.organisationId;
                         // loginData.loginTeamExist = result.loginData.isTeamExist;
                         // loginData.department = result.loginData.department;

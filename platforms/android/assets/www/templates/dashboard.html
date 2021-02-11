@@ -22,12 +22,13 @@
                 </div>
                 <div class="name">
                     <h2>{{loginData.loginName}}</h2>
+                    <h2>{{loginData.emp_code}}</h2>
                     <!-- <p ng-if="attendData.start_time && !attendData.stop_time">Your Login Time Is <span>{{attendData.start_time}}</span></p> -->
                 </div>
             </div>
         </div>
         
-       
+        
         <div class="bx-container mt20 mb0">
             <h2>Today Records</h2>
             
@@ -45,94 +46,82 @@
                     <p><span>{{dashboardData['todayQuotationCount']}}</span> Quotation</p>
                     <div class="info">Create Quotation</div>
                 </a> -->
-                <a >
-                    <p class="text-left" ng-click="onGoToRootPageHandler('sfaPriOrder-list')" ><span>{{dashboardData['sfaPriOrdCount'].total_ord}}</span>Primary</p>
-                    <div class="info"> {{dashboardData['sfaPriOrdCount'].total_qty ? 'Item Qty : '+dashboardData['sfaPriOrdCount'].total_qty : 'No Orders'}} </div>
-                    <h1 ng-click="onGoToRootPageHandler('sfaPriOrder')" class="addorder-tab">ADD NEW</h1>
+                <a ng-click="onGoToRootPageHandler('sfaPriOrder-list')">
+                    <!-- {{dashboardData['sfaPriOrdCount'].total_qty ? 'Item Qty : '+dashboardData['sfaPriOrdCount'].total_qty : 'Pending Primary'}} -->
+                    <!-- {{dashboardData['sfaPriOrdCount'].total_ord}} -->
+                    <p class="text-center"><span>{{dashboardData['pending_order'] ? dashboardData['pending_order'] : ''}}</span></p>
+                    <div class="info">Primary Pending Orders</div>
+                    <!-- <h1 ng-click="onGoToRootPageHandler('sfaPriOrder')" class="addorder-tab">ADD NEW</h1> -->
                 </a>
                 
-                <a >
-                    <p class="text-left" ng-click="onGoToRootPageHandler('secondary-order-list')" ><span>{{dashboardData['sfaSecOrdCount'].total_ord}}</span> Secondary</p>
-                    <div class="info">{{dashboardData['sfaSecOrdCount'].total_qty ? 'Item Qty : '+dashboardData['sfaSecOrdCount'].total_qty : 'No Orders'}} </div>
-                    <h1 ng-click="onGoToRootPageHandler('sfaSecOrder')" class="addorder-tab">ADD NEW</h1>
+                <a ng-click="onGoToRootPageHandler('billing-list')">
+                    <!-- {{dashboardData['sfaSecOrdCount'].total_qty ? 'Item Qty : '+dashboardData['sfaSecOrdCount'].total_qty : 'No Details'}} -->
+                    <!-- {{dashboardData['sfaSecOrdCount'].total_ord}} -->
+                    <p class="text-center"><span>{{dashboardData['invoice_billing'] ? dashboardData['invoice_billing'] : ''}}</span></p>
+                    <div class="info">Billing Details</div>
+                    <!-- <h1 ng-click="onGoToRootPageHandler('sfaSecOrder')" class="addorder-tab">ADD NEW</h1> -->
                 </a>
             </div>
         </div>
         
-        <!-- <h4 class="nrml-head" ng-if="loginData.loginAccessLevel == '4'">My Distribution Network</h4> -->
 
+        <!-- <h4 class="nrml-head" ng-if="loginData.loginAccessLevel == '4'">My Distribution Network</h4> -->
+        
         <!-- <h4 class="nrml-head" ng-if="dashboardData['drCountData'].length > 0 && !loginData.channelSalesLogin">My Leads</h4> -->
         <div class="total-count">
-            <a ng-click = "gotoDrPage(row.typeName)"  ng-repeat="row in dashboardData['drCountData']">
+            <a ng-click = "gotoDrPage(row.typeName,false)"  ng-repeat="row in dashboardData['drCountData']">
                 <p>{{row.typeCount}}</p>
                 <span>{{row.typeName}}</span>
             </a>
-            <!-- <a ng-if="dashboardData['drCountData'].length > 0" class="more-count" href="#/tab/lead-counter">
-                <span>More</span>
-                <i class="material-icons vert">more_horiz</i>
-            </a> -->
         </div>
 
-        <!-- <div class="total-count">
-            <a ng-click = "gotoDrPage(row.type_name)" ng-repeat="row in dashboardData['distriCountData']">
-                <p>{{row.total_cn}}</p>
-                <span>{{row.type_name}}</span>
-            </a>
-        </div> -->
-        
-        <!-- <div class="pr16 pl16" ng-if="dashboardData.collectionPlan!=0">
-            <div class="target-bar">
-                
-                <h3>Today Outstanding Collection </h3>
-                
-                <span class="progress-bar">
-                    <span class="inside" style=" width: {{dashboardData.achive_percent}}%;">&nbsp;</span>
-                </span>
-                <div class="v-s">
-                    <h2>Target <span>&#8377; {{dashboardData.collectionPlan}} Lac.</span></h2>
-                    <h2>Achieve <span>&#8377; {{dashboardData.collectionAchivement ? dashboardData.collectionAchivement + ' Lac.' : 0}}</span></h2>
+        <div class="pd-left-right16 mt20">
+            <div class="order-tags mb0">
+                <div class="tag-head border0">
+                    <h1>Outstanding Amount</h1>
+                    <div class="filter-btns">
+                        <button class="font13 mr5 radius4" ng-click = "gotoDrPage('outstanding',true)">&#8377; {{dashboardData['total_outstanding'] ? dashboardData['total_outstanding'] : ''}}</button>
+                    </div>
                 </div>
-            </div>
-        </div> -->
-        
-        
-        <!-- <div class="cs-space" style="padding:16px 20px;">
-            <a ng-if="loginData.loginAccessLevel == '4'" ng-click="loginData.startAttendance ? goToPage('tab.network-add') : loginAlert()" class="cs-btn">Add Dealer</a>
-            <a ng-if="loginData.loginAccessLevel == '4'" ng-click="loginData.startAttendance ? goToPage('tab.travel-add') : loginAlert()" class="cs-btn">Add Travel</a>
-            <a href="#/tab/lead-add" ng-if="loginData.loginAccessLevel == '3'" class="cs-btn">Add New Lead</a>
-            <a ng-click="loginData.startAttendance ? goToPage('tab.followup-add') : loginAlert()" class="cs-btn">Add Follow Up</a>
-        </div> -->
-        
-        <div class="h70">&nbsp;</div>
-        <!-- <button ng-click="loginData.startAttendance=!   loginData.startAttendance">test</button> -->
-    </ion-content>
-    
-    <!-- <ion-footer-bar class="ds_ion-footer-bar">
-        <div class="csm_work_time _start" ng-click = "onActivateGPSLocationHandler('startAttend')" ng-if="data.isAttendanceDataReceived == 'Yes' && !attendData.start_time">
-            <div class="cs-left">
-                <div class="icon"><img src="img/okaya-img/start_clock.png" alt=""></div>
-                <div class="info">
-                    <p>Your Login Time</p>
-                    <p>{{ clock  | date : 'hh:mm:ss a'}}</p>
-                </div>
-            </div>
-            <div class="cs-right">
-                <button>Start Work Time</button>
             </div>
         </div>
-        
-        <div class="csm_work_time _stop" ng-click = "onActivateGPSLocationHandler('stopAttend')" ng-if="data.isAttendanceDataReceived == 'Yes' && attendData.start_time && attendData.stop_time==''">
-            <div class="cs-left">
-                <div class="icon"><img src="img/okaya-img/Stop_clock.png" alt=""></div>
-                <div class="info">
-                    <p>Your Logout Time</p>
-                    <p>{{ clock  | date : 'hh:mm:ss a'}}</p>
-                </div>
-            </div>
-            <div class="cs-right">
-                <button>Stop Work Time</button>
+    </div>
+    
+    
+    <div class="cs-space" style="padding:16px">
+        <a class="cs-btn"  href="#/tab/mis_report">Report <i class="material-icons">arrow_forward_ios</i></a>
+    </div>
+    
+    <div class="h70">&nbsp;</div>
+    <!-- <button ng-click="loginData.startAttendance=!   loginData.startAttendance">test</button> -->
+</ion-content>
+
+<!-- <ion-footer-bar class="ds_ion-footer-bar">
+    <div class="csm_work_time _start" ng-click = "onActivateGPSLocationHandler('startAttend')" ng-if="data.isAttendanceDataReceived == 'Yes' && !attendData.start_time">
+        <div class="cs-left">
+            <div class="icon"><img src="img/okaya-img/start_clock.png" alt=""></div>
+            <div class="info">
+                <p>Your Login Time</p>
+                <p>{{ clock  | date : 'hh:mm:ss a'}}</p>
             </div>
         </div>
-    </ion-footer-bar> -->
+        <div class="cs-right">
+            <button>Start Work Time</button>
+        </div>
+    </div>
     
+    <div class="csm_work_time _stop" ng-click = "onActivateGPSLocationHandler('stopAttend')" ng-if="data.isAttendanceDataReceived == 'Yes' && attendData.start_time && attendData.stop_time==''">
+        <div class="cs-left">
+            <div class="icon"><img src="img/okaya-img/Stop_clock.png" alt=""></div>
+            <div class="info">
+                <p>Your Logout Time</p>
+                <p>{{ clock  | date : 'hh:mm:ss a'}}</p>
+            </div>
+        </div>
+        <div class="cs-right">
+            <button>Stop Work Time</button>
+        </div>
+    </div>
+</ion-footer-bar> -->
+
 </ion-view>
