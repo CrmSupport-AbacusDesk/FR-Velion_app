@@ -17,6 +17,7 @@ app.controller('sfaOrderCtrl', function ($scope, $rootScope, searchSelect, $ioni
     
     $scope.drList = [];
     $scope.drDeliveryByList = [];
+    $scope.tmpbillingList = [];
     
     
     $scope.cartItemData = [];
@@ -28,7 +29,8 @@ app.controller('sfaOrderCtrl', function ($scope, $rootScope, searchSelect, $ioni
     
     $scope.currentPage = 1;
     $scope.pageSize = 20;
-    
+    $scope.billinglist=[];
+    $scope.billingdetail=[];
     // $scope.currentDate =  new Date();
     $scope.currentDate = moment().format('YYYY-MM-DD');
     $scope.minDate = moment().subtract(7, 'days').format('YYYY-MM-DD');
@@ -47,15 +49,215 @@ app.controller('sfaOrderCtrl', function ($scope, $rootScope, searchSelect, $ioni
         $scope.data.statusType = statusType;
     }
     
-    // if($location.path() == '/sfa-order-detail')
-    // {
-    //     $ionicPopover.fromTemplateUrl('add-status', {
-    //         scope: $scope,
-    //     }).then(function(popovers) {
-    //         $scope.data.statusModel = popovers;
-    //     });
-    // }
-    
+
+    if($location.path() == '/billing-detail') {
+        
+        console.log("hello");
+        console.log(myAllSharedService.billingdetail);
+        $scope.data = myAllSharedService.billingdetail;
+        console.log($scope.data);
+        $ionicLoading.show({
+            template: '<p>Loading...</p><ion-spinner icon="android"></ion-spinner>'
+        });
+        fetchingRecords = true;
+
+        myRequestDBService.orpPostServiceRequest('/invoice/getInvoiceDetail',$scope.data)
+        .then(function (result)
+        {
+            console.log(result);
+            $ionicLoading.hide();
+
+            $scope.billingdetail = result.data;
+            console.log($scope.billingdetail);
+            fetchingRecords = false;
+            
+        }, function (errorMessage) {
+            console.log(errorMessage);
+            window.console.warn(errorMessage);
+            $ionicLoading.hide();
+            fetchingRecords = false;
+        });
+    }
+
+
+    $scope.filterBillingList = function(search)
+    {
+        search = search.toLowerCase();
+        $scope.tmpbillingList=$scope.billinglist;
+        console.log($scope.billinglist);
+        
+        console.log(search);
+        $scope.billinglist = [];
+        console.log($scope.billinglist);
+      console.log($scope.tmpbillingList);
+
+        $scope.billinglist = $scope.tmpbillingList.filter(row=>row.customer_code.includes(search) || row.customr_name.toLowerCase().includes(search) || row.sale_order_no.includes(search) || row.bill_doc.includes(search));
+
+        console.log($scope.billinglist);
+       
+
+        console.log(searchArray);
+
+    }
+
+$scope.billinglistdata = function () {
+    fetchingRecords = true;
+    $ionicLoading.show({
+        template: '<p>Loading...</p><ion-spinner icon="android"></ion-spinner>'
+    });
+    myRequestDBService.orpPostServiceRequest('/invoice/getInvoiceList','')
+    .then(function (result)
+    {
+        console.log(result);
+        
+        $scope.billinglist = result.data;
+        $ionicLoading.hide();
+
+        fetchingRecords = false;
+        
+    }, function (errorMessage) {
+        console.log(errorMessage);
+        window.console.warn(errorMessage);
+        $ionicLoading.hide();
+        fetchingRecords = false;
+    });
+}
+
+    if($location.path() == '/billing-list') {
+        
+        console.log("hello");
+        // $scope.data.orderId = myAllSharedService.drTypeFilterData.orderId;
+        $scope.billinglistdata();
+        // fetchingRecords = true;
+        // $ionicLoading.show({
+        //     template: '<p>Loading...</p><ion-spinner icon="android"></ion-spinner>'
+        // });
+        // myRequestDBService.orpPostServiceRequest('/invoice/getInvoiceList','')
+        // .then(function (result)
+        // {
+        //     console.log(result);
+            
+        //     $scope.billinglist = result.data;
+        //     $ionicLoading.hide();
+
+        //     fetchingRecords = false;
+            
+        // }, function (errorMessage) {
+        //     console.log(errorMessage);
+        //     window.console.warn(errorMessage);
+        //     $ionicLoading.hide();
+        //     fetchingRecords = false;
+        // });
+    }
+
+    if($location.path() == '/tab/sfa-order-add')
+    {
+        {
+            var label
+            
+            if($scope.order_type=='secondary')
+            {
+                label = 'Dealer';
+            }
+            else
+            {
+                label = 'Distributor';
+            }
+            $scope.itemList = [];
+            
+            $scope.search.categoryName = { Key: "Select Category", Value: "" };
+            $scope.search.subCategoryName = { Key: "Select Sub Category", Value: "" };
+            $scope.search.product = { Key: "Select Product", Value: "" };
+            $scope.search.dr_name = { Key: "Select "+label, Value: "" };
+            $scope.search.assign_dr_name = { Key: "Select Distributor", Value: "" };
+            
+            $scope.data.payment_type = 'cash';
+            console.log(myAllSharedService.drTypeFilterData.orderData);
+            
+            if(myAllSharedService.drTypeFilterData.orderData && myAllSharedService.drTypeFilterData.orderData.order_type != undefined) {
+                
+                myAllSharedService.drTypeFilterData.referFrom = null;
+                $scope.cartSummaryData = {};
+                $scope.order_type = myAllSharedService.drTypeFilterData.orderData.order_type;
+                $scope.data = myAllSharedService.drTypeFilterData.orderData;
+                $scope.search.dr_name = { Key: $scope.data.dr_name, Value: $scope.data.dr_id };
+                $scope.data.order_date = new Date($scope.data.order_date);
+                $scope.get_dr_list();
+                console.log($scope.search);
+                console.log($scope.cartItemData);
+                $scope.data.dr_id = $scope.data.dr_id;
+                $scope.data.basicAmount = $scope.data.item_total;
+                $scope.data.grandTatal = $scope.data.net_total;
+                $scope.data.netAmount = $scope.data.sub_total;
+                $scope.data.sgstAmount = $scope.data.sgst_amt;
+                $scope.data.igstAmount = $scope.data.igst_amt;
+                $scope.data.cgstAmount = $scope.data.cgst_amt;
+                $scope.data.discountedAmount = $scope.data.dis_amt;
+                $scope.data.order_id = $scope.data.id;
+                $scope.data.payment_type = $scope.data.payment_type;
+                
+                $scope.onGetCartItemDataHandler('fetchCategoryData', '' , 1);
+                
+                
+                if($scope.data.dr_id && $scope.order_type=='secondary')
+                {
+                    $scope.getAssignDistributor();
+                    $scope.getDistributor();
+                    
+                }
+                $scope.cartItemData = [];
+                
+                $scope.data.itemData.forEach(element => {
+                    $scope.cartItemData.push({
+                        warranty: element.warranty,
+                        categoryName: element.category,
+                        subCategoryName: element.sub_category,
+                        productName: element.product_name,
+                        productCode: element.product_code,
+                        qty: element.qty,
+                        rate: element.rate,
+                        discount: element.dis_percent,
+                        discountAmount : element.dis_amt,
+                        igst: element.igst_percent,
+                        cgst: element.cgst_percent,
+                        sgst: element.sgst_percent,
+                        cgstAmount: element.cgst_amount,
+                        sgstAmount: element.sgst_amount,
+                        igstAmount: element.igst_amount,
+                        subTotal : element.amount,
+                        netTotal : element.item_total,
+                        grandTotal : element.item_net_total,
+                    });
+                    
+                });
+                
+                $scope.cartSummaryData.order_id = $scope.data.id;
+                $scope.cartSummaryData.discountAmount = $scope.data.dis_amt;
+                $scope.cartSummaryData.discountedAmount = $scope.data.item_total;
+                $scope.cartSummaryData.cgstAmount = $scope.data.cgst_amt;
+                $scope.cartSummaryData.sgstAmount = $scope.data.sgst_amt;
+                $scope.cartSummaryData.igstAmount = $scope.data.igst_amt
+                $scope.cartSummaryData.itemFinalAmount = $scope.data.net_total;
+                
+            } 
+            else if(myAllSharedService.drTypeFilterData.dr_id && myAllSharedService.drTypeFilterData.referFrom =='network')
+            {
+                $scope.data.order_date = new Date();
+                $scope.get_dr_list();
+                console.log("welcome");
+                $scope.data.dr_id = $scope.data.dr_id;
+                $scope.search.dr_name = { Key: myAllSharedService.drTypeFilterData.dr_name, Value:myAllSharedService.drTypeFilterData.dr_id };
+                
+            }
+            else {
+                myAllSharedService.drTypeFilterData.referFrom = null;
+                $scope.data.order_date = new Date();
+                $scope.get_dr_list();
+            }
+            
+            console.log($scope.data);
+        }
+    }
     
     $scope.onGetCartItemDataHandler = function (typeInfo, searchKey, pagenumber) {
         
@@ -425,6 +627,10 @@ app.controller('sfaOrderCtrl', function ($scope, $rootScope, searchSelect, $ioni
             
             myAllSharedService.drTypeFilterData.isInsideLead = 'No';
             myAllSharedService.drTypeFilterData.orderId = '';
+
+
+
+
         }
         
         myAllSharedService.drTypeFilterData.order_type = $scope.order_type;
@@ -434,41 +640,22 @@ app.controller('sfaOrderCtrl', function ($scope, $rootScope, searchSelect, $ioni
     $scope.tmpOrderList = [];
     $scope.getOrderListData = function(targetSRC) {
         
-        if(!$scope.data.search && targetSRC != 'scroll')
-        {
             $ionicLoading.show({
                 template: '<p>Loading...</p><ion-spinner icon="android"></ion-spinner>'
             });
-        }
+        // if(!$scope.data.search && targetSRC != 'scroll')
+        // {
+        // }
         $scope.isRequestInProcess = true;
         
-        var requestPost = {
-            order_type:$scope.order_type,
-            searchData:$scope.data.search,
-            start:$scope.currentPage,
-            pageLimit:$scope.pageSize,
-            createdBy:$scope.data.orderCreatedBy,
-            targetPage: 'List',
-            drId:$scope.data.dr_id
-        }
-        
-        myRequestDBService.sfaPostServiceRequest('/App_Order/order_list',requestPost)
+        myRequestDBService.orpPostServiceRequest('/invoice/getPendingOrderList','')
         .then(function(response)
         {
+            $ionicLoading.hide();
             console.log(response);
-            const result = response.orderData;
+            const result = response.data;
             console.log(result);
-            if(!$scope.data.search && targetSRC != 'scroll') {
-                $ionicLoading.hide();
-            }
-            for (let index = 0; index < result.length; index++) {
-                
-                const isExist = $scope.orderList.findIndex(row => row.id == result[index].id);
-                if(isExist === -1) {
-                    $scope.orderList = $scope.orderList.concat(result);
-                }
-            }
-
+            $scope.orderList=result;
             $scope.tmpOrderList = $scope.orderList;
             myAllSharedService.drTypeFilterData.orderList = $scope.orderList;
             $scope.isRequestInProcess = false;
@@ -499,17 +686,23 @@ app.controller('sfaOrderCtrl', function ($scope, $rootScope, searchSelect, $ioni
         
     }
     
+  
+    
+
     $scope.filterOrderListList = function(search)
     {
         search = search.toLowerCase();
         
         console.log(search);
+        $scope.orderList = [];
+        console.log($scope.orderList);
 
       console.log($scope.tmpOrderList);
 
-        $scope.orderList = $scope.tmpOrderList.filter(row=>row.created_by_name.toLowerCase().includes(search) || row.dr_name.toLowerCase().includes(search) || row.order_status.toLowerCase().includes(search) || row.payment_type.toLowerCase().includes(search) || row.state_name.toLowerCase().includes(search) || row.city.toLowerCase().includes(search) || row.district_name.toLowerCase().includes(search));
+        $scope.orderList = $scope.tmpOrderList.filter(row=>row.dr_code.includes(search) || row.order_no.toLowerCase().includes(search) || row.dr_name.toLowerCase().includes(search));
 
-        // || row.dr_name.includes(search) || row.order_status.includes(search) || row.payment_type.includes(search) || row.state_name.includes(search) || row.city.includes(search) || row.district_name.includes(search)
+        console.log($scope.orderList);
+       
 
         console.log(searchArray);
 
@@ -517,6 +710,28 @@ app.controller('sfaOrderCtrl', function ($scope, $rootScope, searchSelect, $ioni
 
     if($location.path() == '/tab/sfa-order-list')
     {
+        console.log("hello1");
+        console.log(myAllSharedService.drTypeFilterData);
+        if(myAllSharedService.drTypeFilterData.order_type != undefined)
+        {
+            $scope.order_type = myAllSharedService.drTypeFilterData.order_type;
+            $scope.data.orderCreatedBy = myAllSharedService.drTypeFilterData.orderCreatedBy;
+            if(myAllSharedService.drTypeFilterData.referFrom=='network')
+            {
+                $scope.data.dr_id = myAllSharedService.drTypeFilterData.drId;
+                
+            }
+        }
+        else
+        {
+            $scope.order_type = 'primary';
+            $scope.data.orderCreatedBy = 'me';
+        }
+        $scope.getOrderListData('onLoad');
+    }
+
+    if($location.path() == '/tab/billing-detail')
+    {console.log("hello");
         console.log(myAllSharedService.drTypeFilterData);
         if(myAllSharedService.drTypeFilterData.order_type != undefined)
         {
@@ -1425,11 +1640,12 @@ app.controller('sfaOrderCtrl', function ($scope, $rootScope, searchSelect, $ioni
             template: '<p>Loading...</p><ion-spinner icon="android"></ion-spinner>'
         });
         
-        myRequestDBService.onOrderDeatil($scope.data.orderId).then(function(response) {
+console.log( $scope.data.orderId);
+        myRequestDBService.orpPostServiceRequest('/invoice/getPendingOrderDetail',$scope.data.orderId).then(function(response) {
             
-            console.log(response);
+            console.log(response.data);
             
-            $scope.orderDetail = response.orderData[0];
+            $scope.orderDetail = response.data;
             
             $ionicLoading.hide();
             
@@ -1450,11 +1666,11 @@ app.controller('sfaOrderCtrl', function ($scope, $rootScope, searchSelect, $ioni
         $scope.data.orderId = myAllSharedService.drTypeFilterData.orderId;
         $scope.getOrderDetailData();
         
-        $ionicPopover.fromTemplateUrl('add-status', {
-            scope: $scope,
-        }).then(function(popovers) {
-            $scope.data.statusModel = popovers;
-        });
+        // $ionicPopover.fromTemplateUrl('add-status', {
+        //     scope: $scope,
+        // }).then(function(popovers) {
+        //     $scope.data.statusModel = popovers;
+        // });
     }
     
     
@@ -1462,6 +1678,12 @@ app.controller('sfaOrderCtrl', function ($scope, $rootScope, searchSelect, $ioni
     {
         myAllSharedService.drTypeFilterData.orderId = orderId;
         $state.go('tab.sfa-order-detail');
+    }
+
+    $scope.onGoToBillingDetailPage = function(orderId)
+    {
+        myAllSharedService.billingdetail = orderId;
+        $state.go('billing-detail');
     }
     
     
@@ -1561,7 +1783,8 @@ app.controller('sfaOrderCtrl', function ($scope, $rootScope, searchSelect, $ioni
             $scope.data.search = '';
             $scope.isSearchBarOpen = false;
             // $scope.onSetCurrentPageHandler();
-            
+            $scope.billinglistdata();
+
             $scope.getOrderListData('onLoad');
         }
     }

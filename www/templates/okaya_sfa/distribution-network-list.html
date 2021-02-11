@@ -42,25 +42,30 @@
         <div class="top-head" ng-click = "goToNetworkDetail(row.id)">
             <ul  >
                 <li>
-                    <p>{{!row.dateCreatedInFormat ? 'N/A' : row.dateCreatedInFormat}}</p>
-                    <span>Date Created</span>
+                    <p>{{!row.state_name ? 'N/A' : row.state_name}}</p>
+                    <span>State</span>
                 </li>
                 <li>
-                    <p>{{row.created_by_name ? row.created_by_name : 'N/A'}}</p>
-                    <span>Created By</span>
+                    <p>{{row.district_name ? row.district_name : 'N/A'}}</p>
+                    <span>District</span>
                 </li>
-                <li ng-if="networkTabActive == 2"  >
-                    <p ng-class="{'pending-clr':row.dealer_status=='Pending','approved-clr':row.dealer_status=='Approved'}">{{row.dealer_status}}</p>
-                    <span>Status</span>
+                <li>
+                    <p>{{row.zone ? row.zone : 'N/A'}}</p>
+                    <span>Zone</span>
                 </li>
+                <li>
+                    <p>{{row.branch ? row.branch : 'N/A'}}</p>
+                    <span>Branch</span>
+                </li>
+               
             </ul>
         </div>
         
         <div class="center-item">
             <div class="cs-icon" ng-click = "goToNetworkDetail(row.id)" >{{row.dr_name[0] ? row.dr_name[0] : '--'}}</div>
             <div class="cs-content" ng-click = "goToNetworkDetail(row.id)" >
-                <p>{{row.dr_name ? row.dr_name : 'N/A'}} {{row.dr_code ? '('+row.dr_code+')' : ''}}</p>
-                <span>{{row.contact_name ? row.contact_name : 'N/A'}}</span>
+                <p>{{row.dr_name ? row.dr_name : 'N/A'}} </p>
+                <span>{{row.dr_code ? row.dr_code : ''}}</span>
             </div>
             <a ng-if="row.sfa_contact_no" href="tel: {{row.sfa_contact_no}}" class="dialer"><i class="material-icons">call</i></a>
         </div>

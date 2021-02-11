@@ -70,6 +70,14 @@ app.controller('orderCtrl', function ($scope, $rootScope, searchSelect, $ionicMo
     
     // }
     
+
+    if($location.path() == 'billing-list') {
+        
+        console.log("hello");
+        // $scope.data.orderId = myAllSharedService.drTypeFilterData.orderId;
+        // $scope.getOrderDetailData();
+    }
+    
     $scope.dealerShippingAddress = [];
     $scope.drShippingArray = [{'address':'Other','id':0}];
     $scope.getDetail = function(id)

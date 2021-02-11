@@ -3310,6 +3310,12 @@
     justify-content: flex-start;
     margin-top: 16px;
 }
+
+.bx-listing a.flex-remove
+{
+    display: inherit;
+}
+
 .bx-listing a .description
 {
     height: 50px;

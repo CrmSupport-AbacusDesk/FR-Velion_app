@@ -240,9 +240,10 @@ app.controller('networkController', function ($http,$scope, $rootScope, searchSe
     
     $scope.filterNetworkList = function(search)
     {
+        console.log(search);
         search = search.toLowerCase();
         
-        $scope.myNetworkList = $scope.tmpMyNetworkList.filter(row=>row.created_by_name.toLowerCase().includes(search) || row.sfa_contact_no.toLowerCase().includes(search) || row.street.toLowerCase().includes(search) || row.dr_name.toLowerCase().includes(search) || row.dr_code.toLowerCase().includes(search));
+        $scope.myNetworkList = $scope.tmpMyNetworkList.filter(row => row.dr_name.toLowerCase().includes(search) || row.dr_code.toLowerCase().includes(search) || row.state_name.toLowerCase().includes(search) || row.district_name.toLowerCase().includes(search) || row.zone.toLowerCase().includes(search) || row.branch.toLowerCase().includes(search));
         
         console.log(searchArray);
         
