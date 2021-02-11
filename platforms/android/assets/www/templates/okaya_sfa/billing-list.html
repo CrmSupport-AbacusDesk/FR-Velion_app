@@ -1,0 +1,104 @@
+<ion-view view-title="Billing Details">
+    
+    <ion-nav-buttons side="left">
+        <a href="#/tab/dashboard" class="cs-backbtn button button-icon icon ion-android-arrow-back font18 fff"></a>
+    </ion-nav-buttons>
+    
+    <ion-nav-buttons side="right" class="custom-right-btn">
+        <div ng-click = "onSeachActionHandler('open')" class="right-nav-btn nav-search">
+            <a menu-toggle="left"><i class="material-icons">search</i></a>
+        </div>
+        <div ng-class="isSearchBarOpen ? 'active' : ''" class="search-filter">
+            <input ng-model = "data.search" type="text" id = "searchData" ng-change = "filterBillingList(data.search)">
+            <a ng-click = "onSeachActionHandler('close')" placeholder = "Search" class="close-filter"><i class="material-icons">keyboard_backspace</i></a>
+        </div>
+    </ion-nav-buttons>
+    
+    <ion-content>
+        <ion-refresher on-refresh="data.search = ''; onSetCurrentPageHandler();getOrderListData('onRefresh')">
+            <ion-refresher-content
+            pullingIcon="arrow-dropdown"
+            pullingText="Pull to refresh"
+            refreshingSpinner="circles"
+            refreshingText="Refreshing...">
+        </ion-refresher-content>
+    </ion-refresher>
+    
+    
+    <div  class="coman-list" ng-click = "onGoToBillingDetailPage(row.bill_doc)" ng-repeat= "row in billinglist">
+        <div class="top-head">
+            <ul>
+                <li>
+                    <p>{{row.sale_order_no}}</p>
+                    <span>Order No</span>
+                </li>
+                <li>
+                    <p>{{row.bill_doc}}</p>
+                    <span>Bill No</span>
+                </li>
+                <li>
+                    <p>{{row.bill_date | date: 'dd MMM yyyy'}}</p>
+                    <span>Bill Date</span>
+                </li>
+            </ul>
+            
+            <!-- <ul class="left-auto">
+                <li class="text-right">
+                    <span>{{row.dateCreatedInFormat}}</span>
+                </li>
+            </ul> -->
+        </div>
+        
+        <div class="center-item">
+            <div class="cs-icon">{{row.customr_name[0]}}</div>
+            <div class="cs-content">
+                <span>{{row.customr_name}}</span>
+                <p>{{row.customer_code}}</p>
+            </div>
+            <a class="dialer"><i class="material-icons">keyboard_arrow_right</i></a>
+        </div>
+        
+        <div class="pdlr">
+            <div class="cs-flex">
+                <div class="bdr-field wp100">
+                    <span>Total Item</span>
+                    <p>{{row.total_item}}</p>
+                </div>
+                <div class="bdr-field wp100">
+                    <span>Total item Qty</span>
+                    <p>{{row.total_qty}}</p>
+                </div>
+                <div class="bdr-field wp100">
+                    <span>Total Amount</span>
+                    <p>&#8377; {{row.total_amt | number : 2 }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+    
+    <div class="data-not-found" ng-if="!isRequestInProcess && billinglist.length == 0" >
+        <div class="outer">
+            <div class="innear">
+                <img src="img/data-not-found.svg" alt="">
+                <h2>Temporarily , No Data Available!</h2>
+            </div>
+        </div>
+    </div>
+    
+    <ion-infinite-scroll immediate-check="false" ng-if="!noMoreListingAvailable" on-infinite="getOrderListData('scroll')" distance="20%" class="myspinner">
+    </ion-infinite-scroll>
+    
+    <div class="h50"></div>
+    
+</ion-content>
+
+
+<!-- 
+    <div class="fix-add">
+        <a ng-click="clear_data();onGoToOrderAddHandler()">
+            <i class="material-icons">add</i>
+        </a>
+    </div> -->
+</ion-view>
