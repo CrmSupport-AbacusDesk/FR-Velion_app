@@ -493,18 +493,40 @@ angularApp.run(function ($ionicPlatform, myRequestDBService, myAllSharedService,
         }
     })
 
-    .state('billing-list', {
+    .state('tab.billing-list', {
         url: '/billing-list',
         cache:false,
-        templateUrl: 'templates/okaya_sfa/billing-list.html',
-        controller: 'sfaOrderCtrl'
+        views: {
+            'tab-menu': {
+                templateUrl: 'templates/okaya_sfa/billing-list.html',
+                controller: 'sfaOrderCtrl'
+            }
+        }
     })
 
-    .state('billing-detail', {
+    // .state('billing-list', {
+    //     url: '/billing-list',
+    //     cache:false,
+    //     templateUrl: 'templates/okaya_sfa/billing-list.html',
+    //     controller: 'sfaOrderCtrl'
+    // })
+
+    // .state('billing-detail', {
+    //     url: '/billing-detail',
+    //     cache:false,
+    //     templateUrl: 'templates/okaya_sfa/billing-detail.html',
+    //     controller: 'sfaOrderCtrl'
+    // })
+
+    .state('tab.billing-detail', {
         url: '/billing-detail',
         cache:false,
-        templateUrl: 'templates/okaya_sfa/billing-detail.html',
-        controller: 'sfaOrderCtrl'
+        views: {
+            'tab-menu': {
+                templateUrl: 'templates/okaya_sfa/billing-detail.html',
+                controller: 'sfaOrderCtrl'
+            }
+        }
     })
     
     .state('tab.sfa-order-add', {

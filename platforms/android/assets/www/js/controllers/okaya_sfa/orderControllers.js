@@ -50,7 +50,7 @@ app.controller('sfaOrderCtrl', function ($scope, $rootScope, searchSelect, $ioni
     }
     
 
-    if($location.path() == '/billing-detail') {
+    if($location.path() == '/tab/billing-detail') {
         
         console.log("hello");
         console.log(myAllSharedService.billingdetail);
@@ -123,7 +123,7 @@ $scope.billinglistdata = function () {
     });
 }
 
-    if($location.path() == '/billing-list') {
+    if($location.path() == '/tab/billing-list') {
         
         console.log("hello");
         // $scope.data.orderId = myAllSharedService.drTypeFilterData.orderId;
@@ -1683,7 +1683,7 @@ console.log( $scope.data.orderId);
     $scope.onGoToBillingDetailPage = function(orderId)
     {
         myAllSharedService.billingdetail = orderId;
-        $state.go('billing-detail');
+        $state.go('tab.billing-detail');
     }
     
     
