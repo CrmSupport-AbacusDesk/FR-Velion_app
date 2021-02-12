@@ -1432,6 +1432,11 @@ app.controller('networkController', function ($http,$scope, $rootScope, searchSe
             
             $scope.data.search = '';
             $scope.isSearchBarOpen = false;
+            // myAllSharedService.loginData['user_branch'][0]
+            console.log($scope.branch);
+            // $scope.branch=$scope.branch
+            // $scope.getStockData($scope.branch);
+
             $scope.onSetCurrentPageHandler();
             
             if(target == 'followUp') {
@@ -2080,6 +2085,27 @@ app.controller('networkController', function ($http,$scope, $rootScope, searchSe
         }
         
     }
+
+    $scope.tmpstockList=[];
+    $scope.filterstock = function(search)
+    {
+        search = search.toLowerCase();
+        $scope.tmpstockList=$scope.productStock;
+        console.log($scope.productStock);
+        
+        console.log(search);
+        // $scope.productStock = [];
+        console.log($scope.productStock);
+      console.log($scope.tmpstockList);
+
+        $scope.productStock = $scope.tmpstockList.filter(row=>row.product_description.includes(search) || row.product_code.toLowerCase().includes(search));
+
+        console.log($scope.productStock);
+       
+
+        // console.log(searchArray);
+
+    }
     
     
     $scope.goToEditPage =function()
@@ -2092,21 +2118,26 @@ app.controller('networkController', function ($http,$scope, $rootScope, searchSe
     }
     
     $scope.productStock = [];
-    $scope.getStockData = function()
+    $scope.productss =[];
+
+    $scope.getStockData = function(branch)
     {
+        console.log(branch);
         $scope.suggestiveList = [];
-        
+        $scope.branch=branch;   
         $ionicLoading.show({
             template: '<p>Loading...</p><ion-spinner icon="android"></ion-spinner>',
             duration: 100
         });
-        
-        myRequestDBService.sfaPostServiceRequest('/App_SharedData/getProductStockData',{'productCode':$scope.search.product_code})
+        $scope.userlist=myAllSharedService.loginData['user_branch'];
+        myRequestDBService.sfaPostServiceRequest('/App_SharedData/getProductStockData',{'branch':branch})
         .then(function(response)
         {
             console.log(response);
-            $scope.productStock = response.data;
-            
+            console.log(response['data']);
+            console.log(response.data);
+            $scope.productStock = response['data'];
+            console.log($scope.productStock);
             $ionicLoading.hide();
         }, function (err)
         {
@@ -2544,10 +2575,12 @@ app.controller('networkController', function ($http,$scope, $rootScope, searchSe
         $scope.getDailyActivityPlan($scope.today);
     }
     
-    
+    $scope.user_branchh=[];
     if($location.path() == '/tab/stock')
     {
-        $scope.getStockData();
+        $scope.branch=myAllSharedService.loginData['user_branch'][0];
+        $scope.user_branchh=myAllSharedService.loginData['user_branch'][0];
+        $scope.getStockData(myAllSharedService.loginData['user_branch'][0]);
     }
     
     
@@ -2656,6 +2689,22 @@ app.controller('networkController', function ($http,$scope, $rootScope, searchSe
         
         $scope.add_plan_popovers.show($event);
     }
+
+    $scope.stock_popover='';
+    
+    $ionicModal.fromTemplateUrl('stock-model', {
+        scope: $scope,
+        animation: 'slide-in-up'
+    }).then(function(modal) {
+        $scope.stock_popover = modal;
+    });
+    $scope.stockModel = function() {
+            console.log("Open stock Popever");
+        $scope.stock_popover.show();
+    };
+    $scope.stockCloseModel = function() {
+        $scope.stock_popover.hide();
+    }; 
     
     
     $scope.addDistributorPlanModel = function($event)

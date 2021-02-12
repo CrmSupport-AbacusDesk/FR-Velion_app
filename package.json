@@ -33,7 +33,9 @@
     "cordova-plugin-splashscreen": "^5.0.2",
     "cordova-plugin-statusbar": "^2.4.2",
     "cordova-plugin-x-toast": "2.7.2",
-    "cordova-sqlite-storage": "3.3.0"
+    "cordova-sqlite-storage": "3.3.0",
+    "ionic": "^5.4.16",
+    "s": "^1.0.0"
   },
   "cordova": {
     "plugins": {

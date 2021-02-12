@@ -81,13 +81,13 @@ app.controller('dashCtrl', function ($scope, $rootScope, searchSelect, $ionicMod
         if(targetPage=='billing-list'){
             console.log(targetPage);
 
-            $state.go('billing-list');
+            $state.go('tab.billing-list');
         }
 
         if(targetPage=='billing-detail'){
             console.log(targetPage);
 
-            $state.go('billing-detail');
+            $state.go('tab.billing-detail');
         }
         
         if(targetPage == 'CheckIn') {
