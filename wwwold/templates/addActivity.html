@@ -1,0 +1,184 @@
+<ion-view view-title="Create Activity">
+
+    <ion-nav-buttons side="left">
+        <a ng-click = "goToBackPageHandler()" class="cs-backbtn button button-icon icon ion-android-arrow-back font18 fff"></a>
+    </ion-nav-buttons>
+
+    <ion-nav-buttons side="right">
+    </ion-nav-buttons>
+
+    <ion-content>
+
+        <div ng-if="data.isInsideLead == 'Yes'" class="coman-list clrd-bg sticky">
+            <div class="center-item">
+                <div class="cs-icon">{{drDetail.drData.dr_name[0]}}</div>
+                <div class="cs-content">
+                    <p>{{drDetail.drData.dr_name}}</p>
+                    <span>{{drDetail.drData.contact_name}}</span>
+                    <a ng-if="drDetail.drData.email" class="icon-content"><i class="material-icons">email</i> {{drDetail.drData.email}}</a>
+                </div>
+
+                <a href="tel: {{drDetail.drData.contact_mobile_no}}" class="dialer"><i class="material-icons">call</i></a>
+            </div>
+        </div>
+
+        <form ng-submit="!AddForm.$invalid && onActivateGPSLocationForActivityHandler()" name="AddForm" novalidate>
+
+            <div class="padding16">
+
+                <div ng-if="data.isInsideLead=='No'">
+
+                    <div ng-if="loginData.loginAccessLevel==4" ng-class="{'has-error': Addform.networkType.$invalid && Addform.$submitted}" class="field-input">
+                        <select ng-model = "data.networkType" ng-change="checkNetworkType()" name = "networkType" class="browser-default" required>
+                            <option value="" disabled selected >Select Network Type</option>
+                            <option value=1>Lead Network</option>
+                            <option value=2>Distribution Network</option>
+                        </select>
+                    </div>
+
+                    <div class="form-space">
+                        <label ng-class="{'has-error': AddForm.typeId.$invalid && AddForm.$submitted}" class="item-input item-select cs-select csm-input mb0">
+
+                            <div class="input-label">Select {{data.networkType == '1' ? 'Lead' : 'Distribution'}} Type</div>
+
+                            <select name="typeId" ng-model="data.typeId" ng-change="onDrTypeChangeHandler()" required>
+                                <option value="" disabled selected>Select {{data.networkType == '1' ? 'Lead' : 'Distribution'}} Type <sup>*</sup></option>
+                                <option ng-repeat="row in drTypeList" value="{{row.id}}">{{row.type}}</option>
+                            </select>
+                        </label>
+                    </div>
+
+                    <div class="form-space">
+                        <div  ng-show="data.typeId" ng-class="{'has-error': AddForm.typeId.$invalid && AddForm.$submitted}" class="add-css-select no-padding selectopt" >
+                            <searchandselect selecteditem="search.drName" values="drList" key="Key"  totalrecords="totalDrRecords" onscroll="onGetDrTypeDataHandler('', searchKey, pagenumber)"></searchandselect>
+                        </div>
+                    </div>
+
+                    <div class="cs-add-form">
+                        <div ng-if="search.drName.Value == 'Other'" ng-class="{'has-error': AddForm.otherDrName.$invalid && AddForm.$submitted}" class="input-field field-input" >
+                            <label for="last_name">Company Name<sup>*</sup></label>
+                            <input type="text" name="otherDrName" ng-model="data.otherDrName"  replace="[^a-zA-Z]" with="" required>
+                        </div>
+                    </div>
+
+
+                    <div class="cs-add-form">
+                        <div ng-if="search.drName.Value == 'Other'" ng-class="{'has-error': AddForm.mobile.$invalid && AddForm.$submitted}" class="input-field field-input" >
+                            <label for="last_name">Mobile No.<sup>*</sup></label>
+                            <input class="validate" type="number" name="mobile" limit-to = "10" minlength ="10" ng-model="data.mobile" required>
+                            <span class="error-left relative" ng-show="AddForm.$submitted && AddForm.mobile.$error.minlength">* Mobile No. Must be 10 Digit</span>
+                            <span class="error-left relative" ng-show="AddForm.$submitted && AddForm.mobile.$error.maxlength">* Mobile No. Must be 10 Digit</span>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class="form-space">
+                    <div ng-if="search.drName.Value" >
+                        <label ng-class="{'has-error': AddForm.activityType.$invalid && AddForm.$submitted}" class="item-input item-select cs-select csm-input mb0">
+                            <div class="input-label">Select Activity Type</div>
+                            <select name="activityType" ng-model="data.activityType" required>
+                                <option value="" disabled selected>Select Activity Type <sup>*</sup></option>
+                                <option ng-hide = "data.canNewMeetingStart && data.canNewMeetingStart=='No' && row.name == 'Meeting'" ng-repeat = "row in activityTypeList" value="{{row.name}}">{{row.name}}</option>
+
+                            </select>
+                        </label>
+                    </div>
+                </div>
+
+
+                <div class="cs-add-form">
+                    <div ng-if="data.activityType != 'Meeting'" class="input-field field-input" >
+                        <label for="last_name">Remark</label>
+                        <textarea  ng-model="data.remark" name = "remark" class="validate" style="height: 100px !important; padding: 10px !important;" required></textarea>
+                    </div>
+                </div>
+
+                <div ng-if="data.activityType != 'Meeting' && search.drName.value != 'Other' &&  (data.networkType==1 || drDetail.drData.lead==1 || loginData.loginAccessLevel == 3)" class="form-space">
+
+                    <label class="item-input item-select cs-select csm-input mb0">
+
+                        <div class="input-label">Update Lead Category</div>
+
+                        <select name="category" ng-model="data.category" required>
+
+                            <option value="" disabled selected>Select Lead Category <sup>*</sup></option>
+
+                            <option ng-repeat="row in leadCategory" value="{{row.name}}">{{row.name}}</option>
+
+                        </select>
+                    </label>
+                </div>
+
+                <div ng-if="data.activityType != 'Meeting' && search.drName.value != 'Other' && (data.networkType==1 || drDetail.drData.lead==1 || loginData.loginAccessLevel == 3)" class="form-space">
+
+                    <label class="item-input item-select cs-select csm-input mb0">
+
+                        <div class="input-label">Update Lead Status</div>
+
+                        <select name="status" ng-model="data.status" ng-change="getStatusReason(data.status)" required>
+
+                            <option value="" disabled selected>Select Lead Status <sup>*</sup></option>
+
+                            <option ng-repeat="row in statusList" value="{{row.name}}">{{row.name}}</option>
+
+                        </select>
+                    </label>
+                </div>
+
+                <div ng-if="(data.activityType != 'Meeting' && search.drName.value != 'Other') && data.status == 'Disqualified' || data.status == 'Close' || data.status == 'Lost' || data.status == 'Qualified' || data.status == 'Validate'" class="form-space">
+
+                    <label class="item-input item-select cs-select csm-input mb0">
+
+                        <div class="input-label">{{(data.status == 'Qualified' || data.status == 'Validate') ? 'No Closer Reason' : 'Status Reason'}}</div>
+
+                        <select name="status" ng-model="data.reason" required>
+
+                            <option value="" disabled selected>Select {{data.status}} Reason <sup>*</sup></option>
+
+                            <option ng-repeat="row in reasonList" value="{{row.name}}">{{row.name}}</option>
+
+                        </select>
+                    </label>
+                </div>
+
+                <div ng-if="data.activityType && data.activityType != 'Meeting' && search.drName.value != 'Other'"  ng-class="{'has-error': AddForm.isFollowUp.$invalid && AddForm.$submitted}" class="chekIt no-padding">
+                    <label>
+                        <ion-checkbox ng-model="data.isFollowUp" name = "isFollowUp"> </ion-checkbox>
+                        Do you want to create any follow up ?
+                    </label>
+                </div>
+
+
+                <div ng-if="data.isFollowUp && data.activityType && data.activityType != 'Meeting' && search.drName.value != 'Other'" class="cs-add-form mt20">
+
+                    <div ng-class="{'has-error': Addform.followUpType.$invalid && Addform.$submitted}" class="field-input">
+
+                        <select ng-model = "data.followUpType" name = "followUpType" class="browser-default" required>
+
+                            <option value="" disabled selected>FollowUp Type</option>
+                            <option ng-repeat="row in activityTypeList" value="{{row.name}}">{{row.name}}</option>
+
+                        </select>
+
+                    </div>
+
+                    <div  ng-class="{'has-error': AddForm.followUpDate.$invalid && AddForm.$submitted}" class="input-field field-input">
+                        <input ng-model = "data.followUpDate" name="followUpDate" type="date" min = "{{currentDate}}" class="validate" required>
+                        <label class="active" for="last_name">Next Follow up Date <sup>*</sup></label>
+                    </div>
+
+                    <div  ng-class="{'has-error': AddForm.followUpDescription.$invalid && AddForm.$submitted}" class="input-field field-input">
+                        <textarea ng-model = "data.followUpDescription" name = "followUpDescription"  class="validate" style="height: 100px !important;" required></textarea>
+                        <label for="last_name">FollowUp Description <sup>*</sup></label>
+                    </div>
+                </div>
+            </div>
+            <div class="input-submit padding16">
+                <button type="submit">{{data.activityType == 'Meeting' ? 'Start Meeting' : 'Save'}}</button>
+            </div>
+        </form>
+    </ion-content>
+
+</ion-view>

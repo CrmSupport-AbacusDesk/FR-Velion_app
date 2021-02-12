@@ -1,0 +1,130 @@
+<ion-view view-title="Scan - DLR Sale" hide-nav-bar="true">
+    
+
+    <ion-header-bar class="opr_ion_header">
+        <div class="cs-left">
+            <button class="back-button" ng-click="goToBackPageHandler()"><i class="material-icons">arrow_back</i></button>
+            <h1 class="orp_title">DealScan - DLR Sale</h1>
+        </div>
+    </ion-header-bar>
+
+
+
+
+    <ion-content>
+        
+        <div class="scn-topbg">
+            <div class="orp-select">
+                <label>
+                    <p>Select Type</p>
+                    <select>
+                        <option value="1">End User</option>
+                        <option value="2">Re-seller</option>
+                        <option value="3">Electrician</option>
+                    </select>
+                </label>
+            </div>
+            
+            <div class="orp-input mt10">
+                <input type="text" placeholder="Name">
+                <input type="text" placeholder="Mobile No.">
+                <input type="text" placeholder="Pin Code">
+            </div>
+            
+            <div class="orp-select mt10">
+                <label>
+                    <p>State <span>*</span></p>
+                    <select>
+                        <option value="1">Select An Option</option>
+                    </select>
+                </label>
+                
+                <label>
+                    <p>District <span>*</span></p>
+                    <select>
+                        <option value="1">Select An Option</option>
+                    </select>
+                </label>
+            </div>
+            
+            <div class="orp-textarea mt10"><textarea placeholder="Address"></textarea></div>
+            
+        </div>
+        
+        
+        <div class="op_pr_heading mt16">
+            <h1>Product Information</h1>
+        </div>
+        
+        
+        <div class="product_info pb0">
+            <div class="figure">
+                <div class="code_info">
+                    <p>QR Code</p>
+                    <p>REFTG7854785TG</p>
+                </div>
+                
+                <div class="prt">
+                    <div class="cs-left">
+                        <h1>Product #0011</h1>
+                        <p>Code#2544</p>
+                    </div>
+                    <div class="cs-right">
+                        <h1>5000</h1>
+                        <p>Points</p>
+                    </div>
+                </div>
+                
+                <div class="orp-date">
+                    <label>
+                        <p>Date of Sale</p>
+                        <input type="date">
+                    </label>
+                </div>
+            </div>
+        </div>
+        
+        <div class="scn_more padding16" style="padding-top: 6px !important;">
+            <a href="#/">
+                <div class="thumb"><img src="img/qr_code_barcode.svg" alt=""></div>
+                <div class="desc"><h1>Scan More Product</h1></div>
+            </a>
+        </div>
+        
+        <div class="cs_orp-bttn padding16">
+            <a class="active" ng-click="otpOpenModel();">SAVE</a>
+        </div>
+        
+    </ion-content>    
+    
+    <script id="warranty_section_otp" type="text/ng-template">
+        <ion-modal-view>
+            
+            <div class="orp_model">
+                <div class="model_container">
+                    <button ng-click="otpCloseModel()" class="model_cancel"><i class="material-icons">cancel</i></button>
+                    
+                    <div class="mini_container">
+                        <div class="md_heading"><h1>Warranty Section</h1></div>
+                        
+                        <div class="md_body">
+                            <p>Set the product warranty please enter first OTP then submit</p>
+                            <p>Enter your 6 digit OTP number that sent to <span>91+ 98568547845</span></p>
+                            
+                            <div class="orp-input">
+                                <input type="text" placeholder="Enter OTP">
+                            </div>
+                        </div> 
+                    </div>
+                    
+                    <div class="md_footer">
+                        <button class="fill full">SUBMIT</button>
+                        <button class="trns mt10">Continue Without OTP </button>
+                    </div>
+                    
+                    
+                </div>
+            </div>
+        </ion-modal-view>
+    </script>
+</ion-view>

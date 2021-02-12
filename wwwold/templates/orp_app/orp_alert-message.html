@@ -1,0 +1,59 @@
+<ion-view view-title="Scan" hide-nav-bar="true">
+
+    <ion-header-bar class="opr_ion_header">
+        <div class="cs-left">
+            <button class="back-button" ng-click="goToBackPageHandler()"><i class="material-icons">arrow_back</i></button>
+            <h1 class="orp_title">Scan</h1>
+        </div>
+    </ion-header-bar>
+
+
+    
+    <ion-content>
+        
+        <div class="orp_alerts">
+            <div class="al_container">
+                <div class="icon"><i class="material-icons">clear</i></div>
+                <div class="al_body">
+                    <h1>Oops !</h1>
+                    <h2>Invalid Serial No.</h2>
+                </div>
+
+                <div class="al_footer">
+                    <a href="#/" class="red_btn">Try Again</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="orp_alerts">
+            <div class="al_container">
+                <div class="icon"><i class="material-icons">clear</i></div>
+                <div class="al_body">
+                    <h1>Oops !</h1>
+                    <h2>Unauthorized Scan</h2>
+                </div>
+
+                <div class="al_footer">
+                    <button class="red_btn">Try Again</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="orp_alerts success">
+            <div class="al_container">
+                <div class="icon"><i class="material-icons">done</i></div>
+                <div class="al_body">
+                    <h1>Success</h1>
+                    <h2>500 <span>Point Added in Your Wallet</span></h2>
+                </div>
+
+                <div class="al_footer">
+                    <button class="blue_btn">Scan More Product</button>
+                    <a class="green_btn" style="width: 130px; margin-left: 16px;">Complete</a>
+                </div>
+            </div>
+        </div>
+
+
+    </ion-content>
+</ion-view>

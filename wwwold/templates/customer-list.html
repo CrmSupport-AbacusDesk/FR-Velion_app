@@ -1,0 +1,56 @@
+<ion-view view-title="My {{data.typeName}}">
+    
+    <ion-nav-buttons side="left">
+        <a href="#/tab/dashboard" class="cs-backbtn button button-icon icon ion-android-arrow-back font18 fff"></a>
+    </ion-nav-buttons>
+    
+    <ion-nav-buttons side="right">
+        <div ng-click = "onSeachActionHandler('open', '')" class="right-nav-btn">
+            <a menu-toggle="left"><i class="material-icons">search</i></a>
+        </div>
+        <div ng-class="isSearchBarOpen ? 'active' : ''" class="search-filter">
+            <input ng-model = "data.search" type="text" id = "searchData" ng-change = "onSetCurrentPageHandler(); getDrListData(data.typeId, data.typeName, data.typeStatus, 'onLoad')">
+            <a ng-click = "onSeachActionHandler('close', 'onLoad')" placeholder = "Search" class="close-filter"><i class="material-icons">close</i></a>
+        </div>
+    </ion-nav-buttons>
+    <ion-content>
+        <ion-refresher on-refresh="onSeachActionHandler('close', 'onRefresh')">
+            <ion-refresher-content
+            pullingIcon="arrow-dropdown"
+            pullingText="Pull to refresh"
+            refreshingSpinner="circles"
+            refreshingText="Refreshing...">
+        </ion-refresher-content>
+    </ion-refresher>
+    <div ng-click = "onGoToDrDetail(row.id)"  ng-repeat = "row in drList"  class="coman-list">
+        <div class="center-item">
+            <div class="cs-icon">{{row.dr_name[0] ? row.dr_name[0] : '--'}}</div>
+            <div class="cs-content">
+                <p>{{row.dr_name ? row.dr_name : 'N/A'}}</p>
+                <a class="icon-content"><i class="material-icons">email</i> {{row.email ? row.email : 'N/A'}}</a>
+            </div>
+            <a href="tel: {{row.contact_mobile_no}}" class="dialer"><i class="material-icons">keyboard_arrow_right</i></a>
+        </div>
+        <div class="pdlr">
+            <div class="bdr-field">
+                <span>Address</span>
+                <p>{{row.street}} {{row.state_name}}{{row.district_name ? ', '+row.district_name : ''}}{{row.city ? ', '+row.city : ''}}{{row.pincode ? '- '+row.pincode : ''}}</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="data-not-found" ng-if="!isRequestInProcess && drList.length == 0" >
+        <div class="outer">
+            <div class="innear">
+                <img src="img/data-not-found.svg" alt="">
+                <h2>Temporarily , No Data Available!</h2>
+            </div>
+        </div>
+    </div>
+    
+    <!-- <ion-infinite-scroll immediate-check="false" ng-if="!noMoreListingAvailable" on-infinite="getDrListData(data.typeId, data.typeName, data.typeStatus, 'scroll')" distance="20%" class="myspinner">
+    </ion-infinite-scroll> -->
+    <div class="h50">&nbsp;</div>
+</ion-content>
+
+</ion-view>

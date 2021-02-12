@@ -1,0 +1,100 @@
+<ion-view view-title="Stock - {{branch}}">
+
+    <ion-nav-buttons side="left">
+        <a ng-click="goToBackPageHandler()" class="cs-backbtn button button-icon icon ion-android-arrow-back font18 fff"></a>
+    </ion-nav-buttons>
+    
+    <ion-nav-buttons side="right" class="custom-right-btn">
+        <div class="right-nav-btn nav-search">
+            <a class="mr15" ng-click="stockModel()" menu-toggle="left"><i class="material-icons">filter_list</i></a>
+            <a  ng-click = "onSeachActionHandler('open')" menu-toggle="left"><i class="material-icons">search</i></a>
+        </div>
+        
+         <div ng-class="isSearchBarOpen ? 'active' : ''" class="search-filter">
+            <input name="master_search" ng-model = "search.master_search" type="text" id = "searchData" ng-change ="filterstock(search.master_search)">
+            <!-- <div class="orp_seacrh search-data">
+                <ul>
+                    <li ng-repeat="row in productStock" > -->
+                        <!-- <p ng-click="search.product_code=row.product_code;getStockData()" >{{row.product_name}} <span ng-if="row.brand">({{row.brand}})</span> ({{row.product_code}})</p> -->
+                        <!-- <p ng-click="search.product_code=row.product_code;getStockData()" >{{row.product_name}}</p>
+                    </li>
+                </ul>
+            </div> -->
+            <a ng-click = "onSeachActionHandler('close');search.product_code='';suggestiveList=[];getStockData(branch);" placeholder = "Search" class="close-filter"><i class="material-icons">keyboard_backspace</i></a>
+        </div> 
+    </ion-nav-buttons> 
+    
+    <ion-content>
+       
+        <div class="coman-list" ng-repeat="row in productStock">
+          
+            <div class="center-item">
+                <div class="cs-content">
+                    <p>SR No. : {{row.product_code}}</p>
+                    <span>{{row.product_description}}</span>
+                </div>
+            </div>
+
+            <div class="pdlr">
+                <div class="cs-grid">
+                    <div class="bdr-field wp100">
+                        <span>Intransit Stock</span>
+                        <p>{{row.intransit_qty}} {{row.intransit_uom}}</p>
+                    </div>
+                    
+                    <div class="bdr-field wp100">
+                        <span>Current Stock</span>
+                        <p>{{row.crunnt_stock}} {{row.crunnt_stock_uom}}</p>
+                    </div>
+                </div>
+            </div> 
+
+        </div>
+
+        <!-- <div class="bx-listing" style="display: none;">
+            <a class="flex-remove" >
+                <div class="description">
+                    <div class="cs-left">
+                        <h1>{{row.product_name}} <span ng-if="row.brand">({{row.brand}})</span> - {{row.category}} </h1>
+                        <p>SR No. : {{row.product_code}}</p>
+                    </div>
+                    <div class="cs-right">
+                        <h1>Last Update</h1>
+                        <p class="price">{{row.date_created | date:'dd MMM y'}}</p>
+                    </div>
+                </div>
+            </a>
+        </div> -->
+    </ion-content>
+
+    <script id="stock-model" type="text/ng-template">
+        <ion-modal-view>
+            
+            <div class="orp_model">
+                <div class="model_container">
+                    <button ng-click="stockCloseModel()" class="model_cancel"><i class="material-icons">cancel</i></button>
+                    
+                    <div class="mini_container padding16" style="padding-bottom: 0px !important;">
+                        <div class="md_heading mb20"><h1>Branch</h1></div>
+                        
+                        <div class="md_body">
+                            <form name="Addform" novalidate>
+                                <div class="field-input">
+                                    <select ng-model="branch" class="browser-default"  required>
+                                        <option  value="" disabled selected>Select Type</option>
+                                        <option ng-repeat="row in userlist" value="{{row}}" >{{row}}</option>
+                                        <!-- <option value="" >Distributor</option> -->
+                                    </select>
+                                </div>
+                            </form>
+                        </div> 
+                    </div>
+                    
+                    <div class="md_footer">
+                        <button class="fill full" ng-click="getStockData(branch);stockCloseModel()">SUBMIT</button>
+                    </div>
+                </div>
+            </div>
+        </ion-modal-view>
+    </script>
+</ion-view>

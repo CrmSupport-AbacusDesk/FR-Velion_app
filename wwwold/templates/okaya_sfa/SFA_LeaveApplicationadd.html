@@ -1,0 +1,56 @@
+<ion-view view-title="Add Leaves">
+
+    <!-- BACKBTN ICON START -->
+    <ion-nav-buttons side="left">
+        <a href="#/tab/SFA_LeaveApplicationlist" class="cs-backbtn button button-icon icon ion-android-arrow-back font18 fff"></a>
+    </ion-nav-buttons>
+    <!-- BACKBTN ICON END-->
+
+    <ion-content>
+
+        <div class="leave-content"><p>Before Leave Application,<br>Enter Your Description &<br>Date From & Date To</p></div>
+
+        <div class="padding32">
+
+            <form name="Addform"  ng-submit="!Addform.$invalid && onSubmitLeaveApplication()" novalidate>
+                <div class="cs-add-form">
+
+                    <div class="form-space">
+                      <label class="item-input item-select cs-select csm-input mb0">
+
+                          <div class="input-label">Leave Type</div>
+
+                          <select name="leave_type" ng-model="leave_data.leave_type" required>
+                              <option value="Paid Leave">Paid Leave</option>
+                              <option value="Casual Leave">Casual Leave</option>
+                              <option value="Sick Leave">Sick Leave</option>
+                              <option value="Earned Leave">Earned Leave</option>
+                          </select>
+                      </label>
+                    </div>
+
+                    <div class="input-field field-input mt5">
+                        <label for="last_name">Leave Description</label>
+                        <textarea name="Leave Description" ng-model="leave_data.description" class="validate" style="height: 100px !important;" required></textarea>
+                    </div>
+
+                    <div class="input-field field-input mt25"  ng-class="{'has-error': Addform.date_from.$invalid && Addform.$submitted}">
+                        <input type="date" ng-model="leave_data.date_from"  name = "date_from" ng-required = "true" class="validate"  required>
+                        <label class="active" for="last_name">Date From</label>
+                    </div>
+
+                    <div class="input-field field-input mt25" ng-class="{'has-error': Addform.date_to.$invalid && Addform.$submitted}">
+                        <input name = "date_to"  ng-model="leave_data.date_to" type="date"  ng-required = "true"  class="validate" required>
+                        <label class="active" for="last_name">Date To</label>
+                    </div>
+                </div>
+
+                <div class="cs-save-btn mt20">
+                    <button type="submit" class="wp100">SAVE</button>
+                </div>
+            </form>
+        </div>
+
+    </ion-content>
+</ion-view>
+

@@ -1,0 +1,422 @@
+<ion-view view-title="Expense Detail">
+
+        <ion-nav-buttons side="left">
+            <a ng-click = "goToBackPage()" class="cs-backbtn button button-icon icon ion-android-arrow-back font18 fff"></a>
+        </ion-nav-buttons>
+
+    <ion-content class="">
+
+        <div class="padding16">
+            <!-- class="sticky-bg" -->
+            <div >
+                <div  class="coman-list coman-list margin0">
+                    <div class="top-head">
+                        <ul>
+                            <li>
+                                <p>{{expenseDetail.dateCreated}} {{$root.modelPlanType}}</p>
+                                <span>Date Created</span>
+                            </li>
+                        </ul>
+
+                        <div class="left-auto wp100">
+                            <ul class="jce">
+                                <li>
+                                    <p>&#x20B9; {{expenseDetail.totalAmt}} / -</p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="pdlr pt10">
+                        <div class="cs-flex">
+                            <div class="bdr-field wp100 mr10" ng-Class="{'approved-bg': expenseDetail.seniorStatus == 'Approved', 'pending-bg': expenseDetail.seniorStatus == 'Pending', 'reject-bg': expenseDetail.seniorStatus == 'Reject'}">
+                                <span>Senior Status</span>
+                                <p>{{expenseDetail.seniorStatus}}</p>
+                                <a class="fix-icon-btn" ng-if="expenseDetail.seniorStatus != 'Approved' && $root.modelPlanType == 'teamTravelPlan'" ng-click="changeExpStatus('seniorStatus')"><i class="material-icons">create</i></a>
+                            </div>
+
+                            <div class="bdr-field wp100" ng-Class="{'approved-bg': expenseDetail.acStatus == 'Approved', 'pending-bg': expenseDetail.acStatus == 'Pending', 'reject-bg': expenseDetail.acStatus == 'Reject'}">
+                                <span>A/C Status</span>
+                                <p>{{expenseDetail.acStatus}}</p>
+                                <a class="fix-icon-btn" ng-if="expenseDetail.acStatus != 'Approved' && $root.modelPlanType == 'teamTravelPlan'" ng-click="changeExpStatus('acStatus')"><i class="material-icons">create</i></a>
+                            </div>
+                        </div>
+                        <div class="cs-flex" ng-if=expenseDetail.seniorRemark>
+                            <div class="bdr-field wp100 ">
+                                <span>Senior Remark</span>
+                                <p>{{expenseDetail.seniorRemark}}</p>
+                            </div>
+                        </div>
+
+                        <div class="cs-flex" ng-if="expenseDetail.acRemark">
+                            <div class="bdr-field wp100 ">
+                                <span>A/C Remark</span>
+                                <p>{{expenseDetail.acRemark}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="center-item">
+                        <div class="cs-content df ac">
+                            <p>{{expenseDetail.expenseType}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <section class="ac-container mt10">
+                <!-- -------TRAVELENTITLEMENT------- -->
+                <figure ng-if="(expenseDetail.travel && expenseDetail.travel.length > 0) || (expenseDetail.seniorStatus != 'Approved' && expenseDetail.acStatus != 'Approved')">
+                    <input id="ac-1" name="accordion-1" type="radio" class="ds-none" checked>
+                    <label class="header-label" for="ac-1">TRAVEL ENTITLEMENT</label>
+                    <a class="add-new-link" ng-if="expenseDetail.seniorStatus != 'Approved' && expenseDetail.acStatus != 'Approved'" ng-click="goToExpEdit('travel', expenseDetail.id)">(Add New)</a>
+                    <!-- Out station Travel -->
+                    <article >
+                        <div class="common_form">
+                            <div class="list-box grey-shadow border1" ng-repeat="val in expenseDetail.travel">
+                                <div class="upper">
+                                    <div class="wp100">
+                                        <div class="underline-heading clr-heading">
+                                            <h2>Depature</h2>
+                                        </div>
+                                        <div class="left-date mt5">
+                                            <div class="date-section wp100">
+                                                <p>{{val.depatureDate | date:'dd MMM y'}} {{val.depatureTime}}</p>
+                                                <p>Date & Time</p>
+                                            </div>
+                                            <div class="date-section wp100">
+                                                <p>{{val.depatureStation}}</p>
+                                                <p>Station</p>
+                                            </div>
+                                        </div>
+                                        <div class="left-date  mt10">
+                                            <div class="date-section wp100">
+                                                <p>{{val.depatureTicketNo}}</p>
+                                                <p>Ticket No</p>
+                                            </div>
+                                            <div class="date-section wp100">
+                                                <p>{{val.depatureAmount}}</p>
+                                                <p>Amount</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="upper pt10">
+                                    <div class="wp100">
+                                        <div class="underline-heading clr-heading">
+                                            <h2>Arrival</h2>
+                                        </div>
+                                        <div class="left-date mt5">
+                                            <div class="date-section wp100">
+                                                <p>{{val.arrivalDate | date:'dd MMM y'}} {{val.arrivalTime}}</p>
+                                                <p>Date & Time</p>
+                                            </div>
+                                            <div class="date-section wp100">
+                                                <p>{{val.arrivalStation}}</p>
+                                                <p>Station</p>
+                                            </div>
+                                        </div>
+                                        <div class="left-date mt10">
+                                            <div class="date-section wp100">
+                                                <p>{{val.arrivalTicketNo}}</p>
+                                                <p>Ticket No</p>
+                                            </div>
+                                            <div class="date-section wp100">
+                                                <p>{{val.arrivalAmount}}</p>
+                                                <p>Amount</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="lower">
+                                    <p>Mode Of Travel & Class</p>
+                                    <p>{{val.modeOfTravel}} - {{val.travelClass}}</p>
+                                </div>
+                            </div>
+                            <div class="summary-table">
+                                <table>
+                                    <tr>
+                                        <td class="text-right">Total</td>
+                                        <td class="text-right w120" >&#8377; {{expenseDetail.travelEntitlementAmt}}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </article>
+                </figure>
+
+                <!-- -------HOTEL------- -->
+                <figure  ng-if="(expenseDetail.hotel && expenseDetail.hotel.length > 0) || (expenseDetail.seniorStatus != 'Approved' && expenseDetail.acStatus != 'Approved')">
+                    <input id="ac-2" name="accordion-1" type="radio" class="ds-none">
+                    <label class="header-label" for="ac-2">HOTEL</label>
+                    <a class="add-new-link" ng-if="expenseDetail.seniorStatus != 'Approved' && expenseDetail.acStatus != 'Approved'" ng-click="goToExpEdit('hotel', expenseDetail.id)">(Add New)</a>
+                    <article>
+                        <div class="common_form">
+                            <div class="list-box grey-shadow border1" ng-repeat="val1 in expenseDetail.hotel">
+                                <div class="upper">
+                                    <div class="left-date">
+                                        <div class="date-section">
+                                            <p>{{val1.checkInDate | date:'dd MMM y'}}</p>
+                                            <p>Check In Date</p>
+                                        </div>
+                                        <div class="date-section">
+                                            <p>{{val1.checkOutDate | date:'dd MMM y'}}</p>
+                                            <p>Check Out Date</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="lower">
+                                    <p>Hotel Name & City</p>
+                                    <p>{{val1.hotelName}} - {{val1.city}}</p>
+                                </div>
+                                <div class="three_boxes">
+                                    <!-- <div class="lower mt10 approved">
+                                        <p>Status</p>
+                                        <p>Allow</p>
+                                    </div> -->
+                                    <div class="lower mt10">
+                                        <p>Amount</p>
+                                        <p>₹ {{val1.amount}} / -</p>
+                                    </div>
+                                </div>
+                                <div class="lower">
+                                    <p>Remark</p>
+                                    <p>{{val1.remark}}</p>
+                                </div>
+                            </div>
+
+                            <div class="summary-table">
+                                <table>
+                                    <tr>
+                                        <td class="text-right">Total</td>
+                                        <td class="text-right w120" >&#8377; {{expenseDetail.hotelAmt}}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </article>
+                </figure>
+
+                <!-- -------FOOD------- -->
+                <figure  ng-if="(expenseDetail.food && expenseDetail.food.length > 0) || (expenseDetail.seniorStatus != 'Approved' && expenseDetail.acStatus != 'Approved')">
+                    <input id="ac-3" name="accordion-1" type="radio" class="ds-none">
+                    <label class="header-label" for="ac-3">FOOD</label>
+                    <a class="add-new-link" ng-if="expenseDetail.seniorStatus != 'Approved' && expenseDetail.acStatus != 'Approved'" ng-click="goToExpEdit('food', expenseDetail.id)">(Add New)</a>
+                    <article>
+                        <div class="common_form">
+                            <div class="list-box grey-shadow border1" ng-repeat="val2 in expenseDetail.food">
+                                <div class="upper">
+                                    <div class="left-date">
+                                        <div class="date-section">
+                                            <p>{{val2.date | date:'dd MMM y'}}</p>
+                                            <p>Date</p>
+                                        </div>
+                                        <div class="date-section">
+                                            <p>{{val2.city}}</p>
+                                            <p>City</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="three_boxes">
+                                    <!-- <div class="lower mt10 approved">
+                                        <p>Status</p>
+                                        <p>Allow</p>
+                                    </div> -->
+                                    <div class="lower mt10">
+                                        <p>Amount</p>
+                                        <p>₹ {{val2.amount}} / -</p>
+                                    </div>
+                                </div>
+                                <div class="lower">
+                                    <p>Remark</p>
+                                    <p>{{val2.remark}}</p>
+                                </div>
+                            </div>
+
+                            <div class="summary-table">
+                                <table>
+                                    <tr>
+                                        <td class="text-right">Total</td>
+                                        <td class="text-right w120" >&#8377; {{expenseDetail.foodAmt}} /-</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </article>
+                </figure>
+
+                <!-- -------LOCAL CONVEYANCE------- -->
+                <figure ng-if="(expenseDetail.localConv && expenseDetail.localConv.length > 0) || (expenseDetail.seniorStatus != 'Approved' && expenseDetail.acStatus != 'Approved')">
+                    <input id="ac-4" name="accordion-1" type="radio" class="ds-none">
+                    <label class="header-label" for="ac-4">LOCAL CONVEYANCE</label>
+                    <a class="add-new-link" ng-if="expenseDetail.seniorStatus != 'Approved' && expenseDetail.acStatus != 'Approved'" ng-click="goToExpEdit('localConv', expenseDetail.id)">(Add New)</a>
+                    <article>
+                        <div class="list-box grey-shadow border1" ng-repeat="val3 in expenseDetail.localConv">
+                            <div class="upper">
+                                <div class="left-date">
+                                    <div class="date-section">
+                                        <p>{{val3.date | date:'dd MMM y'}}</p>
+                                        <p>Date</p>
+                                    </div>
+                                    <div class="date-section">
+                                        <p>{{val3.modeOfTravel}} - {{val3.travelClass}}</p>
+                                        <p>Travel Mode</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="three_boxes">
+                                <div class="lower mt10">
+                                    <p>Distance</p>
+                                    <p>{{val3.distance}} KM</p>
+                                </div>
+                                <div class="lower mt10">
+                                    <p>Amount</p>
+                                    <p>₹ {{val3.amount}} /-</p>
+                                </div>
+                            </div>
+                            <div class="lower">
+                                <p>Remark</p>
+                                <p>{{val3.remark}}</p>
+                            </div>
+                        </div>
+                        <div class="summary-table">
+                            <table>
+                                <tr>
+                                    <td class="text-right">Total</td>
+                                    <td class="text-right w120" >&#8377; {{expenseDetail.localConveyanceAmt}} /-</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </article>
+                </figure>
+
+                <figure ng-if="(expenseDetail.miscExp && expenseDetail.miscExp.length > 0) || (expenseDetail.seniorStatus != 'Approved' && expenseDetail.acStatus != 'Approved')">
+                    <input id="ac-5" name="accordion-1" type="radio" class="ds-none">
+                    <label class="header-label" for="ac-5">MISC EXPENSE INFORMATION</label>
+                    <a class="add-new-link" ng-if="expenseDetail.seniorStatus != 'Approved' && expenseDetail.acStatus != 'Approved'" ng-click="goToExpEdit('miscExp', expenseDetail.id)">(Add New)</a>
+                    <article>
+                        <div class="common_form">
+                            <div class="list-box grey-shadow border1" ng-repeat="val4 in expenseDetail.miscExp">
+                                <div class="upper">
+                                    <div class="left-date">
+                                        <div class="date-section">
+                                            <p>{{val4.date | date:'dd MMM y'}}</p>
+                                            <p>Date</p>
+                                        </div>
+                                        <div class="date-section">
+                                            <p>{{val4.expName}}</p>
+                                            <p>Nature Of Exp.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="three_boxes">
+                                    <div class="lower mt10">
+                                        <p>Place Of Expense</p>
+                                        <p>{{val4.placeOfExp}}</p>
+                                    </div>
+                                    <div class="lower mt10">
+                                        <p>Amount</p>
+                                        <p>₹ {{val4.amount}} / -</p>
+                                    </div>
+                                </div>
+                                <div class="lower">
+                                    <p>Remark</p>
+                                    <p>{{val4.remark}}</p>
+                                </div>
+                            </div>
+
+                            <div class="summary-table">
+                                <table>
+                                    <tr>
+                                        <td class="text-right">Total</td>
+                                        <td class="text-right w120" >&#8377; {{expenseDetail.miscExpenseAmt}}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </article>
+                </figure>
+            </section>
+
+
+            <div class="upload-doc mt10">
+                <ul class="no-padding">
+                    <li class="image-upload" ng-if="expenseDetail.expBills.length > 0" ng-repeat="row in expenseDetail.expBills">
+                        <img src="{{uploadURL+'expense/'+row.image}}">
+                        <button class="del" ng-click="hard_delete($index,row)"></button>
+                    </li>
+                    <li class="image-upload" ng-repeat="mediadatas in mediaData">
+                        <img src="{{mediadatas.src}}">
+                        <button class="del" ng-click="delete_img($index)"><i class="material-icons">delete_sweep</i></button>
+                    </li>
+                    <li class="add-image" ng-click="open_camera();">
+                        <i class="material-icons">cloud_upload</i>
+                        <p>Upload Bills</p>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="cs-save-btn text-right" ng-if="mediaData.length > 0">
+                <button type="submit" ng-click="updateBills(expenseDetail.id)">Upload</button>
+            </div>
+
+            <div class="summary-table">
+                <div class="hr">&nbsp;</div>
+                <table>
+                    <tr>
+                        <td >Bill Amount</td>
+                        <td class="text-right w120" >&#8377; {{expenseDetail.totalAmt}} /-</td>
+                    </tr>
+                    <tr>
+                        <td>Advance</td>
+                        <td class="text-right w120" >&#8377; {{expenseDetail.advPayment.amount ? expenseDetail.advPayment.amount : '0'}} /-</td>
+                    </tr>
+                    <tr>
+                        <td>Claim</td>
+                        <td class="text-right w120" >&#8377; {{expenseDetail.claimAmt}} /-</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </ion-content>
+
+</ion-view>
+
+
+<script id="add-status" type="text/ng-template">
+    <ion-modal-view style="background: rgba(0, 0, 0, 0.7);">
+        <ion-content class="padding">
+            <div class="modal-outer">
+                <div class="modal-cs">
+                    <div class="modal-head">
+                        <h2 class="title">Status</h2>
+                        <button class="button button-clear button-primary" ng-click="data.expStatusModel.hide()"><i class="material-icons">clear</i></button>
+                    </div>
+                    <form>
+                        <div class="ledmd">
+                            <div class="cs-add-form mt10">
+                                <label class="fix-label">Status</label>
+                                <select class="browser-default" name="status" ng-model="expStatus.status">
+                                    <option value="Pending">Pending</option>
+                                    <option value="Approved">Approved</option>
+                                    <option value="Reject">Reject</option>
+                                    <option value="Cancel">Cancel</option>
+                                </select>
+
+
+                                <div class="input-field field-input mt20">
+                                    <textarea ng-model="expStatus.remark" name="remark" class="validate" style="height: 100px !important;" required></textarea>
+                                    <label for="last_name" class="fix-label">Remark</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="sgsave">
+                            <button ng-click="saveExpStatus(expenseDetail.id)" ng-disabled = "!expStatus.status" >SUBMIT<i class="material-icons">arrow_right_alt</i></button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </ion-content>
+    </ion-modal-view>
+</script>

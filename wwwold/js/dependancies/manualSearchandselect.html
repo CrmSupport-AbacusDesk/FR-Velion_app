@@ -1,0 +1,29 @@
+﻿<div class="dropdown searchable-multi-select {{active ? 'open' : ''}}"  dropdown on-toggle="toggled(open)">
+    <a class="dropdown-toggle sel-btn btn-default" ng-click="active=!active" data-toggle="dropdown" dropdown-toggle data-target="#" tooltip="{{ commaDelimitedSelected() }}" ng-class="{'disabled': readOnly}">
+        <span class="limit-ellipsis" ng-style="{ 'width' : width }">
+            <small ng-class="{'text-muted': commaDelimitedSelected() === 'Nothing Selected'}">
+                {{ commaDelimitedSelected() }}
+            </small>
+            <i class="caret material-icons">expand_more </i>
+        </span>
+    </a>
+
+    <ul ng-if="!readOnly && allItems.length" class="dropdown-menu  dropdown-menu-search dropdown-menu-form form-control" role="menu">
+        <li><input type="text" class="form-control" ng-model="searchQuery" placeholder="Search"></li>
+        <li ng-repeat="item in ::allItems track by $index" ng-hide="searchQuery.length && item[displayAttr].toLowerCase().indexOf(searchQuery.toLowerCase()) < 0">
+            <label class="checkbox clickable" ng-click="updateSelectedItems(item);" ng-class="{'text-success': isItemSelected(item) }">
+                {{ item[displayAttr] }}
+                <span class="glyphicon glyphicon-remove pull-right clickable"
+                ng-show="isItemSelected(item)"></span>
+            </label>
+        </li>
+       
+    </ul>
+    <ul ng-if="!allItems.length" class="dropdown-menu  dropdown-menu-search dropdown-menu-form form-control" role="menu">
+        <li>
+            <label>
+               No Data Found...
+            </label>
+        </li>
+    </ul>
+</div>

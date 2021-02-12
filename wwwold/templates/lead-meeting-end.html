@@ -1,0 +1,119 @@
+<ion-view view-title="End Visit">
+
+    <ion-nav-buttons side="left">
+        <a ng-click="goToBackPageHandler()"
+            class="cs-backbtn button button-icon icon ion-android-arrow-back font18 fff"></a>
+    </ion-nav-buttons>
+
+    <ion-content>
+
+        <div class="coman-list clrd-bg sticky">
+
+            <div class="center-item">
+                <div class="cs-icon">{{leadActivityData.dr_name[0] ? leadActivityData.dr_name[0] : '--'}}</div>
+                <div class="cs-content">
+                    <p>{{leadActivityData.dr_name ? leadActivityData.dr_name : 'N/A'}}
+                        ({{leadActivityData.dr_type_name ? leadActivityData.dr_type_name : 'N/A'}}) </p>
+                    <a class="icon-content"><i class="material-icons">phone_iphone</i>
+                        {{leadActivityData.mobile ? leadActivityData.mobile : 'N/A'}}</a>
+                </div>
+
+                <a ng-if="leadActivityData.mobile" href="tel: {{leadActivityData.mobile}}"
+                    class="dialer"><i class="material-icons">call</i></a>
+            </div>
+
+
+        </div>
+
+        <div class="padding16">
+            <form ng-submit="!AddForm.$invalid && onActivateGPSLocationForActivityHandler()" name="AddForm" novalidate>
+                <div class="cs-add-form">
+                    <div class="input-field field-input">
+                        <input type="text" class="validate" value="{{leadActivityData.visit_start}}" readonly>
+                        <label class="active" for="last_name">Start Time </label>
+                    </div>
+                    <div ng-class="{'has-error': AddForm.description.$invalid && AddForm.$submitted}"
+                        class="input-field field-input">
+                        <textarea ng-model="leadActivityData.description" name="description" class="validate"
+                            style="height: 100px !important;" required></textarea>
+                        <label for="last_name">Description <sup>*</sup></label>
+                    </div>
+                </div>
+
+                <div class="form-space">
+                    <label class="item-input item-select cs-select csm-input mb0">
+                
+                        <div class="input-label">Update Lead Category</div>
+                
+                        <select name="category" ng-model="leadActivityData.category" ng-change="getLeadStatus(leadActivityData.category)"
+                            ng-options="row.name as row.name for row in leadCategoryList" required>
+                
+                            <option value="" disabled selected>Select Lead Category <sup>*</sup></option>
+                
+                            <!-- <option  ng-repeat="row in leadCategoryList" value="{{row.name}}">{{row.name}}</option> -->
+                
+                        </select>
+                    </label>
+                </div>
+                
+                <div class="form-space">
+                    <label class="item-input item-select cs-select csm-input mb0">
+                        <div class="input-label">Update Lead Status</div>
+                        <select name="status" ng-model="leadActivityData.status" ng-change="getReason(leadActivityData.status)" required>
+                            <option value="" disabled selected>Select Lead Status <sup>*</sup></option>
+                            <option ng-repeat="row in leadStatusList" value="{{row.status_name}}">{{row.status_name}}</option>
+                        </select>
+                    </label>
+                </div>
+                
+                <div ng-if="(leadActivityData.status == 'Lost' || leadActivityData.status == 'Disqualified' || leadActivityData.status == 'Close' || leadActivityData.status == 'Validate' || leadActivityData.status == 'Qualified')"
+                    class="form-space">
+                    <label class="item-input item-select cs-select csm-input mb0">
+                        <div class="input-label">
+                            {{(leadActivityData.status == 'Qualified' || leadActivityData.status == 'Validate') ? 'No Closer Reason' : 'Status Reason'}}
+                        </div>
+                        <select name="status" ng-model="leadActivityData.reason" required>
+                            <option value="" disabled selected>Select {{leadActivityData.status}} Reason <sup>*</sup></option>
+                            <option ng-repeat="row in leadReasonList" value="{{row.name}}">{{row.name}}</option>
+                        </select>
+                    </label>
+                </div>
+
+                <div ng-class="{'has-error': AddForm.isFollowUp.$invalid && AddForm.$submitted}"
+                    class="chekIt no-padding">
+                    <label>
+                        <ion-checkbox ng-model="leadActivityData.isFollowUp" name="isFollowUp"> </ion-checkbox>
+                        Do you want to create any follow up ?
+                    </label>
+                </div>
+
+                <div ng-if="leadActivityData.isFollowUp" class="cs-add-form mt20">
+                    <div ng-class="{'has-error': Addform.followUpType.$invalid && Addform.$submitted}" class="field-input">
+                        <select ng-model="leadActivityData.followUpType" name="followUpType" class="browser-default" required>
+                            <option value="" disabled selected>FollowUp Type</option>
+                            <option ng-show="row.name!='Call-Connected' && row.name!='Call-Not Connected'"
+                                ng-repeat="row in activityTypeList" value="{{row.name}}">{{row.name}}</option>
+                        </select>
+                    </div>
+                    <div ng-class="{'has-error': AddForm.followUpDate.$invalid && AddForm.$submitted}"
+                        class="input-field field-input">
+                        <input ng-model="leadActivityData.followUpDate" name="followUpDate" type="date" min="{{currentDate}}"
+                            class="validate" required>
+                        <label class="active" for="last_name">Next Follow up Date <sup>*</sup></label>
+                    </div>
+                    <div ng-class="{'has-error': AddForm.followUpDescription.$invalid && AddForm.$submitted}"
+                        class="input-field field-input">
+                        <textarea ng-model="leadActivityData.followUpDescription" name="followUpDescription" class="validate"
+                            style="height: 100px !important;" required></textarea>
+                        <label for="last_name">FollowUp Description <sup>*</sup></label>
+                    </div>
+                </div>
+
+                <div class="cs-save-btn mt20">
+                    <button type="submit" class="wp100">End Visit</button>
+                </div>
+            </form>
+        </div>
+    </ion-content>
+
+</ion-view>
