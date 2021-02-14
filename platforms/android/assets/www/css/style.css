@@ -15380,11 +15380,11 @@ h4.nrml-head
     color: #000000;
 }
 
-.scroll
+/* .scroll
 {
     height: calc(100% - 50px);
     overflow: scroll;
-}
+} */
 
 .cs-space
 {

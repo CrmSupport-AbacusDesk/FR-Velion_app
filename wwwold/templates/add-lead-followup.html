@@ -1,0 +1,70 @@
+<ion-view view-title="Create Followup">
+    
+    <ion-nav-buttons side="left">
+        <a ng-click="goToBackPageHandler()"
+        class="cs-backbtn button button-icon icon ion-android-arrow-back font18 fff"></a>
+    </ion-nav-buttons>
+    
+    <ion-nav-buttons side="right">
+    </ion-nav-buttons>
+    
+    <ion-content>
+        
+        <div class="coman-list clrd-bg sticky" ng-if="drDetail.dr_id">
+            <div class="center-item">
+                <div class="cs-icon">{{drDetail.dr_name[0]}}</div>
+                <div class="cs-content">
+                    <p>{{drDetail.dr_name}}</p>
+                    <span>{{drDetail.contact_mobile_no}}</span>
+                    <a ng-if="drDetail.email" class="icon-content"><i class="material-icons">email</i>
+                        {{drDetail.email}}</a>
+                    </div>
+                    
+                    <a href="tel: {{drDetail.contact_mobile_no}}" class="dialer"><i class="material-icons">call</i></a>
+                </div>
+            </div>
+            
+            <form ng-submit="!AddForm.$invalid && onSaveLeadFollowup()" name="AddForm" novalidate>
+                <div  class="padding16">                    
+                    <div ng-if="!drDetail.dr_id" class="cs-add-form">
+                        <div class="cs-add-form">
+                            <div class="field-input">
+                                <select ng-model="data.type" ng-options="row.type as row.type for row in drOrderTypeData" ng-change="getLeadDataonChangeLeadType(data.type)" class="browser-default">
+                                    <option value="" disabled selected>Select Type</option>                                
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="field-input">
+                            <label for="last_name" class="fix-label">Select Distributor</label>
+                            <div class="add-css-select pt0 selectopt no-padding  add2">
+                                <searchable-multiselect display-attr="Key" selected-items="data.dr_name all-items="allLeadData" add-item="single_select(item)"></searchable-multiselect>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div ng-class="{'has-error': Addform.followUpType.$invalid && Addform.$submitted}" class="field-input mt15">
+                        <select ng-model="data.followUpType" name="followUpType" class="browser-default" required>
+                            <option value="" disabled selected>FollowUp Type</option>
+                            <option ng-show="row.name!='Call-Connected' && row.name!='Call-Not Connected'" ng-repeat="row in activityTypeList" value="{{row.name}}">{{row.name}}</option>
+                        </select>                        
+                    </div>
+                    
+                    <div ng-class="{'has-error': AddForm.followUpDate.$invalid && AddForm.$submitted}" class="input-field field-input">
+                        <input ng-model="data.followUpDate" name="followUpDate" type="date" min="{{currentDate}}" class="validate" required>
+                        <label class="active" for="last_name">Next Follow up Date <sup>*</sup></label>
+                    </div>
+                    
+                    <div ng-class="{'has-error': AddForm.followUpDescription.$invalid && AddForm.$submitted}" class="input-field field-input">
+                        <textarea ng-model="data.followUpDescription" name="followUpDescription" class="validate" style="height: 100px !important;" required></textarea>
+                        <label for="last_name">FollowUp Description <sup>*</sup></label>
+                    </div>
+                </div>
+            </div>
+            <div class="input-submit padding16">
+                <button type="submit">Save</button>
+            </div>
+        </form>
+    </ion-content>
+    
+</ion-view>

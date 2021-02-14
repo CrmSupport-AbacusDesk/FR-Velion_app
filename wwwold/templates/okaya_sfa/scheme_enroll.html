@@ -1,0 +1,137 @@
+<ion-view view-title="Scheme Enrollment">
+    
+    <ion-nav-buttons side="left">
+        <a ng-click="goToBackPageHandler()"
+        class="cs-backbtn button button-icon icon ion-android-arrow-back font18 fff"></a>
+    </ion-nav-buttons>
+    
+    <ion-content>
+        <div class="padding16">
+            <!-- <form name="Addform" novalidate ng-submit="!Addform.$invalid && getleadAdd()"> -->
+                <div class="cs-add-form">
+                    
+                    <div class="radio_type_input">
+                        <label>Enrolled under</label>
+                        <div class="full_width_type">
+                            <div class="types">
+                                <p>SFA</p>
+                                <span class="yes">Yes</span>
+                            </div>
+                            
+                            <div class="types">
+                                <p>ORP</p>
+                                <span ng-class="{'yes':schemeData.inORP==1,'no':schemeData.inORP==0}">No</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="cs-add-form mt20">
+                        <div class="field-input">
+                            <label for="last_name" class="fix-label">Enrolled Under Distributor<span>*</span></label>
+                            <div class="add-css-select pt0 selectopt no-padding  add2">
+                                <searchable-multiselect display-attr="Key" selected-items="schemeData.dr_name" all-items="AssignDistributorList"
+                                add-item="single_select(item)">
+                            </searchable-multiselect>
+                        </div>
+                    </div>
+                </div>
+                
+                <ng-container >
+                    
+                    <div class="field-input">
+                        <div class="underline-heading mt20">
+                            <label class="fix-label">Enrolled For IB BRAND <span>*</span></label>
+                        </div>
+                        <div class="form-column flat">
+                            <div class="check-radio label-bodr">
+                                <label ng-repeat="row in schemeBrand">
+                                    <input type="radio" name="enroll_brand" ng-change="getBrandScheme(row)" value="{{row}}"
+                                    ng-model="schemeData.enroll_brand">
+                                    {{row}}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt10 field-input" >
+                        <label>Enrolled Slab<span>*</span></label>
+                        <div class="accordan-table padding0 mb5">
+                            <table class="font-increase">
+                                <tr>
+                                    <th class="w60"></th>
+                                    <th class="w70  text-center">Billing Qty</th>
+                                    <th class="w60  text-center">Duration</th>
+                                    <th class="w200">Incentive</th>
+                                </tr>
+                                <tr ng-repeat="row in enrollSchemeList">
+                                    <td>
+                                        <div class="form-column flat">
+                                            <div class="check-radio center">
+                                                <label for="">
+                                                    <input type="radio" name="enroll_id+$index" ng-change="schemeData.scheme = row.incentive" value="{{row.id}}" ng-model="schemeData.scheme_id">
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">{{row.billing_qty}}</td>
+                                    <td class="text-center">{{row.duration}}</td>
+                                    <td>{{row.incentive}}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    
+                </ng-container> 
+                
+                <div class="cs-save-btn">
+                    <button class="wp100 border-radius box-shadow-none" ng-click="addSchemeToList()" >Add Scheme</button>
+                </div>
+                
+                <div class="coman-list margin0" ng-repeat="row in schemeArray">
+                    <div class="top-head">
+                        <ul>
+                            <li>
+                                <p>{{row.distributor_name}}</p>
+                                <span>Distributor</span>
+                            </li>
+                        </ul>
+                        <a class="right-btn clr-red df padding3" ng-click="removeScheme($index)"><i class="material-icons font18">delete_sweep</i></a>
+                    </div>
+                    
+                    <div class="center-item">
+                        <div class="cs-icon">{{row.brand[0]}}</div>
+                        <div class="cs-content">
+                            <p>{{row.brand}}</p>
+                            <span>{{row.scheme}}</span>
+                        </div>
+                    </div>
+                    
+                </div>
+                
+                <div class="input-field field-input mt30" ng-if="schemeArray.length">
+                    <input type="tel" numbers-only style="letter-spacing: 30px; text-align: center; padding-left: 30px !important; margin-bottom: 7px !important;"
+                    class="input-cs" minlength="6" maxlength="6" ng-model="schemeData.otp">
+                    
+                    <label>OTP</label>
+                    
+                    <div class="text-right" ng-if="schemeData.otp_sent==false">
+                        <a ng-click="sendOTP();schemeData.otp_sent = true" class="link-btn">Send OTP</a>
+                    </div>
+                    <div class="timer-otp jce dflex-data" ng-if="schemeData.otp_sent==true">
+                        <p class="mb0 mr5 red-text">(00:{{counter}})</p>
+                        <a ng-style="{opacity:counter==0 ? '1':'0.3'}" ng-click="counter ? '' : sendOTP()" class="link-btn">Resend OTP</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div ng-if="schemeData.otp" class="cs-save-btn text-right mt20">
+                <button class="outline" ng-click="submitSchemeEnrollment()">Save</button>
+            </div>
+        </div>
+    </div>
+</ion-content>
+
+
+</ion-footer>
+
+</ion-view>

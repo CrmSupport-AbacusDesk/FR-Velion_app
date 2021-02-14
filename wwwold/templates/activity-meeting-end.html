@@ -1,0 +1,90 @@
+<ion-view view-title="End Visit">
+
+    <ion-nav-buttons side="left">
+        <a ng-click="goToBackPageHandler()" class="cs-backbtn button button-icon icon ion-android-arrow-back font18 fff"></a>
+    </ion-nav-buttons>
+
+    <ion-content>
+
+        <div class="coman-list clrd-bg sticky">
+
+            <div class="center-item">
+                <div class="cs-icon">{{drDetail.drData.dr_name[0] ? drDetail.drData.dr_name[0] : '--'}}</div>
+                <div class="cs-content">
+                    <p>{{drDetail.drData.dr_name ? drDetail.drData.dr_name : 'N/A'}} ({{drDetail.drData.type_name ? drDetail.drData.type_name : 'N/A'}}) </p>
+                    <span>{{drDetail.drData.contact_name ? drDetail.drData.contact_name : 'N/A'}}</span>
+                    <a class="icon-content"><i class="material-icons">email</i> {{drDetail.drData.email ? drDetail.drData.email : 'N/A'}}</a>
+                </div>
+
+                <a ng-if="drDetail.drData.contact_mobile_no" href="tel: {{drDetail.drData.contact_mobile_no}}" class="dialer"><i class="material-icons">call</i></a>
+            </div>
+
+            <div ng-if="drDetail.drData.state_name" class="pdlr">
+                <div class="bdr-field">
+                    <span>Address</span>
+                    <p>{{drDetail.drData.street}} {{drDetail.drData.state_name}}{{drDetail.drData.district_name ? ', '+drDetail.drData.district_name : ''}} {{drDetail.drData.city ? ', '+drDetail.drData.city : ''}} {{drDetail.drData.pincode ? '- '+drDetail.drData.pincode : ''}}</p>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="padding16">
+            <form ng-submit="!AddForm.$invalid && onActivateGPSLocationForActivityHandler()" name="AddForm"  novalidate>
+                <div class="cs-add-form">
+                    <div class="input-field field-input">
+                        <input type="text" class="validate" value = "{{activityIdData.visitStartTimeInFormat}}" readonly>
+                        <label class="active" for="last_name">Start Time </label>
+                    </div>
+                    <div  ng-class="{'has-error': AddForm.description.$invalid && AddForm.$submitted}" class="input-field field-input">
+                        <textarea ng-model = "data.description" name = "description" class="validate" style="height: 100px !important;" required></textarea>
+                        <label for="last_name">Description <sup>*</sup></label>
+                    </div>
+                </div>
+
+                <div class="form-space" ng-if="data.lead == '1'">
+                    <label class="item-input item-select cs-select csm-input mb0">
+                        <div class="input-label">Update Lead Status <sup>*</sup></div>
+                        <select name="status" ng-model="data.status" required>
+                            <option value="" disabled selected>Select Lead Status </option>
+                            <option ng-repeat="row in statusList" value="{{row.name}}">{{row.name}}</option>
+                        </select>
+                    </label>
+                </div>
+
+                <div ng-if="data.status == 'Lost'"  class="input-field field-input">
+                    <textarea ng-model = "data.lostReason"  name = "description" class="validate" style="height: 100px !important;" required></textarea>
+                    <label for="last_name">Description</label>
+                </div>
+
+                <div ng-class="{'has-error': AddForm.isFollowUp.$invalid && AddForm.$submitted}" class="chekIt no-padding">
+                    <label>
+                        <ion-checkbox ng-model="data.isFollowUp" name = "isFollowUp"> </ion-checkbox>
+                        Do you want to create any follow up ?
+                    </label>
+                </div>
+
+                <div ng-if="data.isFollowUp" class="cs-add-form mt20">
+                    <div ng-class="{'has-error': Addform.followUpType.$invalid && Addform.$submitted}" class="field-input">
+                        <select ng-model = "data.followUpType" name = "followUpType" class="browser-default" required>
+                            <option value="" disabled selected>FollowUp Type</option>
+                            <option ng-repeat="row in activityTypeList" value="{{row.name}}">{{row.name}}</option>
+                        </select>
+                    </div>
+                    <div  ng-class="{'has-error': AddForm.followUpDate.$invalid && AddForm.$submitted}" class="input-field field-input">
+                        <input ng-model = "data.followUpDate" name="followUpDate" type="date" min = "{{currentDate}}" class="validate" required>
+                        <label class="active" for="last_name">Next Follow up Date <sup>*</sup></label>
+                    </div>
+                    <div  ng-class="{'has-error': AddForm.followUpDescription.$invalid && AddForm.$submitted}" class="input-field field-input">
+                        <textarea ng-model = "data.followUpDescription" name = "followUpDescription"  class="validate" style="height: 100px !important;" required></textarea>
+                        <label for="last_name">FollowUp Description <sup>*</sup></label>
+                    </div>
+                </div>
+
+                <div class="cs-save-btn mt20">
+                    <button type = "submit" class="wp100">End Visit</button>
+                </div>
+            </form>
+        </div>
+    </ion-content>
+
+</ion-view>

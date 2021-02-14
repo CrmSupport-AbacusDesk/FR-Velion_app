@@ -1,0 +1,45 @@
+<ion-view view-title="Login" name="login-view" hide-nav-bar="true">
+    <ion-content >
+        <div class="login">
+            <div class="logo text-center">
+                <img src="img/okaya-img/logo.png" alt="">
+            </div>
+
+            <div class="login-form">
+                <div class="list">
+                    <h2>Login</h2>
+                    <p>Please Sign in to Continue.</p>
+                    <form name="Loginfrom" ng-submit = "!Loginfrom.$invalid && login()" novalidate >
+                        <label class="item item-input item-floating-label">
+                            <i class="material-icons">person</i>
+                            <input type="text" placeholder="Username" required ng-model="loginData.username">
+                        </label>
+                        
+                       
+
+                        <div class="show-hide">
+                            <label ng-init="passwordType='password'" class="item item-input item-floating-label">
+                                <i class="material-icons rotate">vpn_key</i>
+                                <input type="{{passwordType}}" placeholder="Password" class="no-margin-bottom" required ng-model="loginData.password">
+                            </label>
+                            <a ng-show="passwordType=='text'" class="show-hide-btn" ng-click="passwordType='password'" required>
+                                <i class="material-icons">visibility</i>
+                            </a>
+
+                            <a ng-show="passwordType=='password'"  class="show-hide-btn" ng-click="passwordType='text'" >
+                                <i class="material-icons">visibility_off</i>
+                            </a>
+                        </div>
+
+                        <!-- <a class="frgt_pswrd" href="#/change-password">Forget Password</a> -->
+
+                        <div class="btnn">
+                            <input type="submit" value="LOGIN"/>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

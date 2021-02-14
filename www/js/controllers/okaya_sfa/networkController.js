@@ -164,9 +164,9 @@ app.controller('networkController', function ($http,$scope, $rootScope, searchSe
     $scope.myNetworkList = [];
     $scope.tmpMyNetworkList = [];
     $scope.data = {};
-    $scope.getNetworkList = function(type, actionType,status,value)
+    $scope.getNetworkList = function(type, actionType,status,value,search)
     {
-        $scope.myNetworkList = [];
+        // $scope.myNetworkList = [];
         
         console.log($scope.networkTabActive);
         if($scope.data.type != type)
@@ -187,12 +187,24 @@ app.controller('networkController', function ($http,$scope, $rootScope, searchSe
                 
             }
         }
+
+        $scope.noMoreItemsAvailable = false;
+
+        if(!$scope.data.search)
+        {
+            $ionicLoading.show({
+                template: '<ion-spinner icon="android"></ion-spinner><p>Loading...</p>'
+            });
+        }
+
+        if (search) {
+            $scope.myNetworkList=[];
+        }
         
-        $ionicLoading.show({
-            template: '<ion-spinner icon="android"></ion-spinner><p>Loading...</p>'
-        });
-        
-        var data = {limit:$scope.myNetworkList.length,outstanding:value};
+        var data = {limit:$scope.myNetworkList.length,outstanding:value,search:search};
+        // $scope.data.limit=$scope.myNetworkList.length;
+        // $scope.data.outstanding=value;
+        // $scope.data.search=search;
         
         console.log(data);
         
@@ -217,12 +229,14 @@ app.controller('networkController', function ($http,$scope, $rootScope, searchSe
                     title: 'Error!',
                     template: 'Something went wrong !!'
                 });
-                
-                $scope.noMoreItemsAvailable = true;
-                
             }
-            
-            // $scope.$broadcast('scroll.infiniteScrollComplete');
+
+            if (actionType == 'scroll') {
+
+                console.log('scroll called');
+                $scope.$broadcast('scroll.infiniteScrollComplete');
+
+            } 
             
             $ionicLoading.hide();
             
@@ -244,7 +258,6 @@ app.controller('networkController', function ($http,$scope, $rootScope, searchSe
         search = search.toLowerCase();
         
         $scope.myNetworkList = $scope.tmpMyNetworkList.filter(row => row.dr_name.toLowerCase().includes(search) || row.dr_code.toLowerCase().includes(search) || row.state_name.toLowerCase().includes(search) || row.district_name.toLowerCase().includes(search) || row.zone.toLowerCase().includes(search) || row.branch.toLowerCase().includes(search));
-        
         console.log(searchArray);
         
     }
@@ -1935,7 +1948,7 @@ app.controller('networkController', function ($http,$scope, $rootScope, searchSe
         console.log(myAllSharedService.drTypeFilterData.outstanding);
         if($scope.networkTabActive==1)
         {
-            $scope.getNetworkList('Distributor', '','',myAllSharedService.drTypeFilterData.outstanding);
+            $scope.getNetworkList('Distributor', '',myAllSharedService.drTypeFilterData.outstanding,'');
         }
         else
         {
