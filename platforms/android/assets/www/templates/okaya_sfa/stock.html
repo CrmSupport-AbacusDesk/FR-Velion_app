@@ -12,14 +12,7 @@
         
          <div ng-class="isSearchBarOpen ? 'active' : ''" class="search-filter">
             <input name="master_search" ng-model = "search.master_search" type="text" id = "searchData" ng-change ="filterstock(search.master_search)">
-            <!-- <div class="orp_seacrh search-data">
-                <ul>
-                    <li ng-repeat="row in productStock" > -->
-                        <!-- <p ng-click="search.product_code=row.product_code;getStockData()" >{{row.product_name}} <span ng-if="row.brand">({{row.brand}})</span> ({{row.product_code}})</p> -->
-                        <!-- <p ng-click="search.product_code=row.product_code;getStockData()" >{{row.product_name}}</p>
-                    </li>
-                </ul>
-            </div> -->
+          
             <a ng-click = "onSeachActionHandler('close');search.product_code='';suggestiveList=[];getStockData(branch);" placeholder = "Search" class="close-filter"><i class="material-icons">keyboard_backspace</i></a>
         </div> 
     </ion-nav-buttons> 
@@ -51,20 +44,14 @@
 
         </div>
 
-        <!-- <div class="bx-listing" style="display: none;">
-            <a class="flex-remove" >
-                <div class="description">
-                    <div class="cs-left">
-                        <h1>{{row.product_name}} <span ng-if="row.brand">({{row.brand}})</span> - {{row.category}} </h1>
-                        <p>SR No. : {{row.product_code}}</p>
-                    </div>
-                    <div class="cs-right">
-                        <h1>Last Update</h1>
-                        <p class="price">{{row.date_created | date:'dd MMM y'}}</p>
-                    </div>
+        <div class="data-not-found" ng-if="productStock.length == 0" >
+            <div class="outer">
+                <div class="innear">
+                    <img src="img/data-not-found.svg" alt="">
+                    <h2>Temporarily , No Data Available!</h2>
                 </div>
-            </a>
-        </div> -->
+            </div>
+        </div>
     </ion-content>
 
     <script id="stock-model" type="text/ng-template">
@@ -83,7 +70,6 @@
                                     <select ng-model="branch" class="browser-default"  required>
                                         <option  value="" disabled selected>Select Type</option>
                                         <option ng-repeat="row in userlist" value="{{row}}" >{{row}}</option>
-                                        <!-- <option value="" >Distributor</option> -->
                                     </select>
                                 </div>
                             </form>

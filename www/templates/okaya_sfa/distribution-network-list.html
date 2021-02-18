@@ -73,9 +73,9 @@
         
         <div class="pdlr">
             <div class="cs-grid">
-                <div class="bdr-field wp100">
-                    <span>Outstanding</span>
-                    <p>₹ {{row.credit_exposure ? row.credit_exposure : '0'}}</p>
+                <div class="bdr-field wp100" ng-class="{'outstanding-colour': parseInt(row.credit_exposure)>parseInt(row.credit_limit)}">
+                    <span ng-class="{'outstanding-pcolour': row.credit_exposure>row.credit_limit}">Outstanding</span>
+                    <p ng-class="{'outstanding-pcolour': row.credit_exposure>row.credit_limit}">₹ {{row.credit_exposure ? row.credit_exposure : '0'}}</p>
                 </div>
                 
                 <div class="bdr-field wp100">
