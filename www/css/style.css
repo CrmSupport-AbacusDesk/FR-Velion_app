@@ -1837,6 +1837,15 @@ ion-slide {
     text-align: center
 }
 
+.outstanding-colour{
+    background: #ea2323 !important;
+}
+
+.outstanding-pcolour{
+    color: white !important;
+}
+
+
 .user-list.date-format .list .item p strong {
     color: #333;
     display: inline-block
