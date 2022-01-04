@@ -1,6 +1,6 @@
-<ion-view view-title="Profile" hide-nav-bar="true">    
-    <ion-content style="background: #4875B5;">
-        
+<ion-view view-title="Profile" hide-nav-bar="true">
+    <ion-content style="background: #253c71;">
+
         <div class="orp_profile">
             <div class="p_head">
                 <div class="cs-left">
@@ -8,72 +8,310 @@
                     <p>My Profile</p>
                 </div>
 
-                <div class="cs-right">
-                    <button><i class="material-icons">camera_alt</i></button>
+                <div class="cs-right df">
+                    <button ng-click="onImageTypeHandler('profile');"><i class="material-icons">camera_alt</i></button>
+                    <button ng-click="goToEditProfile()"><i class="material-icons">edit</i></button>
                 </div>
             </div>
 
             <div class="profile_info">
-                <div class="thumb"><img src="img/outline_profile-icon_black.svg" alt=""></div>
+                <div class="thumb">
+                    <img ng-if="!loginUserDetail.profile_image" src="img/profile.svg" class="default">
+                    <img ng-click="openModel(loginUserDetail.profile_image)" ng-if="loginUserDetail.profile_image" src="{{uploadURL}}{{loginUserDetail.profile_image}}">
+                </div>
                 <div class="pro_info">
-                    <h1>Ram & Sons PVT. LTD.</h1>
-                    <p>C01785</p>
+                    <h1>{{loginUserDetail.dr_name}}</h1>
+                    <p></p>
                 </div>
             </div>
         </div>
 
 
-        <div class="profile_container">
-            <div class="org_name">
+        <div class="profile_container pt20">
+            <!-- <div class="org_name">
                 <div class="icon"><img src="img/organization_icon.svg" alt=""></div>
                 <div class="org_info">
                     <p>Organization</p>
                     <p><span>Okaya</span></p>
                 </div>
+            </div> -->
+
+            <div ng-if="loginUserDetail.gst_no || loginUserDetail.orp_pan_no || loginUserDetail.orp_pol_cert_no" class="other-info">
+                <ul>
+                    <li ng-if="loginUserDetail.gst_no">
+                        <p>{{loginUserDetail.gst_no}}</p>
+                        <span>GST Number</span>
+                    </li>
+                    <li ng-if="loginUserDetail.orp_pan_no">
+                        <p>{{loginUserDetail.orp_pan_no}}</p>
+                        <span>PAN Number</span>
+                    </li>
+                    <li ng-if="loginUserDetail.orp_pol_cert_no">
+                        <p>{{loginUserDetail.orp_pol_cert_no}}</p>
+                        <span>Pollution Cert. No.</span>
+                    </li>
+
+                </ul>
             </div>
 
             <div class="basic_info">
                 <ul>
                     <li>
                         <img src="img/pro_call_icon.svg" alt="">
-                        <p><a href="tel:9685478589">9685478589</a>, <a href="tel:0129 748596">0129 748596</a></p>
+                        <p><a href="tel:{{loginUserDetail.contact_mobile_no}}">{{loginUserDetail.contact_mobile_no?loginUserDetail.contact_mobile_no:"N/A"}}</a></p>
                     </li>
-                    <li>
+                    <li ng-show="loginUserDetail.email">
                         <img src="img/pro_email_icon.svg" alt="">
-                        <p><a href="mailto:Ram_Kmishra011@Gmail.Com">Ram_Kmishra011@Gmail.Com</a></p>
+                        <p><a href="mailto:{{loginUserDetail.email}}">{{loginUserDetail.email?loginUserDetail.email:"N/A"}}</a></p>
                     </li>
                     <li>
                         <img src="img/pro_home_icon.svg" alt="">
-                        <p>5E/7 , B.P., Railway Road, Near Neelam Chowk, NIT Faridabad, Haryana 121001</p>
+                        <p>{{loginUserDetail.street}} {{loginUserDetail.city}} {{loginUserDetail.district_name}} {{loginUserDetail.state_name}} {{loginUserDetail.pincode}} India</p>
+                    </li>
+                    <li ng-if="loginUserDetail.orp_date_anniversary!='0000-00-00'">
+                        <img src="img/calendar.svg" alt="">
+                        <p>{{loginUserDetail.orp_date_anniversary | date: 'dd MMM yyyy'}} <span>Date Of Anniversary</span></p>
+                    </li>
+                    <li ng-if="loginUserDetail.orp_dob!='0000-00-00'">
+                        <img src="img/cake.svg" alt="">
+                        <p>{{loginUserDetail.orp_dob | date: 'dd MMM yyyy'}}<span>Date Of Birth</span></p>
                     </li>
                 </ul>
             </div>
 
             <div class="contact_persons">
                 <h1>Contact Person(S)</h1>
-
                 <div class="figure">
                     <div class="cs-left">
-                        <p><i class="material-icons">person</i> <span>Ram Kumar Mishra (HR Manager)</span></p>
-                        <p><i class="material-icons">local_post_office</i> <a href="">Ram Kumar Mishra (HR Manager)</a></p>
+                        <p><i class="material-icons">person</i> <span>{{loginUserDetail.contact_name?loginUserDetail.contact_name:"N/A"}}</span></p>
+                        <p><i class="material-icons">call</i> <span class="blue-clr">{{loginUserDetail.contact_mobile_no?loginUserDetail.contact_mobile_no:"N/A"}}</span></p>
                     </div>
-                    <div class="cs-right"><a href="#/"><i class="material-icons">call</i></a></div>
-                </div>
-
-                <div class="figure">
-                    <div class="cs-left">
-                        <p><i class="material-icons">person</i> <span>Ram Kumar Mishra (HR Manager)</span></p>
-                        <p><i class="material-icons">local_post_office</i> <a href="">Ram Kumar Mishra (HR Manager)</a></p>
-                    </div>
-                    <div class="cs-right"><a href="#/"><i class="material-icons">call</i></a></div>
                 </div>
             </div>
 
+            <div class="text-box">
+                <h2>Login Credentials</h2>
+                <div class="text-box wp100 ">
+                    <p>User name</p>
+                    <span>{{loginUserDetail.userName?loginUserDetail.userName:"N/A"}}</span>
+                </div>
+                <div class="text-box wp100  mt10">
+                    <p>Password</p>
+                    <span>{{loginUserDetail.password?loginUserDetail.password:"N/A"}}</span>
+                </div>
+            </div>
+
+
+
+            <div class="text-box" ng-if='loginUserDetail.type_name!="Electrician"'>
+                <h2>Deal With</h2>
+                <!-- <div class="text-box pb0">
+                    <p>Division</p>
+                    <span ng-repeat="row in loginUserDetail.deals_brand" class="cs-chips">{{row.brand_name}}</span>
+                </div> -->
+                <div class="text-box mt10 pb0">
+                    <p>Division</p>
+                    <span ng-repeat="row in loginUserDetail.deals_category" class="cs-chips">{{row.category_name}}</span>
+                </div>
+            </div>
+
+            <div class="text-box">
+                <h2>Bank Details</h2>
+                <div class="right_text cs-right df">
+                    <p class="done" ng-if="loginUserDetail.is_kyc_done==1"><i class="material-icons">check_circle</i> KYC DONE</p>
+                    <p class="pending" ng-if="loginUserDetail.is_kyc_done==0"><i class="material-icons">watch_later</i> KYC PENDING</p>
+                    <a class="edit-pr" ng-click="loginUserDetail.acc_no?'':remarkModel.show()"><i class="material-icons">edit</i></a>
+                </div>
+                <div class="text-box mt10 pb0">
+                    <table class="detail_table">
+                        <tr>
+                            <th>Account Holder</th>
+                            <td>{{loginUserDetail.acc_holder_name?loginUserDetail.acc_holder_name:"N/A"}}</td>
+                        </tr>
+                        <tr>
+                            <th>Account Number</th>
+                            <td>{{loginUserDetail.acc_no?loginUserDetail.acc_no:"N/A"}}</td>
+                        </tr>
+                        <tr>
+                            <th>Account Type</th>
+                            <td>{{loginUserDetail.acc_type?loginUserDetail.acc_type:"N/A"}}</td>
+                        </tr>
+                        <tr>
+                            <th>IFSC Code</th>
+                            <td>{{loginUserDetail.ifsc_code?loginUserDetail.ifsc_code:"N/A"}}</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="scheme_en-ds registration_change" ng-if="loginUserDetail.cancel_check_image">
+                    <div class="sc_container">
+                        <div class="sc_head_info">
+                            <div class="sc_info multi-schmes">
+                                <div class="al-item">
+                                    <div class="thumb">
+                                        <img ng-click="openModel(loginUserDetail.cancel_check_image)" src="{{uploadURL}}/{{loginUserDetail.cancel_check_image}}" alt="">
+                                    </div>
+                                    <div class="desc">
+                                        <h1>Cancel cheque</h1>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-box">
+                <h2>Document Details
+                </h2>
+                <div class="scheme_en-ds registration_change" ng-if="loginUserDetail.document.length">
+                    <div class="sc_container">
+                        <div class="sc_head_info">
+                            <div class="sc_info multi-schmes">
+                                <div class="al-item" ng-repeat="row in loginUserDetail.document">
+                                    <div class="thumb">
+                                        <img ng-click="openModel(row.document_name)" src="{{uploadURL}}/{{row.document_name}}" alt="">
+                                    </div>
+                                    <div class="desc">
+                                        <h1>{{row.document_type}}</h1>
+                                        <p>{{row.document_number}}</p>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- <div class="contact_persons">
+                <h1>Microtek Contact Person</h1>
+                <div class="figure" ng-repeat="row in loginUserDetail.sales_execuative">
+                    <div class="cs-left" >
+                        <p>
+                            <i class="material-icons">person</i>
+                            <span>{{row.name}}</span>&nbsp;&nbsp;&nbsp;
+                        </p>
+                        <a href="tel: {{row.mobile}}" >
+                            <i class="material-icons">call</i>
+                            <span class="blue-clr">{{row.mobile}}</span>
+                        </a>
+                        <span class="text-head">{{row.designation}}</span>
+                    </div>
+                </div>
+            </div> -->
         </div>
-
-        
-
     </ion-content>
+
+    <script id="add-status" type="text/ng-template">
+        <ion-modal-view style="background: rgba(0, 0, 0, 0.7);">
+            <ion-content class="padding">
+                <div class="modal-outer fancy-box-model">
+                    <div class="modal-cs">
+                        <button class="fix-close" ng-click="data.statusModel.hide()"><i class="material-icons">clear</i></button>
+                        <div class="lg-img">
+                            <img src="{{uploadURL}}/{{imageSRC}}" alt="">
+                        </div>
+                    </div>
+                </div>
+            </ion-content>
+        </ion-modal-view>
+    </script>
+
+    <script id="add-remark" type="text/ng-template">
+      <ion-modal-view style="background: rgba(0, 0, 0, 0.7);">
+          <ion-content class="padding">
+              <div class="modal-outer">
+                  <div class="modal-cs">
+                      <div class="modal-head">
+                          <h2 class="title">Add Bank Details</h2>
+                          <button class="button button-clear button-primary" ng-click="remarkModel.hide()"><i class="material-icons">clear</i></button>
+                      </div>
+                      <form name='bank_details' novalidate ng-submit='!bank_details.invalid?saveBankDetails():""'>
+                          <div class="ledmd">
+                              <div class="cs-add-form">
+                                  <!-- <div class="input-field field-input mt0">
+                                      <textarea ng-model = "data.remark"  name = "remark" class="validate" style="height: 100px !important;" required></textarea>
+                                      <label for="last_name">Remark</label>
+                                  </div> -->
+
+                                  <!-- <div class="rg_heading">
+                                      <h4>Bank Details</h4>
+                                  </div> -->
+
+                                  <div  class="field-input mt20" ng-class="{'has-error': bank_details.acc_type.$invalid && bank_details.$submitted}">
+                                    <!-- <input name="acc_type"  id= "acc_type" required ng-model="Bank_data.acc_type"></input> -->
+                                    <select class="browser-default" name="acc_type"  id="acc_type" required ng-model="Bank_data.acc_type">
+                                        <!-- <option value="" disabled selected>Account Type</option> -->
+                                        <option value="Saving" >Saving</option>
+                                        <option value="Current" >Current</option>
+                                    </select>
+                                    <label class="fix-label">Account Type <span>*</span></label>
+                                    <span class="error-left relative" ng-show="bank_details.$submitted && bank_details.acc_type.$error.required">* Account Type Required</span>
+                                  </div>
+
+                                  <div  class="input-field field-input" ng-class="{'has-error': bank_details.acc_holder_name.$invalid && bank_details.$submitted}">
+                                      <input name="acc_holder_name"  id= "acc_holder_name" required ng-model="Bank_data.acc_holder_name"></input>
+                                      <label class="fix-label">Account Holder Name <span>*</span></label>
+
+                                      <span class="error-left relative" ng-show="bank_details.$submitted && bank_details.acc_holder_name.$error.required">* Account Holder Name Required</span>
+                                  </div>
+
+                                  <div  class="input-field field-input" ng-class="{'has-error': bank_details.acc_no.$invalid && bank_details.$submitted}">
+                                      <input name="acc_no"  id= "acc_no" required ng-model="Bank_data.acc_no"></input>
+                                      <label class="fix-label">Account Number <span>*</span></label>
+
+                                      <span class="error-left relative" ng-show="bank_details.$submitted && bank_details.acc_no.$error.required">* Account Number Required</span>
+                                  </div>
+
+
+                                  <div  class="input-field field-input" ng-class="{'has-error': bank_details.ifsc_code.$invalid && bank_details.$submitted}">
+                                      <input name="ifsc_code"  id= "ifsc_code" required ng-model="Bank_data.ifsc_code"></input>
+                                      <label class="fix-label">IFSC Code <span>*</span></label>
+                                      <span class="error-left relative" ng-show="bank_details.$submitted && bank_details.ifsc_code.$error.required">* IFSC Code Required</span>
+                                  </div>
+
+                                  <div class="or_upload grid-item" ng-if="!Bank_data.cancel_check && !data.cancel_check.length">
+                                      <label ng-click="onImageTypeHandler('cancel_check')">
+                                          <img src="img/upload_camera-icon.svg" alt="" class="camera_icon">
+                                          <p>Upload Cancel cheque</p>
+                                      </label>
+                                  </div>
+
+                                  <div class="scheme_en-ds registration_change">
+                                      <div class="sc_container">
+                                          <div class="sc_head_info">
+                                              <div class="sc_info multi-schmes">
+                                                  <div class="al-item" ng-repeat="row in data.cancel_check">
+                                                      <div class="thumb">
+                                                          <img src="{{row.src}}" alt="">
+                                                      </div>
+                                                      <div class="desc">
+                                                          <h4>Cancel Check</h4>
+                                                      </div>
+                                                      <button ng-click="remove_check($index)"><i class="material-icons">delete_sweep</i></button>
+                                                  </div>
+
+                                              </div>
+                                          </div>
+
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="sgsave">
+                              <button type='submit'>SUBMIT<i class="material-icons">arrow_right_alt</i></button>
+                          </div>
+                      </form>
+                  </div>
+              </div>
+          </ion-content>
+      </ion-modal-view>
+  </script>
+
 </ion-view>
 
 

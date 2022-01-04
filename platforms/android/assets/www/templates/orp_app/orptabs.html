@@ -3,21 +3,29 @@
 <ion-side-menus enable-menu-with-back-views="false">
     <ion-side-menu-content>
 
-        <ion-tabs class="tabs-icon-top tabs-color-active-positive">
+        <ion-tabs class="tabs-icon-top tabs-color-active-positive orp_tabs">
 
-            <ion-tab title="HOME" icon-off="home-icon" icon-on="home-icon" href="#/orptab/orp_dashboard">
+            <ion-tab title="HOME" icon-off="homes-icon" icon-on="homes-icon animate__animated animate__flip" ng-click="onGoToRootPageHandler('HOME')">
                 <ion-nav-view name="orptab-orp-dashboard"></ion-nav-view>
             </ion-tab>
 
-            <ion-tab  title="SCHEME" icon-off="scheme-icon" icon-on="scheme-icon" href="#/orptab/orp_offerlist">
+            <ion-tab  title="SCHEME" icon-off="scheme-icon" icon-on="scheme-icon animate__animated animate__flip" ng-click="onGoToRootPageHandler('SCHEME')">
                 <ion-nav-view name="offerlist"></ion-nav-view>
             </ion-tab>
 
-            <ion-tab title="HISTORY" icon-off="history-icon" icon-on="history-icon" href="#/orptab/orp_history">
+            <!-- <ion-tab title="HISTORY" icon-off="history-icon" icon-on="history-icon" href="#/orptab/orp_history">
                 <ion-nav-view name="history"></ion-nav-view>
+            </ion-tab> -->
+
+            <ion-tab hidden="{{$root.loginType != 'Electrician'}}" title="LEADERBOARD" icon-off="leaderboard-icon" icon-on="leaderboard-icon animate__animated animate__flip" ng-click="onGoToRootPageHandler('LEADERBOARD')">
+              <ion-nav-view name="leaderboard"></ion-nav-view>
             </ion-tab>
 
-            <ion-tab title="GALLERY" icon-off="gallery-icon" icon-on="gallery-icon" href="#/orptab/orp_gallery">
+            <ion-tab title="CATALOGUE" icon-off="catalogue-icon" icon-on="catalogue-icon animate__animated animate__flip" ng-click="onGoToRootPageHandler('CATALOGUE')">
+                <ion-nav-view name="catalogue"></ion-nav-view>
+            </ion-tab>
+
+            <ion-tab title="GALLERY" icon-off="gallery-icon" icon-on="gallery-icon animate__animated animate__flip" ng-click="onGoToRootPageHandler('GALLERY')">
                 <ion-nav-view name="gallery"></ion-nav-view>
             </ion-tab>
 
@@ -26,21 +34,25 @@
             <!--  -->
 
 
-            <ion-tab hidden="true" title="SCAN" icon-off="follow-icon" icon-on="follow-icon" href="#/orptab/orp_scan">
+            <ion-tab hidden="true" title="SCAN" icon-off="follow-icon" icon-on="follow-icon animate__animated animate__flip" href="#/orptab/orp_scan">
                 <ion-nav-view name="orptab-scan"></ion-nav-view>
             </ion-tab>
 
-            <ion-tab hidden="true" title="Wallet History" icon-off="follow-icon" icon-on="follow-icon" href="#/orptab/orp_wallet-history">
+            <ion-tab hidden="true" title="Wallet History" icon-off="follow-icon" icon-on="follow-icon animate__animated animate__flip" href="#/orptab/orp_wallet-history">
                 <ion-nav-view name="my-wallet"></ion-nav-view>
             </ion-tab>
 
-            <ion-tab hidden="true" title="Menus" icon-off="follow-icon" icon-on="follow-icon" href="#/orptab/orp_menus">
+            <ion-tab hidden="true" title="Menus" icon-off="follow-icon" icon-on="follow-icon animate__animated animate__flip" href="#/orptab/orp_menus">
                 <ion-nav-view name="menus"></ion-nav-view>
             </ion-tab>
 
-            <ion-tab hidden="true" title="My Dealer" icon-off="follow-icon" icon-on="follow-icon" href="#/orptab/orp_dealerlist">
-                <ion-nav-view name="my-dealer"></ion-nav-view>
+            <ion-tab hidden="true" title="My Retailer" icon-off="follow-icon" icon-on="follow-icon animate__animated animate__flip" href="#/orptab/orp_dealerlist">
+                <ion-nav-view name="my-Retailer"></ion-nav-view>
             </ion-tab>
+
+            <ion-tab hidden="true" title="My Password" icon-off="follow-icon" icon-on="follow-icon animate__animated animate__flip" href="#/orptab/orp_forgotpassword">
+              <ion-nav-view name="menus"></ion-nav-view>
+          </ion-tab>
 
         </ion-tabs>
     </ion-side-menu-content>

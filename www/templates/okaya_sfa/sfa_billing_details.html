@@ -1,0 +1,142 @@
+<ion-view view-title="Billing Detail">
+    
+    <ion-nav-buttons side="left">
+        <a ng-click = "goToBackPageHandler()" class="cs-backbtn button button-icon icon ion-android-arrow-back font18 fff"></a>
+    </ion-nav-buttons>
+    
+    <ion-nav-buttons side="right" class="custom-right-btn">
+        
+        <div class="right-nav-btn nav-search" ng-if="orderDetail.created_by==loginData.loginId && orderDetail.order_status=='Pending'">
+            <a ng-click="edit_order(orderDetail.id,orderDetail)" menu-toggle="left"><i class="material-icons">edit</i></a>
+        </div>
+        
+    </ion-nav-buttons>
+    
+    <ion-content>
+        <div class="coman-list clrd-bg margin0 border-radius box-shadow-none">
+            <div class="center-item">
+                <div class="cs-icon">{{sfa_billing_details.customer_name[0] ? sfa_billing_details.customer_name[0] : '--'}}</div>
+                <div class="cs-content">
+                    <p>{{sfa_billing_details.customer_name ? sfa_billing_details.customer_name : 'N/A'}}</p>
+                    <span>{{sfa_billing_details.customer_code ? sfa_billing_details.customer_code : 'N/A'}}</span>
+                    
+                </div>
+            </div>
+            <div class="pdlr">
+                <div class="cs-flex">
+                    <div class="bdr-field wp100">
+                        <span>Bill No</span>
+                        <p>{{sfa_billing_details.bill_number}}</p>
+                    </div>
+            
+                    <div class="bdr-field wp100">
+                        <span>Bill Date</span>
+                        <p>{{sfa_billing_details.billing_date | date: 'dd MMM yyyy'}}</p>
+                    </div>
+                    <div class="bdr-field wp100">
+                        <span> Item</span>
+                        <p>{{sfa_billing_details.total_billing_item}}</p>
+                    </div>
+                    <div class="bdr-field wp100">
+                        <span> item Qty</span>
+                        <p>{{sfa_billing_details.total_billing_item_qty}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="pdlr">
+                <div class="cs-flex">
+                    <div class="bdr-field wp100">
+                        <span>Total Amount</span>
+                        <p>&#8377; {{sfa_billing_details.total_billing_amount | number : 2 }}</p>
+                    </div>
+                    <div class="bdr-field wp100">
+                        <span>Receive Amount</span>
+                        <p>&#8377; {{sfa_billing_details.billing_receive_amount}}</p>
+                    </div>
+                    <div class="bdr-field wp100">
+                        <span>Pending Balance</span>
+                        <p>&#8377; {{sfa_billing_details.pending_balance}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="pd-left-right16">
+            
+            
+        </div>
+        
+        <div class="cs-heading1 pt0" style="margin-bottom: -10px;">
+            <p>Item Information</p>
+        </div>
+        
+        <div ng-repeat="row in sfa_billing_details.invoice_item" class="coman-list">
+            
+            <div class="center-item">
+                <div class="cs-icon">{{row.material_description[0]}}</div>
+                <div class="cs-content">
+                    <p>{{row.material}}</p>
+                    <span>{{row.material_description}}</span>
+                </div>
+                <!-- <a class="dialer"><i class="material-icons">keyboard_arrow_right</i></a> -->
+            </div> 
+            
+            <div class="pdlr">
+                <div class="cs-flex">
+                    <div class="bdr-field wp100">
+                        <span>Sale qty</span>
+                        <p>{{row.sale_qty}} {{row.uom}}</p>
+                    </div>
+                    
+                    <div class="bdr-field wp100">
+                        <span>Total Amount</span>
+                        <p>&#8377; {{row.total_amt}}</p>
+                    </div>
+                </div> 
+            </div>
+        </div>
+        <div class="h70">&nbsp;</div>
+    </ion-content>
+    <!-- <div class="footer-bar">
+        <button class="edit-btn" ng-repeat="user in orderDetail.approval" ng-if="user.assign_user_id==loginData.loginId && user.status=='Pending'" ng-click="orderData.approvalId = user.approvalId;orderData.status=user.status;changeStatus()">
+            <img src="img/edit.svg" ><p>Changes Status <span>Click here to change order status</span></p>
+        </button>
+    </div> -->
+    <!-- <script id="add-status" type="text/ng-template">
+        <ion-modal-view style="background: rgba(0, 0, 0, 0.7);">
+            <ion-content class="padding">
+                <div class="modal-outer">
+                    <div class="modal-cs">
+                        <div class="modal-head">
+                            <h2 class="title">Status</h2>
+                            <button class="button button-clear button-primary" ng-click="data.statusModel.hide()"><i class="material-icons">clear</i></button>
+                        </div>
+                        <form>
+                            <div class="ledmd">
+                                <div class="cs-add-form">
+                                    <select class="browser-default" name="status" ng-model="orderData.status" required>
+                                        <option value="Pending">Pending</option>
+                                        <option value="Approved">Approved</option>
+                                        <option value="Reject">Reject</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="ledmd" ng-if="orderData.status=='Reject'">
+                                <div class="cs-add-form">
+                                    <div class="input-field field-input mt0">
+                                        <textarea ng-model="orderData.reason" placeholde="Reject Reason" name="reason" class="validate" style="height: 100px !important;" required></textarea>
+                                        <label for="last_name">Remark</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="sgsave">
+                                <button ng-click="orderData.orderId=orderDetail.id;saveStatus(orderDetail.id)" ng-disabled = "!orderData.status" >SUBMIT<i class="material-icons">arrow_right_alt</i></button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </ion-content>
+        </ion-modal-view>
+    </script> -->
+</ion-view>

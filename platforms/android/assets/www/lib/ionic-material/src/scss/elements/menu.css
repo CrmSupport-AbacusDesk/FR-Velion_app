@@ -21,7 +21,8 @@
 }
 
 .menu .bar.bar-header.expanded {
-  box-shadow: none;
+  -webkit-box-shadow: none;
+          box-shadow: none;
   min-height: 150px;
   color: #fff;
 }
@@ -34,6 +35,4 @@
 .has-expanded-header {
   top: 150px !important;
 }
- 
-
- /*# sourceMappingURL= menu.css.map */
+/*# sourceMappingURL=menu.css.map */

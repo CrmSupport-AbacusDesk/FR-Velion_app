@@ -11,24 +11,40 @@
 
 
 
-
-
-
     
     <ion-content>
         <div class="padding16">
             <div class="orp-select">
                 <label>
                     <p>Select Category</p>
-                    <select>
-                        <option value="1">Select an option</option>
+                    <select name="category" ng-model="suportData.category">
+                        <option value="" disabled>Select an option</option>
+                        <option value="{{row.category}}" ng-repeat="row in productCategoryList">{{row.category}}</option>
                     </select>
                 </label>
             </div>
+
+            <div class="orp-input mt10" ng-if="suportData.category == 'Scan Related Issue'">
+                <input type="text" name="serialno" placeholder="Enter Serial No." ng-model="suportData.serialno">
+            </div>
+
+            <div class="orp-textarea mt10">
+                <textarea placeholder="Remark" name="remark" ng-model="suportData.remark" style="padding: 10px !important;"></textarea>
+            </div>
+
+            <div class="or_upload grid-item" ng-if="suportData.category == 'Scan Related Issue'">
+                <label ng-click="onImageTypeHandler('invoice')">
+                    <img src="img/upload_camera-icon.svg" alt="" class="camera_icon">
+                    <p>Upload File</p>
+                </label>
+                
+                <label ng-repeat="row in mediaData">
+                    <button ng-click="delete_img($index)" ><i class="material-icons">delete_sweep</i></button>
+                    <img src="{{row.src}}" alt="">
+                </label>
+            </div>
             
-            <div class="orp-textarea mt10"><textarea placeholder="Address"></textarea></div>
-            
-            <div class="cs_orp-bttn mt16">
+            <div class="cs_orp-bttn mt16" ng-click="saveSupportData()">
                 <a href="" class="active">SAVE</a>
             </div>
         </div>
@@ -39,31 +55,27 @@
         <div class="op_heading"><h1>History</h1></div>
         
         <div class="dealer-list">
-            <div class="figure">
+            <div class="figure" ng-repeat="row in supportHistoryList">
                 <div class="dl_info">
-                    <a class="cs-left" href="#/">
-                        <div class="naming">
-                            <p><span>12 April 202 &nbsp;</span> Lorem Ipsum Is Simply Dummy Text.</p>
+                    <a class="cs-left wp100" href="#/">
+                        <div class="naming wp100 df ac">
+                            <p>Date : <span>{{row.date_created | date : 'd-MMM-y'}} &nbsp;</span></p>
+                            <p class="ml15">Status : <span class="yellow-clr">{{row.status}}</span></p>
                         </div>
                     </a>
                 </div>
+                <a class="dl-add">
+                    <p><span>Category:- </span> {{row.category}}</p>
+                </a>
+                <a class="dl-add" ng-if="row.category=='Scan Related Issue'">
+                    <p><span>Serial No:- </span> {{row.serialno}}</p>
+                </a>
+                
                 <a class="dl-add" href="#/">
-                    <p><span>Remark</span><br>It is a long established fact that a reader will be distracted by the readable</p>
+                    <p><span>Remark :- </span> {{row.remark}}</p>
                 </a>
             </div>
-
-            <div class="figure">
-                <div class="dl_info">
-                    <a class="cs-left" href="#/">
-                        <div class="naming">
-                            <p><span>12 April 202 &nbsp;</span> Lorem Ipsum Is Simply Dummy Text.</p>
-                        </div>
-                    </a>
-                </div>
-                <a class="dl-add" href="#/">
-                    <p><span>Remark</span><br>It is a long established fact that a reader will be distracted by the readable</p>
-                </a>
-            </div>
+            
         </div>
         
     </ion-content>

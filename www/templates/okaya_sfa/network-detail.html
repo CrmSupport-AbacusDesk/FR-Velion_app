@@ -1,37 +1,41 @@
 <ion-view view-title="Network Detail">
-    
+
     <ion-nav-buttons side="left">
-        <a href="#/tab/distribution-network" class="cs-backbtn button button-icon icon ion-android-arrow-back font18 fff"></a>
+        <a href="#/tab/distribution-network"
+            class="cs-backbtn button button-icon icon ion-android-arrow-back font18 fff"></a>
     </ion-nav-buttons>
-    
+
     <ion-nav-buttons side="right" class="custom-right-btn">
         <div ng-if="drDetail.drData.type_name=='Dealer'" class="right-nav-btn nav-search">
-            <a ng-click="goToEditPage()" ><i class="material-icons">edit</i></a>
+            <a ng-click="goToEditPage()"><i class="material-icons">edit</i></a>
         </div>
     </ion-nav-buttons>
-    
+
     <ion-content>
         <div ng-if="drDetail && drDetail.drData" class="coman-list clrd-bg">
             <div class="center-item">
                 <div class="cs-icon large">
                     <img ng-if="!drDetail.drData.profile_image" src="img/profile.svg" class="default wp70">
-                    <img ng-if="drDetail.drData.profile_image" ng-click="showImages(0,drDetail.drData.profile_image)" src="{{uploadURL}}{{drDetail.drData.profile_image}}">
+                    <img ng-if="drDetail.drData.profile_image" ng-click="showImages(0,drDetail.drData.profile_image)"
+                        src="{{uploadURL}}{{drDetail.drData.profile_image}}">
                 </div>
                 <div class="cs-content">
                     <p>{{drDetail.drData.dr_name ? drDetail.drData.dr_name : 'N/A'}}</p>
                     <span>{{drDetail.drData.dr_code}}</span>
-                    <a ng-if="drDetail.drData.email" class="icon-content"><i class="material-icons">email</i> {{drDetail.drData.email ? drDetail.drData.email : 'N/A'}}</a>
+                    <a ng-if="drDetail.drData.email" class="icon-content"><i class="material-icons">email</i>
+                        {{drDetail.drData.email ? drDetail.drData.email : 'N/A'}}</a>
                 </div>
-                <a ng-if="drDetail.drData.sfa_contact_no" href="tel: {{drDetail.drData.sfa_contact_no}}" class="dialer"><i class="material-icons">call</i></a>
+                <a ng-if="drDetail.drData.sfa_contact_no" href="tel: {{drDetail.drData.sfa_contact_no}}"
+                    class="dialer"><i class="material-icons">call</i></a>
             </div>
-            
-            
+
+
             <div class="pdlr dflex-data mt10">
                 <div class="bdr-field wp100">
                     <span>State</span>
                     <p>{{drDetail.drData.contact_name ? drDetail.drData.contact_name : 'N/A'}}</p>
                 </div>
-                
+
                 <div class="bdr-field wp100">
                     <span>District</span>
                     <p>{{drDetail.drData.type_name}}</p>
@@ -42,44 +46,48 @@
                     <span>Zone</span>
                     <p>{{drDetail.drData.zone ? drDetail.drData.zone : 'N/A'}}</p>
                 </div>
-                
+
                 <div class="bdr-field wp100">
                     <span>Branch</span>
                     <p>{{drDetail.drData.branch ? drDetail.drData.branch : 'N/A'}}</p>
                 </div>
             </div>
-            
-            
+
+
         </div>
         <div class="text-box" style="margin: 16px 16px;">
             <h2>Division</h2>
             <div class="text-box padding0 border0 background-transparent">
-                <span ng-repeat="var in drDetail.drData.assign_segment" class="cs-chips background-fff border-radius3 margin0">{{var.category_name ? var.category_name: 'N/A'}}</span>
+                <span ng-repeat="var in drDetail.drData.assign_segment"
+                    class="cs-chips background-fff border-radius3 margin0">{{var.category_name ? var.category_name:
+                    'N/A'}}</span>
             </div>
-            
+
         </div>
-        
-        <div class="text-box" style="margin: 0px 16px;">
+
+        <div class="text-box" style="margin: 0px 16px;" ng-if="drDetail.drData.type_name == 'Distributor'">
             <h2>Account Details</h2>
             <div class="order-tags">
                 <div class="tag-head border0">
                     <h1>Credit Limit</h1>
                     <div class="filter-btns">
-                        <button class="font13 mr5 radius4" ng-click="gotoDrPage('outstanding',true)">₹ {{drDetail.drData.credit_limit ? drDetail.drData.credit_limit : '0'}}</button>
+                        <button class="font13" ng-click="gotoDrPage('outstanding',true)">₹
+                            {{drDetail.drData.credit_limit ? drDetail.drData.credit_limit : '0'}}</button>
                     </div>
                 </div>
             </div>
-            
+
             <div class="order-tags mb0">
                 <div class="tag-head border0">
                     <h1>Outstanding</h1>
                     <div class="filter-btns">
-                        <button class="font13 mr5 radius4" ng-click="gotoDrPage('outstanding',true)">₹ {{drDetail.drData.credit_exposure ? drDetail.drData.credit_exposure : 0}}</button>
+                        <button class="font13" ng-click="gotoDrPage('outstanding',true)">₹
+                            {{drDetail.drData.credit_exposure ? drDetail.drData.credit_exposure : 0}}</button>
                     </div>
                 </div>
             </div>
         </div>
-        
+
         <div class="summary-table nrmal-table padding16">
             <table>
                 <tr ng-repeat="row in drDetail.drData.assign_user">
@@ -88,35 +96,40 @@
                 </tr>
             </table>
         </div>
-        
+
         <div ng-if="drDetail && drDetail.drData" class="forword-page flat-item anchor-bdr padding16">
-            
-            
-            <a ng-click="gotoOrder('primary',drDetail.drData.id,drDetail.drData.dr_name)" ng-if="drDetail.drData.type_name == 'Distributor'">
-                <p><span>{{drDetail.priOrderData.length}}</span></p>
-                <div class="info">Primary Order</div>
+
+
+            <a ng-click="gotoOrder(drDetail.drData.dr_code)"
+                ng-if="drDetail.drData.type_name == 'Distributor'">
+                <p><span>{{drDetail.priOrderData}}</span></p>
+                <div class="info">Pending Order</div>
             </a>
-            <a ng-click="gotoOrder('secondary',drDetail.drData.id,drDetail.drData.dr_name)" ng-if="drDetail.drData.type_name == 'Distributor'">
+            <!-- <a ng-click="gotoOrder('secondary',drDetail.drData.id,drDetail.drData.dr_name)"
+                ng-if="drDetail.drData.type_name == 'Distributor'">
                 <p><span>{{drDetail.secOrderData.length}}</span></p>
                 <div class="info">Secondary Order</div>
-            </a>
-            <a ng-click="gotoOrder('primary',drDetail.drData.id,drDetail.drData.dr_name)" ng-if="drDetail.drData.type_name == 'Distributor'">
-                <p><span>{{drDetail.priOrderData.length}}</span></p>
+            </a> -->
+            <a ng-click="goToBilling(drDetail.drData.dr_code,'Billing')"
+                ng-if="drDetail.drData.type_name == 'Distributor'">
+                <p><span>{{drDetail.billing_data}}</span></p>
                 <div class="info">Billing Details</div>
             </a>
-            
+
+            <a ng-click="goToBilling(drDetail.drData.dr_code,'Account_statment')" ng-if="drDetail.drData.type_name == 'Distributor'">
+                <div class="info">Account Statment</div>
+            </a>
+
         </div>
-        
-        
+
+
         <div class="h70"></div>
     </ion-content>
-    
-    <!-- ng-if="drDetail.checkInData.canNewMeetingStart && drDetail.checkInData.canNewMeetingStart == 'No'" -->
-    
-    <ion-footer  class="ft2_btns h50 pt0 cs-footerr cs-save-btn" ng-if="drDetail.checkInData.canNewMeetingStart && drDetail.checkInData.canNewMeetingStart == 'No'">
-        <a  class="wp100 h35 padding0"  style="line-height: 35px;"   href="#/tab/activity-meeting-end">
-            End Meeting with {{drDetail.checkInData.drName}}
-        </a>
-    </ion-footer>
-    
+    <div class="bar bar-footer bar-balanced" ng-if='drDetail.drData.orp_status=="Pending" &&  loginData.channelSalesLogin==true'>
+        <div class="ods-btns" style="width: 100%;" > <!-- flt -->
+          <button class="button button-balanced" ng-click="updateStatus('Approve')">APPROVE</button>
+          <button class="button button-assertive" ng-click="updateStatus('Reject')">REJECT</button>>
+        </div>
+      </div>
+
 </ion-view>

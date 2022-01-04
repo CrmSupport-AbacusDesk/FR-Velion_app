@@ -31,38 +31,56 @@
                 </a>
 
                 <a ng-click="onGoToRootPageHandler('sfaPriOrder-list')">
-                    <p><img src="img/menu-icon/pr-order.svg" alt="">Pending Primary Orders</p>
+                    <p><img src="img/menu-icon/pr-order.svg" alt="">Microtek Pending Orders</p>
                     <i class="material-icons">keyboard_arrow_right</i>
                 </a>
 
-                <a ng-click="onGoToRootPageHandler('billing-list')">
+                <a ng-click="onGoToRootPageHandler('primary-order-list')">
+                    <p><img src="img/menu-icon/delivery.svg" alt="">Primary Orders</p>
+                    <i class="material-icons">keyboard_arrow_right</i>
+                </a>
+
+                <a ng-click="onGoToRootPageHandler('sfa_billing_list')">
                     <p><img src="img/menu-icon/collection-plan.svg" alt="">Billing Details</p>
                     <i class="material-icons">keyboard_arrow_right</i>
                 </a>
 
-                <a ng-click = "gotoDrPage(Distributor,false)" >
+                <a ng-click="gotoDrPage('Distributor',false)">
                     <p><img src="img/menu-icon/icon-customernetwork.svg" alt="">Distributor</p>
                     <i class="material-icons">keyboard_arrow_right</i>
                 </a>
 
-                <a ng-click = "gotoDrPage(Dealer,false)" >
+                <a ng-click="gotoDrPage('Dealer',false)">
                     <p><img src="img/menu-icon/dealer.svg" alt="">Dealer</p>
                     <i class="material-icons">keyboard_arrow_right</i>
                 </a>
+
+                <a ng-click="gotoDrPage('Electrician',false)">
+                  <p><img src="img/menu-icon/mechanic.png" alt="">Electrician</p>
+                  <i class="material-icons">keyboard_arrow_right</i>
+              </a>
 
                 <a href="#/tab/stock">
                     <p><img src="img/menu-icon/stock.svg" alt="">Stock</p>
                     <i class="material-icons">keyboard_arrow_right</i>
                 </a>
 
-                <a ng-click = "gotoDrPage('outstanding',true)">
+                <a ng-click="gotoDrPage('outstanding',true)">
                     <p><img src="img/menu-icon/pricelist_icon.svg" alt="">Outstanding Amount List</p>
                     <i class="material-icons">keyboard_arrow_right</i>
                 </a>
-             
+
                 <button ng-click="logout()">
                     <p><i class="material-icons">power_settings_new</i>LOGOUT</p>
                 </button>
+
+                <div class="okaya_version">
+                    <div class="version_section">
+                        <img src="img/menu-icon/favicon.png" alt="">
+                        <p>Version {{$root.current_app_version}}</p>
+                        <!-- <p>Version 0.0.1</p> -->
+                    </div>
+                </div>
             </div>
         </div>
     </ion-content>

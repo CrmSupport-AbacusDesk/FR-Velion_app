@@ -1,27 +1,30 @@
 <ion-view view-title="Distribution Network">
 
     <ion-nav-buttons side="left">
-        <a ng-click="goToBackPageHandler()" class="cs-backbtn button button-icon icon ion-android-arrow-back font18 fff"></a>
+        <a ng-click="goToBackPageHandler()"
+            class="cs-backbtn button button-icon icon ion-android-arrow-back font18 fff"></a>
     </ion-nav-buttons>
 
     <ion-nav-buttons side="right" class="custom-right-btn">
-        <div ng-click = "onSeachActionHandler('open')" class="right-nav-btn nav-search">
+        <div ng-click="onSeachActionHandler('open')" class="right-nav-btn nav-search">
             <a menu-toggle="left"><i class="material-icons">search</i></a>
         </div>
         <div ng-class="isSearchBarOpen ? 'active' : ''" class="search-filter">
-            <input ng-model = "data.search" type="text" id = "searchData" ng-change = "getNetworkList(data.type,'',data.status,'',data.search)">
-            <a ng-click = "onSeachActionHandler('close')" placeholder = "Search" class="close-filter"><i class="material-icons">keyboard_backspace</i></a>
+            <input ng-model="data.search" type="text" id="searchData"
+                ng-change="data.search.length>=3?getNetworkList(data.type,'',data.status,'',data.search):''">
+            <a ng-click="onSeachActionHandler('close')" placeholder="Search" class="close-filter"><i
+                    class="material-icons">keyboard_backspace</i></a>
         </div>
     </ion-nav-buttons>
 
     <div class="sticky bg-white top50">
-        <div  class="round-tab">
+        <div class="round-tab">
             <ul>
-                <li ng-click = "getNetworkList('Distributor','','','');networkTabActive = 1" ng-class = "networkTabActive == 1 ? 'active' : ''">
+                <li ng-click="getNetworkList('Distributor','clearNetwork','','');networkTabActive = 1"
+                    ng-class="networkTabActive == 1 ? 'active' : ''">
                     <a>Distributor</a>
                 </li>
-
-                <li ng-click = "getNetworkList('Dealer','','Pending','');networkTabActive = 2" ng-class = "networkTabActive == 2 ? 'active' : ''">
+                <li ng-click = "getNetworkList('Dealer','','Pending','');networkTabActive = 2" ng-class = "networkTabActive == 2 ? 'active' : ''">              
                     <a>Dealer</a>
                 </li>
             </ul>
@@ -29,6 +32,7 @@
     </div>
 
     <ion-content class="mt55">
+
         <!-- <ion-refresher on-refresh="data.search = ''; onSetCurrentPageHandler();getOrderListData('onRefresh')">
             <ion-refresher-content
             pullingIcon="arrow-dropdown"
@@ -37,7 +41,6 @@
             refreshingText="Refreshing...">
         </ion-refresher-content>
     </ion-refresher> -->
-
 
     <div  ng-repeat = "row in myNetworkList" class="coman-list" >
         <div class="top-head" ng-click = "goToNetworkDetail(row.id)">

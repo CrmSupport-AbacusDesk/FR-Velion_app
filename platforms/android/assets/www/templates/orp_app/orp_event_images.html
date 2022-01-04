@@ -1,0 +1,27 @@
+<ion-view hide-nav-bar="true">   
+    
+    <ion-header-bar class="opr_ion_header">
+        <div class="cs-left">
+            <button class="back-button" ng-click="goToBackPageHandler()"><i class="material-icons">arrow_back</i></button>
+            <h1 class="orp_title">News & Evenet Detail</h1>
+        </div>
+    </ion-header-bar>
+    
+    <ion-content>
+       
+        <div class="padding16">
+            <h2 class="text-heading">{{data.title}}</h2>
+            <div class="cs-desc">
+                <p>{{data.description}}
+                </p>
+            </div>
+        </div>
+
+        <div class="tvc_gallery" >
+            <div ng-click="showImages($index)" class="thumb" ng-repeat="row in newsEventImagesData"><img src="{{orpURL}}{{row.image}}" alt=""></div>
+        </div>
+       
+    </ion-content>
+</ion-view>
+
+

@@ -1,70 +1,24 @@
 <ion-view view-title="Lead Detail">
-    <!-- BACKBTN ICON START -->
     <ion-nav-buttons side="left">
-        <a href="#/tab/lead-list" class="cs-backbtn button button-icon icon ion-android-arrow-back font18 fff"></a>
+        <a ng-click="goToBackPageHandler()" class="cs-backbtn button button-icon icon ion-android-arrow-back font18 fff"></a>
     </ion-nav-buttons>
-    <!-- BACKBTN ICON END-->
-    
-    <!-- EDIT ICON START-->
     <ion-nav-buttons side="right" class="custom-right-btn">
-        <div class="right-nav-btn nav-search">
-            <a ng-click="goToEditPage()"><i class="material-icons">edit</i></a>
+        <div ng-click="onShowPopUpHandler($event, drDetail.drData.id, 'leadDetail')" class="right-nav-btn nav-search">
+            <a ><i class="material-icons">more_vert</i></a>
         </div>
     </ion-nav-buttons>
-    <!-- EDIT ICON END-->
-    
     <ion-content>
-        
-        <div class="sticky-column bdr-botm">
-            <div  class="coman-list margin0 radius0 no-shadow">
-                <div class="top-head">
-                    <ul>
-                        <li>
-                            <p>{{dateFormat(leadDetailData.date_created)}}</p>
-                            <span>Date Created</span>
-                        </li>
-                        <li>
-                            <p>{{leadDetailData.created_by_name}}</p>
-                            <span>Created By</span>
-                        </li>
-                        <li>
-                            <p>{{leadDetailData.source_name}}</p>
-                            <span>Source</span>
-                        </li>
-                    </ul>
-                    <!-- <a class="right-btn">Edit Lead</a> -->
-                </div>
-                
-                <div class="center-item padding10">
-                    <div class="cs-icon">{{leadDetailData.dr_name[0] ? leadDetailData.dr_name[0] : '--'}}</div>
-                    <div class="cs-content ellipsis">
-                        <p class="ellipsis">{{leadDetailData.dr_name}}</p>
-                        <span class="ellipsis">{{leadDetailData.contact_name ? leadDetailData.contact_name : 'N/A'}} - {{leadDetailData.contact_mobile_no}}</span>
-                    </div>
-                    <a href="tel: {{row.contact_mobile_no}}" class="dialer"><i class="material-icons">call</i></a>
-                </div>
-                <div class="bottom-sec">
-                    <p><strong>Address</strong>: {{leadDetailData.street}} {{leadDetailData.state_name}}{{leadDetailData.district_name ? ', '+leadDetailData.district_name : ''}} {{leadDetailData.city ? ', '+leadDetailData.city : ''}}{{leadDetailData.pincode ? '- '+leadDetailData.pincode : ''}}</p>
-                </div>
-            </div>
-        </div>
-        <div  class="coman-list radius0 no-shadow mb0">
-            <div class="bottom-sec flat padding0">
-                <p><strong>Description</strong>: {{leadDetailData.description ? leadDetailData.description : 'N/A'}}</p>
-            </div>
-        </div>
-        
-        <div ng-if="drDetail && drDetail.drData" class="coman-list clrd-bg sticky" hidden>
+        <div ng-if="drDetail && drDetail.drData" class="coman-list clrd-bg sticky">
             <div class="center-item">
                 <div class="cs-icon">{{drDetail.drData.dr_name[0] ? drDetail.drData.dr_name[0] : '--'}}</div>
                 <div class="cs-content">
                     <p>{{drDetail.drData.dr_name ? drDetail.drData.dr_name : 'N/A'}}</p>
-                    <!-- <span>{{drDetail.drData.contact_name ? drDetail.drData.contact_name : 'N/A'}}</span> -->
+                    <span>{{drDetail.drData.contact_name ? drDetail.drData.contact_name : 'N/A'}}</span>
                     <a class="icon-content"><i class="material-icons">email</i> {{drDetail.drData.email ? drDetail.drData.email : 'N/A'}}</a>
                 </div>
                 <a href="tel: {{drDetail.drData.contact_mobile_no}}" class="dialer"><i class="material-icons">call</i></a>
             </div>
-            
+
             <div class="top-head">
                 <ul>
                     <li>
@@ -81,9 +35,9 @@
                     </li>
                 </ul>
             </div>
-            
+
             <div class="pdlr mt10">
-                <div class="bdr-field mr0">
+                <div class="bdr-field">
                     <span>Description</span>
                     <p>{{drDetail.drData.description ? drDetail.drData.description : 'N/A'}}</p>
                 </div>
@@ -93,113 +47,77 @@
                 </div>
             </div>
         </div>
-        
-        <!-- ng-if="drDetail && drDetail.drData" -->
-        <div class="padding16">
-            <div class="btn-group">
-                <a ng-click = "gotoPage(leadDetailData.id,leadDetailData.dr_name,leadDetailData.contact_mobile_no,'lead-activity-list',leadDetailData.type_name)">
-                    <span>{{leadDetailData.activity.length ? leadDetailData.activity.length : '0'}}</span>
+
+        <div ng-if="drDetail && drDetail.drData" class="forword-page flat-item padding16">
+            <a href="#/tab/lead-activity-list" class="no-height">
+                <p><span>{{drDetail.checkInData.checkInData.length}}</span></p>
+                <div class="info">
                     Activity
-                </a>
-                <a ng-click="gotoPage(leadDetailData.id,leadDetailData.dr_name,leadDetailData.contact_mobile_no,'lead-followup-list',leadDetailData.type_name)">
-                    <span>{{leadDetailData.followup.length ? leadDetailData.followup.length : '0'}}</span>
-                    Follow Up
-                </a>
-                
-                <a ng-click="gotoPage(leadDetailData.id,leadDetailData.dr_name,leadDetailData.contact_mobile_no,'lead-requirement-list',leadDetailData.type_name)">
-                    <span>{{leadDetailData.requirement.length ? leadDetailData.requirement.length : '0'}}</span>
-                    Requirements
-                </a>
-                <a ng-click="gotoPage(leadDetailData.id,leadDetailData.dr_name,leadDetailData.contact_mobile_no,'lead-quotation-list',leadDetailData.type_name)">
-                    <span>{{leadDetailData.quotation.length ? leadDetailData.quotation.length : '0'}}</span>
-                    Quotation
-                </a>
-                <a ng-click="gotoPage(leadDetailData.id,leadDetailData.dr_name,leadDetailData.contact_mobile_no,'lead-order-list',leadDetailData.type_name)">
-                    <span>{{leadDetailData.order.length ? leadDetailData.order.length : '0'}}</span>
-                    Order
-                </a>
-            </div>
+                </div>
+            </a>
+
+            <a href="#/tab/lead-followup-list" class="no-height">
+                <p><span>{{drDetail.followUpData.length}}</span></p>
+                <div class="info">
+                    <h2> Follow Up</h2>
+                    <span ng-if="drDetail.nextFollowUpData && drDetail.nextFollowUpData.followUpDateInFormat" >Next Folllow Up - <strong>{{drDetail.nextFollowUpData.followUpDateInFormat}}</strong></span>
+                </div>
+            </a>
+
+            <a href="#/tab/lead-requirement-list">
+                <p><span>{{drDetail.requirementData.length}}</span></p>
+                <div class="info">Requirements</div>
+            </a>
+
+            <a href="#/tab/lead-quotation-list">
+                <p><span>{{drDetail.quotationData.length}}</span></p>
+                <div class="info">Quotation</div>
+            </a>
+
+            <a href="#/tab/lead-order-list">
+                <p><span>{{drDetail.orderData.length}}</span></p>
+                <div class="info">Order</div>
+            </a>
+
         </div>
 
-        <div class="ft2_btns cs-save-btn">
-            <a class="wp100 h35 padding0 text-center" style="line-height: 35px; letter-spacing: 1.5px;"  ng-click="getSfaUserList();reasignLeadModel($event);">REASIGN LEAD</a>
-        </div>
+        <div ng-if="drDetail.contactData.length > 0" style="padding: 0px 16px;">
 
-        <div ng-if="leadDetailData.contact.length > 0">
-            <div class="cs-bg-heading" style="padding: 0px 16px;">
+            <div class="cs-bg-heading">
                 <h2>Contact Persons</h2>
             </div>
-            <!-- loop Start -->
-            <div  class="coman-list" ng-repeat="row in leadDetailData.contact">
-                <div class="center-item padding10">
-                    <div class="cs-icon" >{{row.name[0] ? row.name[0] : '--'}}</div>
-                    <div class="cs-content ellipsis">
-                        <p class="ellipsis">{{row.name}}</p>
-                        <span class="ellipsis">{{row.mobile}} / {{row.email}}</span>
-                    </div>
-                    <a href="tel: {{row.mobile}}" class="dialer"><i class="material-icons">call</i></a>
+        </div>
+        <div class="cart-card padding16 mb10" ng-repeat = "row in drDetail.contactData">
+            <div class="cs-flex" >
+                <div class="bdr-field wp100">
+                    <span>Name</span>
+                    <p>{{row.name}}</p>
                 </div>
-                <!-- <div class="top-head bdr-bottom0 bdr-top1" style="background: #f9f9f9;">
-                    <ul>
-                        <li>
-                            <p>XYZ</p>
-                            <span>Designation No</span>
-                        </li>
-                        <li>
-                            <p>{{row.email}}</p>
-                            <span>Email ID</span>
-                        </li>
-                    </ul>
-                </div> -->
+                <div class="bdr-field wp100">
+                    <span>Mobile No</span>
+                    <p>{{row.mobile}}</p>
+                </div>
             </div>
-            <!-- loop end -->
-        </div>
-        
-        <div class="upload-doc" ng-if="drDetail.attachments.length > 0">
-            <div style="padding-left: 10px;">Attachment</div>
-            <ul>
-                <li class="image-upload" ng-repeat="mediadatas in drDetail.attachments" ng-click="showImages(0,mediadatas.image_name)">
-                    <img src="{{uploadURL+mediadatas.image_name}}">
-                </li>
-            </ul>
-        </div>
-    </ion-content>    
-    
-    <ion-footer class="ft2_btns csm-footer-tabs cs-footerr bg-none cs-save-btn" >
-        <a class="wp100 h35 padding0" ng-if="!isNewMeetingStart"  href="#/tab/lead-meeting-end" style="line-height: 35px;">
-            End Meeting with {{dr_data.dr_name}}
-        </a>
-    </ion-footer>
-    
-    <script id="reasign-plan" type="text/ng-template">
-        <ion-modal-view style="background: rgba(0, 0, 0, 0.7);">
-            <ion-content class="padding">
-                <div class="modal-outer ht100 padding0">
-                    <div class="modal-cs">
-                        <div class="modal-head">
-                            <h2 class="title font12 font500">Reassign Lead</h2>
-                            <button class="button button-clear button-primary" style="min-height: 33px; height: 33px;" ng-click="reasign_popovers.hide()">
-                                <i class="material-icons font17">clear</i>
-                            </button>
-                        </div>
-                        
-                        <div class="padding10">
-                            <div class="field-input">
-                                <div class="add-css-select pt0 selectopt no-padding pb16 add2  df afs">
-                                    <searchable-multiselect display-attr="Key" selected-items="data.user_name" all-items="userList" add-item="single_select(item)" input=getSfaUserList() remove-item="removeItemFromList(item)" class="wp100">
-                                    </searchable-multiselect>
-                                </div>
-                            </div>
-                        </div> 
-                        
-                        <div class="sgsave padding10">
-                            <button class="h30 font11" ng-click="reasign_popovers.hide();reAssignLeadData()">
-                                SAVE<i class="material-icons ml10">arrow_right_alt</i>
-                            </button>
-                        </div>
-                    </div>
+            <div class="cs-flex" >
+                <div class="bdr-field wp100">
+                    <span>Email ID</span>
+                    <p>{{row.email}}</p>
                 </div>
-            </ion-content>
-        </ion-modal-view>
-    </script>
+                <div class="bdr-field wp100">
+                    <span>Designation No</span>
+                    <p>{{row.designation}}</p>
+                </div>
+            </div>
+        </div>
+
+            <div class="upload-doc" ng-if="drDetail.attachments.length > 0">
+                <div style="padding-left: 10px;">Attachment</div>
+                <ul>
+                    <li class="image-upload" ng-repeat="mediadatas in drDetail.attachments" ng-click="showImages(0,mediadatas.image_name)">
+                        <img src="{{uploadURL+mediadatas.image_name}}">
+                    </li>
+                </ul>
+            </div>
+    </ion-content>
+
 </ion-view>

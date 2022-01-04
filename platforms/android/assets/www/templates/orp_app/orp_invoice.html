@@ -1,5 +1,5 @@
 <ion-view view-title="Invoice" hide-nav-bar="true">
-
+    
     <ion-header-bar class="opr_ion_header">
         <div class="cs-left">
             <button class="back-button" ng-click="goToBackPageHandler()"><i class="material-icons">arrow_back</i></button>
@@ -10,84 +10,79 @@
     
     <ion-content>
         <div class="padding16">
-            <div class="orp-select">
+            <!-- <div class="orp-select">
                 <label>
-                    <p>Select Dealer Name</p>
+                    <p>Select Retailer Name</p>
                     <select>
                         <option value="1">Ram Batteries</option>
                     </select>
                 </label>
-            </div>
+            </div> -->
             
-            <div class="or_upload">
-                <label>
-                    <input type="file" style="display: none;">
+            <div class="field-input mt10" ng-if="loginData.loginTypeId == '6'">
+                <label for="last_name" class="fix-label">Select Retailer Name</label>
+                <div class="add-css-select pt0 selectopt no-padding add2">
+                    <searchandselect selecteditem="search.dealer" values="assignDealerList" key="Key"  totalrecords="totalStateRecords" onscroll="getAssignDealerList(searchKey)"></searchandselect>
+                </div>
+            </div>
+            <div class="or_upload grid-item">
+                <label ng-click="onImageTypeHandler('invoice')">
                     <img src="img/upload_camera-icon.svg" alt="" class="camera_icon">
                     <p>Upload Invoice</p>
                 </label>
                 
-                <label>
-                    <button><i class="material-icons">delete_sweep</i></button>
-                    <img src="img/okaya-img/tvc_1.png" alt="">
+                <label ng-repeat="row in mediaData">
+                    <button ng-click="delete_img($index)" ><i class="material-icons">delete_sweep</i></button>
+                    <img src="{{row.src}}" alt="">
                 </label>
             </div>
             
-            <div class="cs_orp-bttn mt16">
-                <a href="" class="active">SAVE</a>
+            <div class="cs_orp-bttn mt16" ng-click="uploadInvoiceData()">
+                <a class="active">SAVE</a>
             </div>
         </div>
         
-        
-        
-        
-        <div class="op_heading"><h1>History</h1></div>
-        
-        <div class="invoice_listing">
-            <div class="figure">
-                <div class="cs-left">
-                    <p>Ram Batteries</p>
-                    <p>Uploaded Date : 12 May 2020</p>
-                </div>
-                <div class="cs-right">
-                    <a href=""><img src="img/invoice.png" alt=""></a>
-                    <a href=""><img src="img/invoice.png" alt=""></a>
-                </div>
-            </div>
-            
-            <div class="figure">
-                <div class="cs-left">
-                    <p>Ram Batteries</p>
-                    <p>Uploaded Date : 12 May 2020</p>
-                </div>
-                <div class="cs-right">
-                    <a href=""><img src="img/invoice.png" alt=""></a>
-                </div>
-            </div>
-            
-            <div class="figure">
-                <div class="cs-left">
-                    <p>Ram Batteries</p>
-                    <p>Uploaded Date : 12 May 2020</p>
-                </div>
-                <div class="cs-right">
-                    <a href=""><img src="img/invoice.png" alt=""></a>
-                </div>
-            </div>
-            
-            <div class="figure">
-                <div class="cs-left">
-                    <p>Ram Batteries</p>
-                    <p>Uploaded Date : 12 May 2020</p>
-                </div>
-                <div class="cs-right">
-                    <a href=""><img src="img/invoice.png" alt=""></a>
-                    <a href=""><img src="img/invoice.png" alt=""></a>
-                    <a href=""><img src="img/invoice.png" alt=""></a>
+        <div ng-if="invoiceHistoryData.length">
+            <div class="op_heading"><h1>History</h1></div>
+            <div class="invoice_listing">
+                <div class="figure" ng-repeat="row in invoiceHistoryData">
+                    <div class="cs-left">
+                        <p>{{row.dealer_name}}</p>
+                        <p>Date : {{row.date_created | date:'d-MMM-y'}}</p>
+                    </div>
+                    <div class="cs-right" >
+                        <a  ng-if="row.doc.length > 0" ng-click="openModel(row.doc[0].image)" >
+                            <img src="{{orpURL}}/{{row.doc[0].image}}" alt="">
+                        </a>
+                        
+                        <a ng-if="row.doc.length > 1" ng-click="goToInvoiceImagePage(row.doc,row.dealer_name)">
+                            <img src="{{orpURL}}/{{row.doc[2].image}}" alt="">
+                            <label class="more-img"><i class="material-icons">add</i>{{row.doc.length - 1}}</label>
+                        </a>
+                        
+                        <a class="del-row-btn" ng-click="removeInvoice(row.id)" ><i class="material-icons">delete_sweep</i></a>
+                        
+                    </div>
                 </div>
             </div>
         </div>
-        
+       
     </ion-content>
+    
+    <script id="add-status" type="text/ng-template">
+        <ion-modal-view style="background: rgba(0, 0, 0, 0.7);">
+            <ion-content class="padding">
+                <div class="modal-outer fancy-box-model">
+                    <div class="modal-cs">
+                        <button class="fix-close" ng-click="data.statusModel.hide()"><i class="material-icons">clear</i></button>
+                        <div class="lg-img">
+                            <img src="{{orpURL}}/{{imageSRC}}" alt="">
+                        </div>
+                    </div>
+                </div>
+            </ion-content>
+        </ion-modal-view>
+    </script>
 </ion-view>
 
 

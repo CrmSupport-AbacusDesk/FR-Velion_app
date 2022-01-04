@@ -1,0 +1,36 @@
+<ion-view view-title="Get Reports" hide-nav-bar="true" ng-init = "getCataloguePdf()">
+
+    <ion-header-bar class="opr_ion_header">
+        <div class="cs-left">
+            <button class="back-button" ng-click="goToBackPageHandler()"><i class="material-icons">arrow_back</i></button>
+            <h1 class="orp_title">Catalogue</h1>
+        </div>
+    </ion-header-bar>
+
+
+    <ion-content>
+        <!-- <div class="gt_report">
+
+            <a ng-click="openCataloguePdf('Leaflet_Mtekpower.pdf','IB – Mtekpower Catalogue')">IB – Mtekpower</a>
+            <a ng-click="openCataloguePdf('Leafleat_Digipower.pdf','IB – Digipower Catalogue')">IB – Digipower</a>
+        </div> -->
+        <div  class="vd_img_listing padding16">
+            <div class="figure" ng-repeat="row in catalogueList" ng-click="openCataloguePdf(row.pdf_name,row.pdf_title)">
+                <div  class="thumb" ng-if="row.pdf_category_image!=''"><img src="{{uploadURL}}{{row.pdf_category_image}}" alt=""></div>
+                <div  class="thumb" ng-if="row.pdf_category_image==''"><img src="img/dft_product.svg" alt=""></div>
+                <div  class="naming">
+                    <h1>{{row.pdf_title}}</h1>
+                </div>
+            </div>
+            <div class="data-not-found" ng-if="catalogueList.length == 0" >
+                <div class="outer">
+                    <div class="innear">
+                        <img src="img/data-not-found.svg" alt="">
+                        <h2>Temporarily , No Data Available!</h2>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </ion-content>
+</ion-view>

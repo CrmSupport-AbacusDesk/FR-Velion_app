@@ -1,31 +1,26 @@
 <ion-view view-title="Scan" hide-nav-bar="true">
 
-    <ion-header-bar class="opr_ion_header">
-        <div class="cs-left">
-            <button class="back-button" ng-click="goToBackPageHandler()"><i class="material-icons">arrow_back</i></button>
-            <h1 class="orp_title">Scan</h1>
-        </div>
-    </ion-header-bar>
-
-
-    
     <ion-content>
-        
-        <div class="orp_alerts">
+
+        <div class="orp_alerts" ng-if="result_data.status == 'error'">
             <div class="al_container">
-                <div class="icon"><i class="material-icons">clear</i></div>
+                <div class="icon" ng-if="data.activity == 'distributor' || data.activity == 'dealer_purchase' || data.activity == 'electrician_scan'"><a  href="#/orptab/orp_scan_purchase"></a><i class="material-icons">clear</i></div>
+                <div class="icon" ng-if="data.activity == 'dealer_sale'"><a  href="#/orptab/orp_scan_sale"></a><i class="material-icons">clear</i></div>
                 <div class="al_body">
                     <h1>Oops !</h1>
-                    <h2>Invalid Serial No.</h2>
+                    <h2>{{result_data.statusMessage}}</h2>
                 </div>
 
-                <div class="al_footer">
-                    <a href="#/" class="red_btn">Try Again</a>
+                <div class="al_footer" >
+                    <a class="green_btn" href='#/orptab/orp_scan_purchase' style="margin-right: 2px;">OK</a>
+                    <a class="red_btn" ng-click="startScan('scan','')" style="margin-left: 2px;">Try Again</a>
                 </div>
+                <!-- <div class="al_footer" >
+                </div> -->
             </div>
         </div>
 
-        <div class="orp_alerts">
+    <!-- <div class="orp_alerts" >
             <div class="al_container">
                 <div class="icon"><i class="material-icons">clear</i></div>
                 <div class="al_body">
@@ -33,27 +28,26 @@
                     <h2>Unauthorized Scan</h2>
                 </div>
 
-                <div class="al_footer">
+                <div class="al_footer" >
                     <button class="red_btn">Try Again</button>
                 </div>
             </div>
-        </div>
+        </div> -->
 
-        <div class="orp_alerts success">
+        <div class="orp_alerts success" ng-if="result_data.status == 'success'">
             <div class="al_container">
                 <div class="icon"><i class="material-icons">done</i></div>
                 <div class="al_body">
                     <h1>Success</h1>
-                    <h2>500 <span>Point Added in Your Wallet</span></h2>
+                    <h2>{{result_data.outputData.points}} <span>Points Added in Your Wallet</span></h2>
                 </div>
-
                 <div class="al_footer">
-                    <button class="blue_btn">Scan More Product</button>
-                    <a class="green_btn" style="width: 130px; margin-left: 16px;">Complete</a>
+                    <button class="blue_btn" ng-click="startScan('scan','')">Scan More Product</button>
+                    <a ng-if="data.activity == 'electrician_scan'" class="green_btn" style="width: 130px; margin-left: 16px;" href="#/orptab/orp_electrician_scan" >Complete</a>
+                    <a ng-if="data.activity == 'distributor' || data.activity == 'dealer_purchase'" class="green_btn" style="width: 130px; margin-left: 16px;" href="#/orptab/orp_scan_purchase" >Complete</a>
+                    <a ng-if="data.activity == 'dealer_sale'" class="green_btn" style="width: 130px; margin-left: 16px;" href="#/orptab/orp_scan_sale" >Complete</a>
                 </div>
             </div>
         </div>
-
-
     </ion-content>
 </ion-view>

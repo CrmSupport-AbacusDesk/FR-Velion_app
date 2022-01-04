@@ -1,11 +1,11 @@
-<ion-view view-title="Profile" >
-    
+<ion-view view-title="Profile">
+
     <!-- BACKBTN ICON START -->
     <ion-nav-buttons side="left">
         <a href="#/tab/dashboard" class="cs-backbtn button button-icon icon ion-android-arrow-back font18 fff"></a>
     </ion-nav-buttons>
     <!-- BACKBTN ICON END-->
-    
+
     <!-- HUMBURGER ICON START-->
     <ion-nav-buttons side="right" class="custom-right-btn">
         <div class="right-nav-btn nav-search">
@@ -13,44 +13,44 @@
         </div>
     </ion-nav-buttons>
     <!-- HUMBURGER ICON END-->
-    
+
     <ion-content class="profile-ex camera">
-        
+
         <div class="hiddent-x">
             <div class="profile-head">
-                
+
                 <div class="pr-icon">
-                    
+
                     <img ng-if="!userData.image" src="img/profile.svg" class="default">
                     <img ng-if="userData.image" src="{{uploadURL}}{{userData.image}}">
-                    
+
                     <button class="camera-btn" ng-click="onImageTypeHandler();">
                         <i class="material-icons">camera_alt</i>
                     </button>
                 </div>
-                
+
                 <h2 class="text-center">{{userData.name}}</h2>
             </div>
             <div class="listed">
-                
+
                 <ul>
                     <li>
                         <h2>Contact No.</h2>
                         <p ng-if="userData.contact_01 != ''">{{userData.contact_01}}</p>
                         <p ng-if="userData.contact_01 == ''">N A</p>
-                        
+
                     </li>
                     <li>
                         <h2>Alternate Contact No.</h2>
                         <p ng-if="userData.contact_02 != ''">{{userData.contact_02}}</p>
                         <p ng-if="userData.contact_02 == ''">N A</p>
-                        
+
                     </li>
                     <li>
                         <h2>Email</h2>
                         <p ng-if="userData.email != ''">{{userData.email}}</p>
                         <p ng-if="userData.email == ''">N A</p>
-                        
+
                     </li>
                     <li>
                         <h2>Username</h2>
@@ -60,12 +60,12 @@
                         <h2>Designation</h2>
                         <p>{{userData.designation}}</p>
                     </li>
-                    
+
                     <!-- <li >
                         <h2>Password</h2>
                         <p>{{userData.password}}</p>
                     </li> -->
-<!--                     
+                    <!--                     
                     <li>
                         <h2>Street</h2>
                         <p ng-if="userData.street != ''">{{userData.street}}</p>
@@ -94,6 +94,6 @@
             </div>
         </div>
     </ion-content>
-    
-    
+
+
 </ion-view>

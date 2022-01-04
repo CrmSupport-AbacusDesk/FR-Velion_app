@@ -1,31 +1,37 @@
-<ion-view view-title="Scheme & Offers" name="Wallet-History-view"  hide-nav-bar="true">
+<ion-view view-title="Scheme & Offers" name="Wallet-History-view"  hide-nav-bar="true" ng-init = "getOfferList()">
     
     <ion-header-bar class="opr_ion_header">
         <div class="cs-left">
+            <button class="back-button" ng-click="goToBackPageHandler()"><i class="material-icons">arrow_back</i></button>
             <h1 class="orp_title">Scheme & Offers</h1>
         </div>
     </ion-header-bar>
     
     <ion-content>
         <div class="offerlist">
-            <a href="#/orptab/orp_offerdetail" class="figure">
+            <a class="figure" ng-repeat="row in offer_list" ng-click = "offerDetail(row.id)">
                 <div class="desc">
                     <div class="off">
-                        <h1>Holi Lover Offer #0001</h1>
-                        <p>Valid Upto : 5 April 2020</p>
+                        <h1>{{row.title}} {{row.offer_code}}</h1>
+                        <p>Valid Upto : {{dateFormat(row.end_date)}}</p>
                     </div>
                     <div class="gifts">
-                        <div class="t-count">23</div>
+                        <div class="t-count">{{row.total_gift}}</div>
                         <div class="gin">
                             <p>Gift</p>
                             <p>Are Available</p>
                         </div>
                     </div>
                 </div>
-                <div class="thumb"><img src="img/holi_banner.jpg" alt=""></div>
+                <div class="thumb">
+                    <!-- <img ng-if ="" src="img/dft_product.svg " alt="">
+                    <img src="img/dft_product.svg " alt=""> -->
+                    <img ng-if="row.offer_image == ''" src="img/dft_product.svg" alt="">
+                    <img ng-if="row.offer_image != ''" src="{{uploadURL+row.offer_image}}" alt="">
+                </div>
             </a>
             
-            <a href="#/orptab/orp_offerdetail" class="figure">
+            <!-- <a href="#/orptab/orp_offerdetail" class="figure">
                 <div class="desc">
                     <div class="off">
                         <h1>Holi Lover Offer #0001</h1>
@@ -40,7 +46,16 @@
                     </div>
                 </div>
                 <div class="thumb"><img src="img/holi_banner.jpg" alt=""></div>
-            </a>
+            </a> -->
+        </div>
+
+        <div class="data-not-found" ng-if="!isRequestInProcess && offer_list.length == 0" >
+            <div class="outer">
+                <div class="innear">
+                    <img src="img/data-not-found.svg" alt="">
+                    <h2>Currently No Offer Available!</h2>
+                </div>
+            </div>
         </div>
     </ion-content>
 </ion-view>

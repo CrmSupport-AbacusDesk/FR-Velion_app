@@ -1,0 +1,163 @@
+<ion-view view-title="Electrician List">
+
+  <ion-nav-buttons side="left">
+      <a ng-click="goToBackPageHandler()"
+          class="cs-backbtn button button-icon icon ion-android-arrow-back font18 fff"></a>
+  </ion-nav-buttons>
+
+  <ion-nav-buttons side="right" class="custom-right-btn">
+      <div ng-click="onSeachActionHandler('open')" class="right-nav-btn nav-search">
+          <a menu-toggle="left"><i class="material-icons">search</i></a>
+      </div>
+      <div ng-class="isSearchBarOpen ? 'active' : ''" class="search-filter">
+          <input ng-model="data.search" type="text" id="searchData"
+              ng-change="data.search.length>=3?getElectricianList('Electrician','',electrician_status,'','search'):''">
+          <a ng-click="onSeachActionHandler('close')" placeholder="Search" class="close-filter"><i
+                  class="material-icons">keyboard_backspace</i></a>
+      </div>
+  </ion-nav-buttons>
+
+  <div class="sticky bg-white top50">
+      <div class="round-tab">
+          <ul>
+              <li ng-click="getElectricianList('Electrician','clearNetwork','Pending','','');ElectricianTabActive = 1"
+                  ng-class="ElectricianTabActive == 1 ? 'active' : ''">
+                  <a>Pending</a>
+              </li>
+
+              <li ng-click="getElectricianList('Electrician','clearNetwork','Approved','','');ElectricianTabActive = 2"
+                  ng-class="ElectricianTabActive == 2 ? 'active' : ''">
+                  <a>Approved</a>
+              </li>
+
+              <li ng-click="getElectricianList('Electrician','clearNetwork','Rejected','','');ElectricianTabActive = 3"
+                  ng-class="ElectricianTabActive == 3 ? 'active' : ''">
+                  <a>Rejected</a>
+               </li>
+
+          </ul>
+      </div>
+  </div>
+
+  <ion-content class="mt55">
+
+      <!-- <ion-refresher on-refresh="data.search = ''; onSetCurrentPageHandler();getOrderListData('onRefresh')">
+          <ion-refresher-content
+          pullingIcon="arrow-dropdown"
+          pullingText="Pull to refresh"
+          refreshingSpinner="circles"
+          refreshingText="Refreshing...">
+      </ion-refresher-content>
+  </ion-refresher> -->
+
+      <div ng-repeat="row in electricianList" class="coman-list" ng-click="goToElectricianDetail(row.id,electrician_status,page)">
+          <!-- <div class="top-head" ng-click="goToNetworkDetail(row.id)">
+              <ul>
+                  <li>
+                      <p>{{!row.state_name ? 'N/A' : row.state_name}}</p>
+                      <span>State</span>
+                  </li>
+                  <li>
+                      <p>{{row.district_name ? row.district_name : 'N/A'}}</p>
+                      <span>District</span>
+                  </li>
+              </ul>
+          </div> -->
+
+          <div class="center-item">
+              <div class="cs-icon">{{row.dr_name[0] ? row.dr_name[0] : '--'}}
+              </div>
+              <div class="cs-content">
+                  <p>{{row.dr_name ? row.dr_name : 'N/A'}} </p>
+                  <span>{{row.dr_code ? row.dr_code : ''}}</span>
+              </div>
+              <a ng-if="row.sfa_contact_no" href="tel: {{row.sfa_contact_no}}" class="dialer"><i
+                      class="material-icons">call</i></a>
+          </div>
+
+          <div class="pdlr">
+              <div class="cs-grid">
+                  <div class="bdr-field wp100">
+                      <span>Date Created</span>
+                      <p>{{formatDate(row.date_created)}}</p>
+                  </div>
+
+                  <div class="bdr-field wp100">
+                      <span>Status</span>
+                      <p ng-class="{'yellow-clr':row.orp_status=='Pending','green-clr':row.orp_status=='Approved','red-clr':row.orp_status=='Reject'}">
+                        {{row.orp_status ? row.orp_status : '0'}}</p>
+                  </div>
+              </div>
+          </div>
+          <div class="pdlr">
+            <div class="cs-grid">
+                <div class="bdr-field wp100">
+                    <span>Address</span>
+                    <p>{{row.street ? row.street : ''}},{{row.city ? row.city : ''}},{{row.district_name ? row.district_name : ''}},{{row.state_name ? row.state_name : ''}} - {{row.pincode ? row.pincode : ''}}</p>
+                </div>
+            </div>
+        </div>
+      </div>
+
+
+      <div class="data-not-found" ng-if="electricianList.length == 0">
+          <div class="outer">
+              <div class="innear">
+                  <img src="img/data-not-found.svg" alt="">
+                  <h2>Temporarily , No Data Available!</h2>
+              </div>
+          </div>
+      </div>
+      <!-- <div class="pdlr" ng-if="electricianList.length  || page">
+        <div class="wp100 cs-flex">
+      <button class="btn" ng-click="getElectricianList(data.type, 'previous',electrician_status,'','')" ng-disabled='page==0'>previous</button>
+      <button class="btn" ng-click="getElectricianList(data.type, 'next',electrician_status,'','')"  ng-disabled='electricianList.length == 0'>next</button>
+        </div>
+     </div> -->
+
+
+      <!-- commented -->
+
+      <!-- <ion-infinite-scroll immediate-check="false" ng-if="noMoreItemsAvailable==false"
+          on-infinite="getElectricianList(data.type, 'scroll',data.status,'')" distance="20%" class="myspinner">
+      </ion-infinite-scroll> -->
+
+      <div class="fix-botm-item flat" ng-if="electricianList.length  || page">
+        <div class="round-tab flat green-tab wp100" >
+          <ul>
+            <li ng-class="{'active': page!=0}" ng-click="page==0?'':getElectricianList(data.type, 'previous',electrician_status,'','')">
+              <i class="material-icons ic-left">arrow_back</i>
+              <a>Previous</a>
+            </li>
+            <li ng-class="{'active': electricianList.length != 0}" ng-click="electricianList.length == 0?'':getElectricianList(data.type, 'next',electrician_status,'','')">
+              <i class="material-icons ic-right">arrow_forward</i>
+              <a>Next</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="h60"></div>
+  </ion-content>
+
+
+  <div ng-if="data.type=='Dealer'" class="fix-botm-item">
+      <div class="round-tab flat green-tab wp100">
+          <ul>
+              <li ng-click="getNetworkList('Dealer','','Pending')"
+                  ng-class="data.status == 'Pending' ? 'active' : ''">
+                  <a>Pending</a>
+              </li>
+
+              <li ng-click="getNetworkList('Dealer','','Approved')"
+                  ng-class="data.status == 'Approved' ? 'active' : ''">
+                  <a>Active</a>
+              </li>
+          </ul>
+      </div>
+      <div class="fix-add flat">
+          <a ng-click="goToNetwork()">
+              <i class="material-icons">add</i>
+          </a>
+      </div>
+  </div>
+</ion-view>

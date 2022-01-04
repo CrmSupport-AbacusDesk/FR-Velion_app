@@ -19,7 +19,7 @@
     </ion-nav-buttons>
 
     <ion-content>
-        <div class="cs-padding" ng-if="drStatusCountData.length">
+        <div class="cs-padding">
             <div ng-repeat = "row in drStatusCountData" class="cs-list">
                 <div ng-click = "onTypeClickHandler(row.typeId, row.typeName, row.typeStatusData[0].statusName, row.typeCount)" class="cs-tittle next-page">
                     <p>My {{row.typeName}} <span>"{{row.typeCount}}"</span></p>
@@ -29,15 +29,6 @@
                         <span>{{statusRow.statusTotalCount}}</span>
                         <p>{{statusRow.statusName}}</p>
                     </a>
-                </div>
-            </div>
-        </div>
-
-        <div class="data-not-found" ng-if="drStatusCountData.length == 0">
-            <div class="outer">
-                <div class="innear">
-                    <img src="img/data-not-found.svg" alt="">
-                    <h2>Temporarily , No Lead Assign !</h2>
                 </div>
             </div>
         </div>

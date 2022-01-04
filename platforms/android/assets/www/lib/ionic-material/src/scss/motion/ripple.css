@@ -7,24 +7,24 @@
 
 .animate-ripple .done,
 .animate-ripple .done {
-  -ms-transform: scale3d(0.8, 0, 1);
   -webkit-transform: scale3d(0.8, 0, 1);
   transform: scale3d(0.8, 0, 1);
   -webkit-transition: -webkit-transform 0.3s cubic-bezier(0.55, 0, 0.1, 1);
+  transition: -webkit-transform 0.3s cubic-bezier(0.55, 0, 0.1, 1);
   transition: transform 0.3s cubic-bezier(0.55, 0, 0.1, 1);
+  transition: transform 0.3s cubic-bezier(0.55, 0, 0.1, 1), -webkit-transform 0.3s cubic-bezier(0.55, 0, 0.1, 1);
 }
 
 .animate-ripple .item-bg-image img.background,
 .animate-ripple .item-bg-image img.background {
-  box-shadow: none;
-  -ms-transform: scale3d(1, 1, 1);
+  -webkit-box-shadow: none;
+          box-shadow: none;
   -webkit-transform: scale3d(1, 1, 1);
   transform: scale3d(1, 1, 1);
 }
 
 .animate-ripple .in, .animate-ripple.done,
 .animate-ripple .in, .animate-ripple.done {
-  -ms-transform: scale3d(1, 1, 1);
   -webkit-transform: scale3d(1, 1, 1);
   transform: scale3d(1, 1, 1);
 }
@@ -35,7 +35,6 @@
 }
 
 .animate-ripple .item {
-  -ms-transform: scale3d(0, 0, 1);
   -webkit-transform: scale3d(0, 0, 1);
   transform: scale3d(0, 0, 1);
   opacity: 0;
@@ -53,11 +52,12 @@
 
 .animate-ripple .done,
 .animate-ripple .done {
-  -ms-transform: scale3d(0.8, 0, 1);
   -webkit-transform: scale3d(0.8, 0, 1);
   transform: scale3d(0.8, 0, 1);
   -webkit-transition: -webkit-transform 0.3s cubic-bezier(0.55, 0, 0.1, 1);
+  transition: -webkit-transform 0.3s cubic-bezier(0.55, 0, 0.1, 1);
   transition: transform 0.3s cubic-bezier(0.55, 0, 0.1, 1);
+  transition: transform 0.3s cubic-bezier(0.55, 0, 0.1, 1), -webkit-transform 0.3s cubic-bezier(0.55, 0, 0.1, 1);
 }
 
 /* Uncomment if you want images to fade in after the card
@@ -104,7 +104,6 @@
 }
 */
 .animate-ripple .in, .animate-ripple.done, .animate-ripple .in, .animate-ripple.done {
-  -ms-transform: scale3d(1, 1, 1);
   -webkit-transform: scale3d(1, 1, 1);
   transform: scale3d(1, 1, 1);
   -webkit-transition: all 0.3s ease-in-out;
@@ -133,10 +132,7 @@
 }
 
 .animate-ripple .out, .animate-ripple .out {
-  -ms-transform: scale3d(0, 0, 1);
   -webkit-transform: scale3d(0, 0, 1);
   transform: scale3d(0, 0, 1);
 }
- 
-
- /*# sourceMappingURL= ripple.css.map */
+/*# sourceMappingURL=ripple.css.map */

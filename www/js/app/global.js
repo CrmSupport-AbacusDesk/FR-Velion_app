@@ -9,6 +9,3 @@ var sfaServerURL = rootURL+"/index.php/app/okaya_sfa";
 var orpServerUrl = rootURL+"/index.php/app/okaya_orp";
 var uploadURL = rootURL+"/uploads/";
 var dbTableName = "okayaApp008";
-
-
-

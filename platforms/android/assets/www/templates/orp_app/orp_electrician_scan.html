@@ -1,0 +1,62 @@
+<ion-view view-title="Electrician Scan" hide-nav-bar="true">
+
+    <ion-header-bar class="opr_ion_header">
+        <div class="cs-left">
+            <button class="back-button" ng-click="goToBackPageHandler()"><i class="material-icons">arrow_back</i></button>
+            <h1 class="orp_title">Electrician Scan</h1>
+        </div>
+    </ion-header-bar>
+
+    <ion-content>
+
+        <div class="orp-date mt16 padding16" ng-if="code_list.length > 0">
+            <label>
+                <p>Date of Scan</p>
+                <input type="date" class="unstyled" ng-model = "dealer_data.date" max="{{currentDate}}" >
+            </label>
+        </div>
+
+        <div class="op_pr_heading" ng-if="code_list.length > 0">
+            <h1>Product Information</h1>
+            <h2>Scan "<span>{{code_list.length}}</span>" Products</h2>
+        </div>
+
+
+        <div class="product_info pb0" >
+            <div class="figure" ng-repeat = "row in code_list">
+                <div class="code_info">
+                    <p>QR Code</p>
+                    <p>{{row.coupon_code}}</p>
+                </div>
+
+                <div class="prt">
+                    <div class="cs-left">
+                        <h1>Product {{row.product_name}}</h1>
+                        <p>Code {{row.product_code}}</p>
+                    </div>
+                    <div class="cs-right">
+                        <h1>{{row.points}}</h1>
+                        <p>Points</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="qr-btns mt16">
+            <a ng-click="startScan('scan','electrician_scan')" class="qr-blue">
+                <img src="img/qr_code_barcode.svg" alt="">
+                <p ng-if="code_list.length > 0">Scan More Product</p>
+                <p ng-if="code_list.length == 0">Scan Product</p>
+            </a>
+
+            <!-- <a class="qr-blur-bdr" href="#/orptab/orp_manual_serialno" ng-show="loginData.loginType !='Electrician'">
+                <p>Click here to select serial number manually</p>
+            </a> -->
+        </div>
+
+        <div class="cs_orp-bttn padding16" ng-if="code_list.length > 0">
+            <a class="active" ng-click="saveDistributorSale()">SAVE</a>
+        </div>
+    </ion-content>
+</ion-view>
+<!-- <div class="qr-image" ng-if="loginData.loginType !='Electrician' || code_list.length == 0"><img src="img/okaya-img/qr-image.png" alt=""></div> -->

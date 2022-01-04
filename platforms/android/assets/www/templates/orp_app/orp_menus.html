@@ -1,32 +1,61 @@
 <ion-view view-title="Menus" name="menu-view" hide-nav-bar="true">
-    
-
-    <ion-header-bar class="opr_ion_header">
+    <!-- <ion-header-bar class="opr_ion_header">
         <div class="cs-left">
-            <button class="back-button" ng-click="goToBackPageHandler()"><i class="material-icons">arrow_back</i></button>
+            <a class="back-button" href="#/orptab/orp_dashboard"><i class="material-icons">arrow_back</i></a>
             <h1 class="orp_title">Menus</h1>
         </div>
+    </ion-header-bar> -->
+    
+    <ion-nav-buttons side="left">
+        <a href="#/orptab/orp_dashboard" class="cs-backbtn button button-icon icon ion-android-arrow-back font18 fff"></a>
+    </ion-nav-buttons>
+    <ion-header-bar class="opr_ion_header">
+        <div class="cs-left wp100">
+            <a class="back-button" href="#/orptab/orp_dashboard"><i class="material-icons">arrow_back</i></a>
+            <h1 class="orp_title">Menu</h1>
+        </div>
     </ion-header-bar>
-
-
-
+    
     <ion-content>
         <div class="padding32">
             <div class="menu_container">
                 <a href="#/orptab/orp_profile"><img src="img/menu-icon/profile_icon.svg" alt=""><p>My Profile</p></a>
-                <a href="#/orptab/orp_mystock"><img src="img/menu-icon/stock_icon.svg" alt=""><p>Stock</p></a>
-                <a href="#/orptab/"><img src="img/menu-icon/wallet_icon.svg" alt=""><p>Wallet History</p></a>
-                <a href="#/orptab/"><img src="img/menu-icon/transaction_history_icon.svg" alt=""><p>Transaction History</p></a>
-                <a href="#/orptab/"><img src="img/menu-icon/change_pass_icon.svg" alt=""><p>Change Password</p></a>
-                <a href="#/orptab/orp_warranty"><img src="img/menu-icon/warranty_icon.svg" alt=""><p>Warranty</p></a>
-                <a href="#/orptab/"><img src="img/menu-icon/product_catalouge_icon.svg" alt=""><p>Product Catalogue</p></a>
-                <a href="#/orptab/orp_pricelist"><img src="img/menu-icon/pricelist_icon.svg" alt=""><p>Pricelist </p></a>
-                <a href="#/orptab/"><img src="img/menu-icon/brms_icon.svg" alt=""><p>BRMS</p></a>
-                <a href="#/orptab/orp_invoice"><img src="img/menu-icon/upload_invoice_icon.svg" alt=""><p>Upload Invoice</p></a>
-                <a href="#/orptab/"><img src="img/menu-icon/contacts_icon.svg" alt=""><p>Contact Us</p></a>
+                <a href="#/orptab/orp_mystock" ng-if="loginData.loginType=='Dealer'"><img src="img/menu-icon/stock_icon.svg" alt=""><p>Stock</p></a>
+                <a href="#/orptab/orp_wallet-history"  ng-if="loginData.loginType=='Dealer'"><img src="img/menu-icon/wallet_icon.svg" alt="" ><p>Wallet History</p></a>
+                <a href="#/orptab/orp_history" ><img src="img/menu-icon/transaction_history_icon.svg" alt="" ><p>Transaction History</p></a>
+                <a href="#/orptab/orp_primary_order" ng-if="loginData.loginType=='Distributor'"><img src="img/menu-icon/pr-order.svg" class="w22" alt=""><p>Primary Orders</p></a>
+                <!-- <a href="#/orptab/orp_secondary_order" ng-if="loginData.loginType=='Distributor'"><img src="img/menu-icon/delivery.svg" class="w22" alt=""><p>Secondary Orders</p></a> -->
+                <a href="#/orptab/orp_secondary_order" ng-if="loginData.loginType=='Dealer'"><img src="img/menu-icon/delivery.svg" class="w22" alt=""><p>Orders</p></a>
+                <!-- <a href="#/orptab/orp_pending_order" ng-if="loginData.loginType=='Distributor'"><img src="img/menu-icon/lead-order.svg" class="w22" alt=""><p>Pending Order</p></a> -->
+                <a href="#/orptab/billing-list" ng-if="loginData.loginType=='Distributor'" ng-click='EmptyBillingCatagory()'><img src="img/menu-icon/bill.svg" class="w22" alt="" ><p>Billing Details</p></a>
+                <a href="#/orptab/orp_forgotpassword"><img src="img/menu-icon/change_pass_icon.svg" alt=""><p>Change Password</p></a>
+                <!-- <a href="#/orptab/orp_warranty"><img src="img/menu-icon/warranty_icon.svg" alt=""><p>Warranty</p></a> -->
+                <!-- <a href="#/orptab/orp_warranty" ng-show="loginData.loginType !='Electrician'"><img src="img/menu-icon/warranty_icon.svg" alt=""><p>Warranty</p></a> -->
+                <!-- <a ng-click="openPdf()"><img src="img/menu-icon/product_catalouge_icon.svg" alt=""><p>Product Catalogue</p></a> -->
+                <!-- <a href="#/orptab/orp_pricelist"><img src="img/menu-icon/pricelist_icon.svg" alt=""><p>Pricelist </p></a> -->
+                <!-- <a ><img src="img/menu-icon/pricelist_icon.svg" alt=""><p>Pricelist </p></a> -->
+                <!-- <a href="#/orptab/"><img src="img/menu-icon/brms_icon.svg" alt=""><p>BRMS</p></a> -->
+                <!-- <a href="#/orptab/orp_invoice"><img src="img/menu-icon/upload_invoice_icon.svg" alt=""><p>Upload Invoice</p></a> -->
+                <a href="#/orptab/orp_contact"><img src="img/menu-icon/contacts_icon.svg" alt=""><p>Contact Us</p></a>
+                <a href="#/orptab/orp_offerlist" ng-show="loginData.loginType =='Electrician'"><img class="h22" src="img/menu-icon/lead-order.svg" alt=""><p>Scheme</p></a>
+                <a href="#/orptab/orp_catalogue" ng-show="loginData.loginType =='Electrician'"><img class="h22" src="img/menu-icon/catalogue.svg" alt=""><p>Catalogue</p></a>
+                <a href="#/orptab/orp_gallery" ng-show="loginData.loginType =='Electrician'"><img class="h22" src="img/menu-icon/gallery.svg" alt=""><p>Gallery</p></a>
+                <a href="#/orptab/orp_survey-list" ng-show="loginData.loginType !='Electrician'"><img class="h20" src="img/menu-icon/survey.svg" alt="">
+                    <p>Survey</p>
+                </a>
                 <a href="#/orptab/orp_faq"><img src="img/menu-icon/faq_icon.svg" alt=""><p>Faqs</p></a>
+                <!-- <a href="https://api.whatsapp.com/send?phone=+91-9313141414&text=Hi"><img class="h20" src="img/menu-icon/whatsapp.svg" alt="">
+                    <p>Chatbot</p>
+                </a> -->
                 <a href="#/orptab/orp_support"><img src="img/menu-icon/support_icon.svg" alt=""><p>Support</p></a>
-                <a href="#/orptab/"><img src="img/menu-icon/logout_icon.svg" alt=""><p>log out</p></a>
+                <a ng-click = "logout()"><img src="img/menu-icon/logout_icon.svg" alt=""><p>Log out</p></a>
+                <div class="okaya_version">
+                    <div class="version_section">
+                        <img src="img/menu-icon/favicon.png" alt="">
+                        <p>Version {{$root.current_app_version}}</p>
+                        <!-- <p>Version 0.0.1</p> -->
+                    </div>
+                </div>
             </div>
         </div>
     </ion-content>

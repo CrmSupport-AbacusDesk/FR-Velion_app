@@ -1,18 +1,26 @@
 <ion-view view-title="Get Reports" hide-nav-bar="true">
-
-    <ion-header-bar class="opr_ion_header">
-        <div class="cs-left">
-            <button class="back-button" ng-click="goToBackPageHandler()"><i class="material-icons">arrow_back</i></button>
-            <h1 class="orp_title">Get Reports</h1>
-        </div>
-    </ion-header-bar>
-
-
-    <ion-content>
-        <div class="gt_report">
-            <a href="#/">Payment Outstanding Report</a>
-            <a href="#/">Item Wise Sales Report</a>
-            <a href="#/">List Price (Item Code)</a>
-        </div>
-    </ion-content>
+  
+  <ion-header-bar class="opr_ion_header">
+    <div class="cs-left">
+      <button class="back-button" ng-click="goToBackPageHandler()"><i class="material-icons">arrow_back</i></button>
+      <h1 class="orp_title">Get Reports</h1>
+    </div>
+  </ion-header-bar>
+  
+  <ion-content>
+    <div class="gt_report">
+      <a href="#/orptab/orp_account_statement">Account Statement</a>
+      <!-- href="#/orptab/commingSoon" -->
+      <a href="#/orptab/aging_report">Ageing Report</a>
+      <!-- <a ng-click="GET_AGEING_REPORT()">Ageing Report</a> -->
+      
+      <!-- <a>Billing Report</a>
+      
+      <a>Pending Order Report</a>
+      
+      <a>Outstanding Report</a>
+      <a>Dispatch Report</a> -->
+    </div>
+    
+  </ion-content>
 </ion-view>

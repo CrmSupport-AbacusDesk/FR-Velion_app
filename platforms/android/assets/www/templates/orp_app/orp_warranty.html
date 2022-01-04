@@ -8,68 +8,91 @@
         </div>
     </ion-header-bar>
 
-
-
-
-    
+  
     <ion-content>
-        
-        <div class="orp_seacrh">
-            <div class="figure">
-                <input type="text" placeholder="Search Mobile No.">
-                <button><i class="material-icons">clear</i></button>
-            </div>
-        </div>
-        <div class="wr_frinfo">
-            <div class="firm_info">
-                <p><span>Contact Person Name</span> <span>Pankaj Sharma</span></p>
-                <p><span>Contact Person Mobile </span> <span>+91 8886322259</span></p>
-                <p class="nodf"><span>Address</span><br><span>5E/7 , B.P., Railway Road, Near Neelam Chowk, NIT Faridabad, Haryana 121001</span></p>
-            </div>
-        </div>
-        <div class="op_pr_heading">
-            <h1>Product Information</h1>
-        </div>
-        
-        
-        <div class="product_info pb0">
-            <div class="figure">
-                <div class="prt">
-                    <div class="cs-left">
-                        <h1>Product #0011</h1>
-                        <p>Code#2544</p>
-                    </div>
-                </div>
-                <div class="ong">
-                    <div class="cs-fig">
-                        <p>REFTG7854785TG</p>
-                        <p>QR Code</p>
-                    </div>
-                    <div class="cs-fig">
-                        <p>05 - 06 - 2020</p>
-                        <p>Date of Sale</p>
-                    </div>
+            <div class="orp_seacrh">
+                <div class="figure">
+                    <input type="number" placeholder="Search Mobile No." name="mobile_search" ng-model = "data.mobile_search" minlength = "10" maxlength ="10" limit-to = "10" ng-change="getWarrantyData()">
+                    <button ng-click="data.mobile_search= '';getWarrantyData();"><i class="material-icons">clear</i></button>
                 </div>
             </div>
+
+            <!-- ng-if="warranty_data.status == 'Exist' && warranty_data.data" -->
+        <div ng-if="warranty_data.status == 'Exist' && data.mobile_search">
+
+            <div class="wr_frinfo">
+                <div class="firm_info">
+                    <p><span>Contact Person Name</span> <span>{{warranty_data.data.name}}</span></p>
+                    <p><span>Contact Person Mobile </span> <span>+91 {{warranty_data.data.mobile}}</span></p>
+                    <p class="nodf"><span>Address</span><br><span>{{warranty_data.data.address}} , {{warranty_data.data.district}}, {{warranty_data.data.state}}, {{warranty_data.data.pincode}}</span></p>
+                </div>
+            </div>
+
+            <div class="op_pr_heading">
+                <h1>Product Information</h1>
+            </div>    
             
-            <div class="figure">
-                <div class="prt">
-                    <div class="cs-left">
-                        <h1>Product #0011</h1>
-                        <p>Code#2544</p>
+            <div class="product_info pb0" ng-repeat="row in warranty_data.data.product_data">
+                <div class="figure">
+                    <div class="prt">
+                        <div class="cs-left">
+                            <h1>{{row.product_name}}</h1>
+                            <p>{{row.product_code}}</p>
+                        </div>
+                    </div>
+                    <div class="ong">
+                        <div class="cs-fig">
+                            <p>{{row.coupon_code}}</p>
+                            <p>QR Code</p>
+                        </div>
+                        <div class="cs-fig">
+                            <p>{{dateFormat(row.sale_date)}}</p>
+                            <p>Date of Sale</p>
+                        </div>
+                        <div class="cs-fig" ng-if="row.valid_upto > row.sale_date">
+                            <p>{{dateFormat(row.valid_upto)}}</p>
+                            <p>Valid Upto</p>
+                        </div>
                     </div>
                 </div>
-                <div class="ong">
-                    <div class="cs-fig">
-                        <p>REFTG7854785TG</p>
-                        <p>QR Code</p>
+                
+                <!-- <div class="figure">
+                    <div class="prt">
+                        <div class="cs-left">
+                            <h1>Product #0011</h1>
+                            <p>Code#2544</p>
+                        </div>
                     </div>
-                    <div class="cs-fig">
-                        <p>05 - 06 - 2020</p>
-                        <p>Date of Sale</p>
+                    <div class="ong">
+                        <div class="cs-fig">
+                            <p>REFTG7854785TG</p>
+                            <p>QR Code</p>
+                        </div>
+                        <div class="cs-fig">
+                            <p>05 - 06 - 2020</p>
+                            <p>Date of Sale</p>
+                        </div>
                     </div>
-                </div>
+                </div> -->
             </div>
+        </div>
+
+        <div class="data-not-found" ng-if="!data.mobile_search" >
+                <div class="outer">
+                    <div class="innear">
+                        <img src="img/data-not-found.svg" alt="">
+                        <h2>No Searched Data</h2>
+                    </div>
+                </div>
+        </div>
+
+        <div class="data-not-found" ng-if="data.mobile_search && warranty_data.status == 'Does Not Exist'" >
+                <div class="outer">
+                    <div class="innear">
+                        <img src="img/data-not-found.svg" alt="">
+                        <h2>No Data Found!</h2>
+                    </div>
+                </div>
         </div>
         
         

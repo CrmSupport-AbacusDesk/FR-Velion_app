@@ -1,6 +1,6 @@
 {
     "version": 3,
-    "mappings": "AAEA;oCACoC;AAEpC,AAAA,oBAAoB;AACpB,AAAA,oBAAoB,CAAC;EACjB,mBAAmB,EAAE,KAAK;CAC7B",
+    "mappings": "AAEA;oCACoC;AAEpC,AAAA,oBAAoB;AACpB,oBAAoB,CAAC;EACjB,mBAAmB,EAAE,KAAK;CAC7B",
     "sources": [
         "pan-in-left.scss"
     ],

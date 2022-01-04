@@ -14,7 +14,7 @@
             <div class="text-right nomargin nopadding pr-6"><small style="color: #5f2d2d;">Showing all related records</small></div>
         </div>
         <ul class="dropdown">
-            <li ng-repeat="item in values" ng-click="selectItem(item);" ng-if="values.length > 0" [ngClass]="{'add-new' : item[key] = 'Add New Dealer'}">
+            <li ng-repeat="item in values" ng-click="selectItem(item);" ng-if="values.length > 0" [ngClass]="{'add-new' : item[key] = 'Add New Retailer'}">
                 <span >{{item[key]}}</span>
                 <i class="material-icons" ng-show="isActive(item)">check</i>
             </li>

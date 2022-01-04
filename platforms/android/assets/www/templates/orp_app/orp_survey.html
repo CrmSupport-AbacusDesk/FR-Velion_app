@@ -1,0 +1,74 @@
+<ion-view view-title="Okaya Survey" hide-nav-bar="true">
+
+    <ion-header-bar class="opr_ion_header">
+        <div class="cs-left">
+            <button class="back-button" ng-click="goToBackPageHandler()"><i class="material-icons">arrow_back</i></button>
+            <h1 class="orp_title">{{survey_title}}</h1>
+        </div>
+    </ion-header-bar>
+
+    <ion-content>
+        <div class="count-section" ng-if="!surveyQuestionData.length == 0">
+            <ul>
+                <li>
+                    <div class="top-side">
+                        <p>Total</p>
+                    </div>
+
+                    <div class="bottom-side">
+                        <p>{{surveyQuestionData.length}}</p>
+                    </div>
+                </li>
+
+                <li>
+                    <div class="top-side">
+                        <p>Filled</p>
+                    </div>
+
+                    <div class="bottom-side">
+                        <p>{{questionCheckCount}}</p>
+                    </div>
+                </li>
+
+                <li>
+                    <div class="top-side">
+                        <p>Not fill</p>
+                    </div>
+
+                    <div class="bottom-side">
+                        <p>{{surveyQuestionData.length-questionCheckCount}}</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+
+        <!------------Repeat from here for multiple question Start------------------>
+        <div class="survey-category" ng-repeat="row in surveyQuestionData">
+            <div class="ques-head">
+                <p>{{$index+1}}. {{row.question}}</p>
+            </div>
+
+            <div class="ques-body">
+                <ion-list>
+                    <ion-checkbox name="ischeck+{{$index}}" ng-repeat="val in row.answer" ng-model="val.ischeck" ng-change="checkcount()">{{val.answer}}</ion-checkbox>
+                </ion-list>
+            </div>
+        </div>
+
+        <div class="cs_orp-bttn padding16">
+            <a class="outline-btn" ng-click="onsurvey(row.data)" ng-if="!surveyQuestionData.length == 0">SAVE</a>
+        </div>
+        <!------------Repeat from here for multiple question End------------------>
+
+        <div class="data-not-found" ng-if="surveyQuestionData.length == 0">
+            <div class="outer">
+                <div class="innear">
+                    <img src="img/data-not-found.svg" alt="">
+                    <h2>Temporarily , No Data Available!</h2>
+                </div>
+            </div>
+        </div>
+
+    </ion-content>
+</ion-view>

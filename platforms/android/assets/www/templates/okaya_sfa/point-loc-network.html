@@ -1,167 +1,171 @@
 <ion-view view-title="Point Location">
-  
-  <!-- BACKBTN ICON START -->
-  <ion-nav-buttons side="left">
-    <a ng-click="goToBackPageHandler()" class="cs-backbtn button button-icon icon ion-android-arrow-back fff"></a>
-  </ion-nav-buttons>
-  <!-- BACKBTN ICON END-->
-  
-  <!-- HOME ICON START -->
-  <!-- <ion-nav-buttons side="right">
-    <a href="#/home" class="button button-icon icon ion-home fff font-18"></a>
-  </ion-nav-buttons> -->
-  <!-- HOME ICON END-->
-  <style type="text/css">
-    .scroll {height: 100%;}
-  </style>
-  <ion-content>
-    <!-- <h5>{{latitude}}, {{longitude}}</h5> -->
-    
-    <input type="hidden" id="latitude" value="{{latitude}}">
-    <input type="hidden" id="longitude" value="{{longitude}}">
-    <div id="map" data-tap-disabled="true" style="position:initial !important;"></div>
-    
-    <div onClick="locate()" class="map-location"><i class="material-icons">my_location</i></div>
-    
-    <div class="point-loc" style="position: absolute;z-index: 999;bottom: 0;left: 0;width: 100%;">
-      <div class="point-add" ng-if="last_gps_add">
-        <p>Last Location</p>
-        <textarea ng-model="last_gps_add" readonly></textarea>
+
+    <!-- BACKBTN ICON START -->
+    <ion-nav-buttons side="left">
+        <a ng-click="goToBackPageHandler()" class="cs-backbtn button button-icon icon ion-android-arrow-back fff"></a>
+    </ion-nav-buttons>
+    <!-- BACKBTN ICON END-->
+
+    <!-- HOME ICON START -->
+    <!-- <ion-nav-buttons side="right">
+        <a href="#/home" class="button button-icon icon ion-home fff font-18"></a>
+    </ion-nav-buttons> -->
+    <!-- HOME ICON END-->
+    <style type="text/css">
+      .scroll {height: 100%;}
+    </style>
+    <ion-content>
+        <!-- <h5>{{latitude}}, {{longitude}}</h5> -->
+
+        <input type="hidden" id="latitude" value="{{latitude}}">
+        <input type="hidden" id="longitude" value="{{longitude}}">
+        <div id="map" data-tap-disabled="true"></div>
+
+        <div onClick="locate()" class="map-location"><i class="material-icons">my_location</i></div>
+
+        <div class="point-loc" style="position: absolute;z-index: 999;bottom: 0;left: 0;width: 100%;">
+          <div class="point-add" ng-if="last_gps_add">
+            <p>Last Location</p>
+            <textarea ng-model="last_gps_add" readonly></textarea>
+         </div>
+         <!-- <div class="">
+          <p>Current Location</p>
+          <input type="text" id="loc" value="">
+         </div> -->
+          <div class="input-submit padding-16" >
+              <a type="button" ng-click="add_loc()">ADD LOCATION</a>
+          </div>
       </div>
-      <!-- <div class="">
-        <p>Current Location</p>
-        <input type="text" id="loc" value="">
-      </div> -->
-      <div class="input-submit padding-16" >
-        <a type="button" ng-click="add_loc()">ADD LOCATION</a>
-      </div>
-    </div>
-  </ion-content>
-  
-  <script>
-    var locat;
-    $( document ).ready(function() {
-      setTimeout(function(){
-        var lat=  $('#latitude').val();
-        var long =  $('#longitude').val();
-        // var lat = angular.element(document.querySelector('[ng-controller="PrayagCtrl"]')).scope().latitude;
-        // var long = angular.element(document.querySelector('[ng-controller="PrayagCtrl"]')).scope().longitude;
-        console.log(lat+" "+long);
-        var latLng = new google.maps.LatLng(lat, long);
-        
-        var mapOptions = {
-          center: latLng,
-          zoom: 15,
-          mapTypeId: google.maps.MapTypeId.ROADMAP
-        };
-        
-        var map = new google.maps.Map(document.getElementById("map"), mapOptions);
-        
-        //Wait until the map is loaded
-        google.maps.event.addListenerOnce(map, 'idle', function(){
-          
-          var marker = new google.maps.Marker({
+    </ion-content>
+
+<script>
+var locat;
+ $( document ).ready(function() {
+   setTimeout(function(){
+    var lat=  $('#latitude').val();
+    var long =  $('#longitude').val();
+    // var lat = angular.element(document.querySelector('[ng-controller="PrayagCtrl"]')).scope().latitude;
+    // var long = angular.element(document.querySelector('[ng-controller="PrayagCtrl"]')).scope().longitude;
+    console.log(lat+" "+long);
+    var latLng = new google.maps.LatLng(lat, long);
+
+    var mapOptions = {
+      center: latLng,
+      zoom: 15,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+
+    var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+
+      //Wait until the map is loaded
+      google.maps.event.addListenerOnce(map, 'idle', function(){
+
+        var marker = new google.maps.Marker({
             map: map,
             animation: google.maps.Animation.DROP,
             position: latLng
-          });
-          marker.addListener('click', toggleBounce);
-          
-          function toggleBounce() {
-            if (marker.getAnimation() !== null) {
-              marker.setAnimation(null);
-            } else {
-              marker.setAnimation(google.maps.Animation.BOUNCE);
-            }
+        });
+        marker.addListener('click', toggleBounce);
+
+        function toggleBounce() {
+          if (marker.getAnimation() !== null) {
+            marker.setAnimation(null);
+          } else {
+            marker.setAnimation(google.maps.Animation.BOUNCE);
           }
-          
-          var infoWindow = new google.maps.InfoWindow();
-          
-          var geocoder = geocoder = new google.maps.Geocoder();
-          geocoder.geocode({ 'latLng': latLng }, function (results, status) {
-            console.log(results);
-            if (status == google.maps.GeocoderStatus.OK) {
-              if (results[0]) {
-                locat=results[0].formatted_address;
-                infoWindow.setContent(results[0].formatted_address);
-                infoWindow.open(map, marker);
-                
-                // document.getElementById('loc').value = locat;
-              }
-              
-              // google.maps.event.addListener(marker, 'click', function() {
-                //      infoWindow.setContent(results[0].formatted_address);
-                //      infoWindow.open(map, this);
-                //  });
-              }
-            });
-            
-          });
-          
-          
-          
-        }, 200);
+        }
+
+        var infoWindow = new google.maps.InfoWindow();
+
+        var geocoder = geocoder = new google.maps.Geocoder();
+                      geocoder.geocode({ 'latLng': latLng }, function (results, status) {
+                        console.log(results);
+                        if (status == google.maps.GeocoderStatus.OK) {
+                          if (results[0]) {
+                             locat=results[0].formatted_address;
+                             infoWindow.setContent(results[0].formatted_address);
+                             infoWindow.open(map, marker);
+
+                            // document.getElementById('loc').value = locat;
+                          }
+
+                          // google.maps.event.addListener(marker, 'click', function() {
+                          //      infoWindow.setContent(results[0].formatted_address);
+                          //      infoWindow.open(map, this);
+                          //  });
+                        }
+                      });
+
       });
-      
-      function locate()
-      {
-        setTimeout(function(){
-          var lat=  $('#latitude').val();
-          var long =  $('#longitude').val();
-          // var lat = angular.element(document.querySelector('[ng-controller="PrayagCtrl"]')).scope().latitude;
-          // var long = angular.element(document.querySelector('[ng-controller="PrayagCtrl"]')).scope().longitude;
-          console.log(lat+" "+long);
-          var latLng = new google.maps.LatLng(lat, long);
-          
-          var mapOptions = {
-            center: latLng,
-            zoom: 15,
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-          };
-          
-          var map = new google.maps.Map(document.getElementById("map"), mapOptions);
-          
-          //Wait until the map is loaded
-          google.maps.event.addListenerOnce(map, 'idle', function(){
-            
-            var marker = new google.maps.Marker({
-              map: map,
-              animation: google.maps.Animation.DROP,
-              position: latLng
-            });
-            marker.addListener('click', toggleBounce);
-            
-            function toggleBounce() {
-              if (marker.getAnimation() !== null) {
-                marker.setAnimation(null);
-              } else {
-                marker.setAnimation(google.maps.Animation.BOUNCE);
-              }
-            }
-            
-            var infoWindow = new google.maps.InfoWindow();
-            
-            var geocoder = geocoder = new google.maps.Geocoder();
-            geocoder.geocode({ 'latLng': latLng }, function (results, status) {
-              console.log(results);
-              if (status == google.maps.GeocoderStatus.OK) {
-                if (results[0]) {
-                  locat=results[0].formatted_address;
-                  infoWindow.setContent(results[0].formatted_address);
-                  infoWindow.open(map, marker);
-                  
-                }
-                
-              }
-            });
-            
-          });
-          
-          
-          
-        }, 200);
-      }
-      
+
+
+
+      }, 200);
+    });
+
+  function locate()
+  {
+    setTimeout(function(){
+    var lat=  $('#latitude').val();
+    var long =  $('#longitude').val();
+    // var lat = angular.element(document.querySelector('[ng-controller="PrayagCtrl"]')).scope().latitude;
+    // var long = angular.element(document.querySelector('[ng-controller="PrayagCtrl"]')).scope().longitude;
+    console.log(lat+" "+long);
+    var latLng = new google.maps.LatLng(lat, long);
+
+    var mapOptions = {
+      center: latLng,
+      zoom: 15,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+
+    var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+
+      //Wait until the map is loaded
+      google.maps.event.addListenerOnce(map, 'idle', function(){
+
+        var marker = new google.maps.Marker({
+            map: map,
+            animation: google.maps.Animation.DROP,
+            position: latLng
+        });
+        marker.addListener('click', toggleBounce);
+
+        function toggleBounce() {
+          if (marker.getAnimation() !== null) {
+            marker.setAnimation(null);
+          } else {
+            marker.setAnimation(google.maps.Animation.BOUNCE);
+          }
+        }
+
+        var infoWindow = new google.maps.InfoWindow();
+
+        var geocoder = geocoder = new google.maps.Geocoder();
+                      geocoder.geocode({ 'latLng': latLng }, function (results, status) {
+                        console.log(results);
+                        if (status == google.maps.GeocoderStatus.OK) {
+                          if (results[0]) {
+                             locat=results[0].formatted_address;
+                             infoWindow.setContent(results[0].formatted_address);
+                             infoWindow.open(map, marker);
+
+                            // document.getElementById('loc').value = locat;
+                          }
+
+                          // google.maps.event.addListener(marker, 'click', function() {
+                          //      infoWindow.setContent(results[0].formatted_address);
+                          //      infoWindow.open(map, this);
+                          //  });
+                        }
+                      });
+
+      });
+
+
+
+      }, 200);
+  }
+
     </script>
-  </ion-view>
-  
+</ion-view>

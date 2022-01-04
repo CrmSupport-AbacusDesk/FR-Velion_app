@@ -1,235 +1,227 @@
 <ion-view view-title="Add Order">
+
     <ion-nav-buttons side="left">
         <a ng-click = "goToBackPageHandler()"  class="cs-backbtn button button-icon icon ion-android-arrow-back font18 fff"></a>
     </ion-nav-buttons>
-    
+
     <ion-content class="">
-        
-      
-        
-    <div class="coman-list clrd-bg sticky" ng-if="drDetail.dr_id">
-        <div class="center-item">
-            <div class="cs-icon">{{drDetail.dr_name[0]}}</div>
-            <div class="cs-content">
-                <p>{{drDetail.dr_name}}</p>
-                <span>{{drDetail.contact_mobile_no}}</span>
-                <a ng-if="drDetail.email" class="icon-content"><i class="material-icons">email</i>
-                    {{drDetail.email}}</a>
+        <div ng-if="data.isInsideLead == 'Yes'" class="coman-list clrd-bg sticky">
+            <div class="center-item">
+                <div class="cs-icon">{{drDetail.drData.dr_name[0] ? drDetail.drData.dr_name[0] : '--'}}</div>
+                <div class="cs-content">
+                    <p>{{drDetail.drData.dr_name ? drDetail.drData.dr_name : 'N/A'}}</p>
+                    <span>{{drDetail.drData.contact_name ? drDetail.drData.contact_name : 'N/A'}}</span>
+                    <a class="icon-content"><i class="material-icons">email</i> {{drDetail.drData.email ? drDetail.drData.email : 'N/A'}}</a>
+                </div>
+                <a ng-if="drDetail.drData.contact_mobile_no" href="tel: {{drDetail.drData.contact_mobile_no}}" class="dialer"><i class="material-icons">call</i></a>
             </div>
-    
-            <a href="tel: {{drDetail.contact_mobile_no}}" class="dialer"><i class="material-icons">call</i></a>
         </div>
-    </div>
-        
+
         <div class="padding16">
             <div class="cs-add-form">
-                <div ng-if="!drDetail.dr_id">
+                <div ng-if="data.isInsideLead=='No'">
                     <div class="cs-add-form mt15">
                         <div class="field-input">
-                            <select ng-model = "data.type" ng-options="row.type as row.type for row in drOrderTypeData" ng-change="getLeadDataonChangeLeadType(data.type)"  class="browser-default">
+                            <select ng-model = "data.typeId" ng-change="onDrTypeChangeHandler()" class="browser-default">
                                 <option value="" disabled selected>Select Type</option>
+                                <option ng-repeat = "row in drOrderTypeData" value="{{row.id}}">{{row.type}}</option>
                             </select>
                         </div>
                     </div>
-                    
-                    <div class="field-input">
-                        <label for="last_name" class="fix-label">Select Coustmer</label>
-                        <div class="add-css-select pt0 selectopt no-padding  add2">
-                            <searchable-multiselect display-attr="Key" selected-items="data.dr_name" all-items="allLeadData" add-item="single_select(item)">
-                            </searchable-multiselect> 
+
+                    <div ng-show = "data.typeId" class="cs-add-form mt15">
+                        <div class="field-input">
+                            <div class="form-space">
+                                <div class="add-css-select no-padding selectopt" >
+                                    <searchandselect selecteditem="search.drName" values="drList" key="Key"  totalrecords="totalDrRecords" onscroll="onGetDrTypeDataHandler('orderFor', searchKey, pagenumber)"></searchandselect>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                
-                
-                
-                <div>
-                    <!-- <div class="form-space">
+
+
+
+                <div ng-show="search.drName && search.drName.Value">
+
+                    <div class="form-space">
+
                         <label class="item-input item-select cs-select csm-input mb0">
+
                             <div class="input-label">Shipping Address</div>
+
                             <select name="category" ng-model="data.address" ng-options="row.id as row.address for row in drShippingArray" ng-change="shippingAddressAction()" required>
+
                             </select>
                         </label>
-                    </div> -->
-                    
-                    <!-- <div class="field-input mt20">
-                        <label for="last_name" class="fix-label">Select Category</label>
-                        <div class="add-css-select pt0 selectopt no-padding add2">
-                            <searchable-multiselect display-attr="Key"></searchable-multiselect>
-                        </div>
                     </div>
-                    
-                    <div class="field-input mt20">
-                        <label for="last_name" class="fix-label">Select Sub Category</label>
-                        <div class="add-css-select pt0 selectopt no-padding  add2">
-                            <searchable-multiselect display-attr="Key"></searchable-multiselect>
-                        </div>
-                    </div>
-                    
-                    <div class="field-input mt20">
-                        <label for="last_name" class="fix-label">Select Product</label>
-                        <div class="add-css-select pt0 selectopt no-padding  add2">
-                            <searchable-multiselect display-attr="Key"></searchable-multiselect>
-                        </div>
-                    </div> -->
-                    
-                    
-                    <div class="cs-add-form mt15">
-                        <div class="field-input">
-                            <select ng-model="data.category" ng-options="row.category as row.category for row in categoryListData"
-                            ng-change="onGetSubcategoryList()" class="browser-default">
-                            <option value="" disabled selected>Select Category</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <div class="cs-add-form mt15">
+
                     <div class="field-input">
-                        <select ng-model="data.sub_category" ng-options="row.sub_category as row.sub_category for row in subCategoryData"
-                        ng-change="onGetProductList()" class="browser-default">
-                        <option value="" disabled selected>Select Subcategory</option>
-                    </select>
+                        <div class="add-css-select pt0 selectopt no-padding pb16 add2">
+                            <searchandselect selecteditem="search.categoryName" values="categoryList" key="Key"  totalrecords="totalCategoryRecords" onscroll="onGetCartItemDataHandler('fetchCategoryData', searchKey, pagenumber)"></searchandselect>
+                        </div>
+                    </div>
+
+                    <div class="field-input">
+                        <div class="add-css-select pt0 selectopt no-padding pb16 add2">
+                            <searchandselect selecteditem="search.subCategoryName" values="subCategoryList" key="Key"  totalrecords="totalSubCategoryRecords" onscroll="onGetCartItemDataHandler('fetchSubCategoryData', searchKey, pagenumber)"></searchandselect>
+                        </div>
+                    </div>
+
+                    <div class="field-input">
+                        <div class="add-css-select pt0 selectopt no-padding pb16 add2">
+                            <searchandselect selecteditem="search.product" values="productList" key="Key"  totalrecords="totalStateRecords" onscroll="onGetCartItemDataHandler('fetchProductData', searchKey, pagenumber)"></searchandselect>
+                        </div>
+                    </div>
+
+                    <div class="flex-input">
+                        <div class="input-field field-input w100">
+                            <input ng-model="data.qty" ng-change = "onCalculateItemTotalHandler('Order')" name="qty" id="qty" type="number" min = "0"  class="validate">
+                            <label class="active" for="last_name">QTY</label>
+                        </div>
+                        <div class="input-field field-input">
+                            <input ng-model="data.rate" name="rate" id="rate" ng-change = "onCalculateItemTotalHandler('Order')" type="number" class="validate">
+                            <label class="active" for="last_name">Rate</label>
+                        </div>
+                    </div>
+
+                    <div class="flex-input">
+                        <div class="input-field field-input wp100">
+                            <input  ng-model="data.discountPercent" name="discountPercent" id="discountPercent" type="number" ng-change = "onCalculateItemTotalHandler('Order')" class="validate">
+                            <label class="active" for="last_name">Discount (%)</label>
+                        </div>
+
+                        <div class="input-field field-input wp100">
+                            <input ng-model="data.gstPercent" name="gstPercent" id="gstPercent" type="number" ng-change = "onCalculateItemTotalHandler('Order')" class="validate">
+                            <label class="active" for="last_name">GST (%)</label>
+                        </div>
+
+                        <div class="input-field field-input wp100">
+                            <input  ng-model="data.itemFinalAmount" name="itemFinalAmount" id="itemFinalAmount" type="number" class="validate" readonly>
+                            <label class="active" for="last_name">Amount</label>
+                        </div>
+
+                        <a ng-click = "onAddToCartHandler('Order')" class="cs-btn">
+                            <i class="material-icons">add</i>
+                        </a>
+                    </div>
                 </div>
             </div>
-            
-            <div class="cs-add-form mt15">
+
+            <div ng-if="cartItemData.length > 0" class="cart-card">
+                <div class="list-heading">Item Information</div>
+                <div ng-repeat = "row in cartItemData" class="coman-list">
+                    <div class="center-item">
+                        <div class="cs-content">
+                            <p>{{row.categoryName}}, {{row.subCategoryName}}, {{row.productName}}</p>
+                            <span>#{{row.productCode}}</span>
+                        </div>
+                        <a ng-click = "onDeleteFromCartHandler($index)" class="dialer circle-btn"><i class="material-icons">delete_sweep</i></a>
+                    </div>
+
+                    <div class="pdlr">
+                        <div class="cs-flex">
+                            <div class="bdr-field wp100">
+                                <span>QTY</span>
+                                <p>{{row.qty}}</p>
+                            </div>
+                            <div class="bdr-field wp100">
+                                <span>Rate</span>
+                                <p> &#8377;  {{row.rate}}</p>
+                            </div>
+
+                            <div class="bdr-field wp100">
+                                <span>Discount ({{row.discountPercent}}%)</span>
+                                <p> &#8377;  {{getRoundAmountHandler(row.discountAmount)}}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pdlr">
+                        <div class="cs-flex">
+                            <div class="bdr-field wp50">
+                                <span>CGST ({{row.cgstPercent}} %)</span>
+                                <p> &#8377;  {{getRoundAmountHandler(row.cgstAmount)}} </p>
+                            </div>
+
+                            <div class="bdr-field wp50">
+                                <span>SGST ({{row.sgstPercent}} %)</span>
+                                <p> &#8377;  {{getRoundAmountHandler(row.sgstAmount)}} </p>
+                            </div>
+
+                            <div class="bdr-field wp50">
+                                <span>IGST ({{row.igstPercent}} %)</span>
+                                <p> &#8377;  {{getRoundAmountHandler(row.igstAmount)}} </p>
+                            </div>
+
+                            <div class="bdr-field wp50">
+                                <span>Amount</span>
+                                <p> &#8377;  {{getRoundAmountHandler(row.itemFinalAmount)}} </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div ng-if = "cartItemData.length > 0" class="cs-add-form mt15">
                 <div class="field-input">
-                    <select ng-model="data.product_id" ng-change="slectedProductInformation(data.product_id)" ng-options="row.id as row.product_name for row in productListData" class="browser-default">
-                        <option value="" disabled selected>Select Product</option>
+                    <select ng-model = "data.deliveryByTypeId" ng-change="onDeliveryByTypeChangeHandler()" class="browser-default">
+                        <option value="" disabled selected>Delivery By Type</option>
+                        <option ng-repeat = "row in deliveryByTypeList" value="{{row.id}}">{{row.type}}</option>
                     </select>
                 </div>
             </div>
-            
-            
-            
-            <div class="flex-input">
-                <div class="input-field field-input wp100">
-                    <input ng-model="data.qty" ng-change = "onCalculateItemTotalHandler('Order')" name="qty" id="qty" type="number" min = "0"  class="validate">
-                    <label class="active" for="last_name">QTY</label>
-                </div>
-                <div class="input-field field-input wp100">
-                    <input ng-model="data.rate" name="rate" id="rate" ng-change = "onCalculateItemTotalHandler('Order')" type="number" class="validate">
-                    <label class="active" for="last_name">Rate</label>
-                </div>
-                
-                <div class="input-field field-input wp100 mr0">
-                    <input  ng-model="data.discountPercent" name="discountPercent" id="discountPercent" type="number" ng-change = "onCalculateItemTotalHandler('Order')" class="validate">
-                    <label class="active" for="last_name">Discount (%)</label>
+
+            <div ng-show = "data.deliveryByTypeId && cartItemData.length > 0" class="cs-add-form mt15">
+                <div class="field-input">
+                    <div class="form-space">
+                        <div class="add-css-select no-padding selectopt" >
+                            <!-- <searchandselect selecteditem="search.deliveryByName" values="drDeliveryByList" key="Key"  totalrecords="totalDeliveryByDrRecords" onscroll="onGetDrTypeDataHandler('orderDeliveryBy', searchKey, pagenumber)"></searchandselect> -->
+                            <div class="input-field">
+                                <input  ng-model="search.deliveryByName" name="deliveryByName">
+                                <label class="active" for="last_name">Delivery By</label>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            
-            <div class="flex-input">            
-                <div class="input-field field-input wp100">
-                    <input ng-model="data.gstPercent" name="gstPercent" id="gstPercent" type="number" ng-change = "onCalculateItemTotalHandler('Order')" class="validate">
-                    <label class="active" for="last_name">GST (%)</label>
-                </div>
-                
-                <div class="input-field field-input wp100">
-                    <input  ng-model="data.itemFinalAmount" name="itemFinalAmount" id="itemFinalAmount" type="number" class="validate" readonly>
-                    <label class="active" for="last_name">Amount</label>
-                </div>
-                
-                <a ng-click = "onAddToCartHandler('Order')" class="cs-btn">
-                    <i class="material-icons">add</i>
-                </a>
+
+
+            <div ng-if="cartItemData.length > 0" class="summary-table">
+                <table>
+                    <tr>
+                        <td class="w130">Discount Amount</td>
+                        <td class="text-right" style="font-size: 14px;">{{getRoundAmountHandler(cartSummaryData.discountAmount)}}</td>
+                    </tr>
+                    <tr>
+                        <td>Pre Tax Total</td>
+                        <td class="text-right" style="font-size: 14px;">{{getRoundAmountHandler(cartSummaryData.discountedAmount)}}</td>
+                    </tr>
+                    <tr>
+                        <td>CGST Amount</td>
+                        <td class="text-right" style="font-size: 14px;">Rs. {{getRoundAmountHandler(cartSummaryData.cgstAmount)}}</td>
+                    </tr>
+                    <tr>
+                        <td>SGST Amount</td>
+                        <td class="text-right" style="font-size: 14px;">Rs. {{getRoundAmountHandler(cartSummaryData.sgstAmount)}}</td>
+                    </tr>
+                    <tr>
+                        <td>IGST Amount</td>
+                        <td class="text-right" style="font-size: 14px;">Rs. {{getRoundAmountHandler(cartSummaryData.igstAmount)}}</td>
+                    </tr>
+                    <tr>
+                        <td>Total(Rs) </td>
+                        <td class="text-right" style="font-size: 14px;">Rs. {{getRoundAmountHandler(cartSummaryData.itemFinalAmount)}}</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div ng-click = "onSaveOrderHandler()" ng-if = "cartItemData.length > 0" class="cs-save-btn mt20">
+                <button class="wp100">PLACE ORDER</button>
             </div>
         </div>
-    </div>
-    
-    <div ng-if="cartItemData.length > 0" class="cart-card">
-        <div class="list-heading">Item Information</div>
-        <div  class="coman-list mt0 mr0 ml0" ng-repeat = "row in cartItemData">
-            <div class="center-item padding10" style="border-bottom: 1px dashed #ccc;">
-                <div class="cs-content ellipsis">
-                    <p class="ellipsis">{{row.categoryName}}, {{row.subCategoryName}}, {{row.productName}}</p>
-                    <span class="ellipsis">#{{row.productCode}}</span>
-                </div>
-                <a ng-click = "onDeleteFromCartHandler($index)" class="dialer circle-btn"><i class="material-icons">delete_sweep</i></a>
-            </div>
-            <div class="top-head" >
-                <ul>
-                    <li class="wp100">
-                        <p>{{row.qty}}</p>
-                        <span>Quantity</span>
-                    </li>
-                    <li class="wp100">
-                        <p> &#8377;  {{row.rate}}</p>
-                        <span>Rate</span>
-                    </li>
-                    
-                    <li class="wp100">
-                        <p>&#8377;  {{getRoundAmountHandler(row.discountAmount)}}</p>
-                        <span>Discount ({{row.discountPercent}}%)</span>
-                    </li>
-                </ul>
-            </div>
-            <div class="cs-secation padding10">
-                <p><span>CGST ({{row.cgstPercent}} %) :</span> &#8377;  {{getRoundAmountHandler(row.cgstAmount)}} </p>
-                <p><span>SGST ({{row.sgstPercent}} %) :</span> &#8377;  {{getRoundAmountHandler(row.sgstAmount)}}</p>
-                <p><span>IGST ({{row.igstPercent}} %) :</span> &#8377;  {{getRoundAmountHandler(row.igstAmount)}}</p>
-            </div>
-            <div class="bottom-sec">
-                <p class="clamp2 text-right"><strong>Amount</strong>: <span style="font-size: 16px;">&#8377;  {{getRoundAmountHandler(row.itemFinalAmount)}}</span> </p>
-            </div>
-        </div>
-    </div>
-    
-    <div ng-if = "cartItemData.length > 0" class="cs-add-form mt15">
-        <div class="field-input">
-            <select ng-model = "data.deliveryBy" ng-change="onDeliveryByTypeChangeHandler(data.deliveryBy)" class="browser-default">
-                <option value="" disabled selected>Delivery By Type</option>
-                <option ng-show="data.type != 'Distributor'" value="Dealer">Dealer</option>
-                <option ng-show="data.type != 'Distributor'" value="Distributor">Distributor</option>
-                <option ng-show="data.type=='Distributor'" value="Company">Company</option>
-            </select>
-        </div>
-    </div>
-    
-    <div ng-show = "(data.deliveryBy == 'Dealer' || data.deliveryBy == 'Distributor' ) && cartItemData.length > 0" class="cs-add-form mt15">
-        <div class="field-input">
-            <label for="last_name" class="fix-label">Dispatch By Name</label>
-            <div class="add-css-select pt0 selectopt no-padding  add2">
-                <searchable-multiselect display-attr="Key" selected-items="data.dispatch_by" all-items="orderDispatchByData"
-                    add-item="dispatch_by_select(item)">
-                </searchable-multiselect>
-            </div>
-        </div>
-    </div>
-    
-    
-    <div ng-if="cartItemData.length > 0" class="summary-table">
-        <table>
-            <tr>
-                <td class="w130">Discount Amount</td>
-                <td class="text-right" style="font-size: 14px;">{{getRoundAmountHandler(cartSummaryData.discountAmount)}}</td>
-            </tr>
-            <tr>
-                <td>Pre Tax Total</td>
-                <td class="text-right" style="font-size: 14px;">{{getRoundAmountHandler(cartSummaryData.discountedAmount)}}</td>
-            </tr>
-            <tr>
-                <td>CGST Amount</td>
-                <td class="text-right" style="font-size: 14px;">Rs. {{getRoundAmountHandler(cartSummaryData.cgstAmount)}}</td>
-            </tr>
-            <tr>
-                <td>SGST Amount</td>
-                <td class="text-right" style="font-size: 14px;">Rs. {{getRoundAmountHandler(cartSummaryData.sgstAmount)}}</td>
-            </tr>
-            <tr>
-                <td>IGST Amount</td>
-                <td class="text-right" style="font-size: 14px;">Rs. {{getRoundAmountHandler(cartSummaryData.igstAmount)}}</td>
-            </tr>
-            <tr>
-                <td>Total(Rs) </td>
-                <td class="text-right" style="font-size: 14px;">Rs. {{getRoundAmountHandler(cartSummaryData.itemFinalAmount)}}</td>
-            </tr>
-        </table>
-    </div>
-    
-    <div ng-click = "onSaveLeadOrderData()" ng-if = "cartItemData.length > 0" class="cs-save-btn mt20">
-        <button class="wp100">PLACE ORDER</button>
-    </div>
-</div>
+    </ion-content>
+</ion-view>
 
 <script id="add-address" type="text/ng-template">
     <ion-modal-view style="background: rgba(0, 0, 0, 0.7);">
@@ -248,31 +240,31 @@
                                         <searchandselect selecteditem="search.stateName" values="stateList" key="Key"  totalrecords="totalStateRecords" onscroll="onGetSearchSelectDataHandler('fetchStateData', searchKey, pagenumber)"></searchandselect>
                                     </div>
                                 </div>
-                                
+
                                 <div ng-class="{'has-error': addressForm.districtName.$invalid && addressForm.$submitted}" class="field-input">
                                     <div class="add-css-select pt0 selectopt no-padding pb16 add2">
                                         <searchandselect selecteditem="search.districtName" values="districtList" key="Key"  totalrecords="totalDistrictRecords" onscroll="onGetSearchSelectDataHandler('fetchDistrictData', searchKey, pagenumber)"></searchandselect>
                                     </div>
                                 </div>
-                                
+
                                 <div ng-class="{'has-error': addressForm.city.$invalid && addressForm.$submitted}" class="input-field field-input">
                                     <input ng-model="data.city" placeholder="City" name="city"  id="city" type="text" class="validate" required>
                                     <label for="last_name" class="fix-label">City</label>
-                                    
+
                                 </div>
-                                
+
                                 <div ng-class="{'has-error': addressForm.pincode.$invalid && addressForm.$submitted}" class="input-field field-input">
                                     <input ng-model="data.pincode" placeholder="pincode" name="pincode"  id="pincode" type="number" class="validate" limit-to = "6" maxlength="6" minlength = "6" string-to-number required>
                                     <label for="last_name" class="fix-label">Pincode</label>
-                                    
+
                                 </div>
-                                
-                                
+
+
                                 <div class="input-field field-input mt10">
                                     <textarea ng-model="data.street" name="remark" class="validate" style="height: 70px !important;" required></textarea>
                                     <label for="last_name" class="fix-label">Street</label>
                                 </div>
-                                
+
                             </div>
                         </div>
                         <div class="sgsave">
@@ -284,8 +276,3 @@
         </ion-content>
     </ion-modal-view>
 </script>
-
-</ion-content>
-</ion-view>
-
-

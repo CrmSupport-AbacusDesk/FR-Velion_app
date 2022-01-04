@@ -11,36 +11,37 @@
     
     <ion-content>
         <div class="wr_frinfo offbg">
-            <div class="firm_info">
-                <p><span>Transport Name</span> <span>XYZ Company</span></p>
-                <p><span>Driver Name</span> <span>Ram Kumar Verma</span></p>
-                <p><span>Driver Mobile No.</span> <span>+91 8748596523</span></p>
-                <p><span>Vehicle No.</span> <span>HR 51 BC 1719</span></p>
+            <div class="firm_info" ng-if="history_data.transport_name != '' || history_data.driver_name != '' ||history_data.driver_mobile != '' || history_data.transport_no != ''">
+                <p ng-if="history_data.transport_name != ''"><span>Transport Name</span> <span>{{history_data.transport_name}}</span></p>
+                <p ng-if="history_data.driver_name != ''"><span>Driver Name</span> <span>{{history_data.driver_name}}</span></p>
+                <p ng-if="history_data.driver_mobile != ''"><span>Driver Mobile No.</span> <span>+91 {{history_data.driver_mobile}}</span></p>
+                <p ng-if="history_data.transport_no != ''"><span>Vehicle No.</span> <span>{{history_data.transport_no}}</span></p>
             </div>
         </div>
         
         
         <div class="gift_slide">
             <div class="nm_point">
-                <h1>Wrist Watch</h1>
-                <h2>23 Points</h2>
+                <h1>{{history_data.offer_gift_name}}</h1>
+                <h2>{{history_data.offer_gift_points}} Points</h2>
             </div>
             
             <div class="orp-slider">
-                <img src="img/dft_product.svg" alt="">
+                <img src="{{uploadURL+history_data.url}}" alt="">
+                <!-- src="{{uploadURL+row.image_name}}" -->
             </div>
         </div>
         
         
         <div class="gf_description">
             <h1 class="mt16">Description :</h1>
-            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy.</p>
-            <p><strong>1.</strong> Lorem Ipsum is simply dummy text of the.</p>
-            <p><strong>2.</strong> It is a long established fact that.</p>
+            <p>{{history_data.gift_description}}</p>
+            <!-- <p><strong>1.</strong> Lorem Ipsum is simply dummy text of the.</p>
+            <p><strong>2.</strong> It is a long established fact that.</p> -->
         </div>
         
-        <div class="cs_orp-bttn padding16">
-            <a href="" class="active">Click Here If You Recieved</a>
+        <div class="cs_orp-bttn padding16" ng-if="history_data.status == 'Shipped' && history_data.receive_status != 'Received'">
+            <a ng-click="changeStatus(history_data.id)" class="active">Click Here If You Recieved</a>
         </div>
         
         

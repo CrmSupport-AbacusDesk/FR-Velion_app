@@ -1,52 +1,89 @@
 <ion-view view-title="Login" name="login-view" hide-nav-bar="true">
-    <ion-content class="gr_bg">
-        <div class="login orp_login">
-            <div class="logo text-center">
-                <img src="img/okaya_orp_logo.png" alt="">
-            </div>
-            
-            <div class="login-form">
-                <div class="list">
-                    <h2>Login</h2>
-                    <p>Please Sign in to Continue.</p>
-                    <label class="item item-input item-floating-label">
-                        <i class="material-icons">person</i>
-                        <input type="text" placeholder="ORP code" required>
-                    </label>
-                    
-                    <div class="show-hide">
-                        <label ng-init="passwordType='password'" class="item item-input item-floating-label">
-                            <i class="material-icons rotate">vpn_key</i>
-                            <input type="text" placeholder="password" class="no-margin-bottom" required>
-                        </label>
-                        <a ng-show="passwordType=='text'" class="show-hide-btn" ng-click="passwordType='password'" required>
-                            <i class="material-icons">visibility</i>
-                        </a>
-                        
-                        <a ng-show="passwordType=='password'"  class="show-hide-btn" ng-click="passwordType='text'" >
-                            <i class="material-icons">visibility_off</i>
-                        </a>
-                    </div>
-                    <a class="fgp" href="#/orp_forgotpassword"><span>Forgot Password</span> ?</a>
-                    
-                    <div class="btnn mt45">
-                        <a href="#/orp_otp">LOGIN</a>
-                        <!-- <input type="submit" value="LOGIN"/> -->
-                    </div>
 
+  <ion-content >
+    <!-- <div class="start-slider" ng-if="view == 'false'"> -->
+    <div class="start-slider" style="display: none;">
 
-                    <div class="or-seprate">
-                        <span>OR</span>
-                    </div>
-
-                    <div class="btnn mt0">
-                        <a href="#/orp_registration" class="active">REGISTER AS YOUR SELF</a>
-                    </div>
-
-
-
-                </div>
-            </div>
+        <div class="com-logo">
+            <img src="img/okaya_orp_logo.png">
         </div>
-    </ion-content>
+
+        <ion-slide-box class="new_slides" on-slide-changed="slideHasChanged($index)" slide-interval="2000">
+            <ion-slide ng-repeat="row in introduction_screen">
+                <div class="sl-container" >
+                    <img src="img/okaya-img/{{row}}">
+                </div>
+            </ion-slide>
+        </ion-slide-box>
+
+        <button class="next-btn" ng-if='index != introduction_screen.length-1' ng-click='slide()'>Next <span><i class="material-icons">keyboard_arrow_right</i></span></button>
+        <button class="next-btn" ng-if='index == introduction_screen.length-1' ng-click='userView()'>Login Page<span><i class="material-icons">keyboard_arrow_right</i></span></button>
+    </div>
+    <!-- <div class="login orp_login" ng-if="view == 'true'"> -->
+    <div class="login orp_login">
+
+        <div class="logo text-center">
+            <img src="img/okaya_orp_logo.png" alt="">
+        </div>
+
+        <div class="login-form">
+            <div class="list login-bx">
+                <p>Please login in to Continue...</p>
+                <form name="Loginfrom" ng-submit = "!Loginfrom.$invalid && login()" novalidate >
+                    <label class="item item-input item-floating-label" ng-class="{'has-error': Loginfrom.username.$invalid && Loginfrom.$submitted}">
+                        <i class="material-icons">person</i>
+                        <input type="text" placeholder="Username" name="username" id='username' required ng-model="loginData.username">
+                    </label>
+                    <span class="error-left relative" ng-show="Loginfrom.$submitted && Loginfrom.username.$error.required">*Username Required</span>
+
+                    <div class="show-hide">
+                        <label ng-init="loginData.passwordType='password'" class="item item-input item-floating-label" ng-class="{'has-error': Loginfrom.password.$invalid && Loginfrom.$submitted}">
+                            <i class="material-icons rotate">vpn_key</i>
+                            <input type="{{loginData.passwordType}}" placeholder="Password" name='password' id="password" class="no-margin-bottom" required ng-model="loginData.password">
+                        </label>
+                        <span class="error-left relative" ng-show="Loginfrom.$submitted && Loginfrom.password.$error.required">*Password Required</span>
+
+                        <ng-container ng-if="loginData.password && loginData.password!=''">
+                            <a  class="show-hide-btn" ng-click="loginData.passwordType='password'" ng-if="loginData.passwordType=='text'">
+                                <i class="material-icons">visibility</i>
+                            </a>
+
+                            <a   class="show-hide-btn" ng-click="loginData.passwordType='text'" ng-if="loginData.passwordType=='password'">
+                                <i class="material-icons">visibility_off</i>
+                            </a>
+                        </ng-container>
+
+                    </div>
+                    <a class="fgp" href="#/orp_otp"><span>Forgot Password</span> ?</a>
+
+                    <div class="btnn arrow-btn mt55">
+                        <!-- <a href="#/orp_otp">LOGIN</a> -->
+                        <button type="submit">SUBMIT</button>
+                    </div>
+                </form>
+
+                <div class="or-seprate">
+                    <span>OR</span>
+                </div>
+
+                <div class="btnn flat-btnn mt0">
+                    <a href="#/orp_registration">NEW USER? REGISTER YOURSELF</a>
+                </div>
+
+                <div class="company-support">
+                  <a href="tel: 7428220220"><i class="material-icons">contact_support</i> Customer Care : +91 74282<span>20220</span></a>
+              </div>
+
+            </div>
+
+            <!-- <div class="powered">
+                Powered by Okaya
+            </div> -->
+        </div>
+    </div>
+</ion-content>
+
+    <!-- <ion-content class="gr_bg" >
+    </ion-content> -->
+
 </ion-view>
