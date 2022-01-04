@@ -23,27 +23,22 @@
                     <div class="form-column">
                         <div class="name">Select Type</div>
                         <div class="check-radio">
-                            <label  ng-if="loginData.designation_id==3 || loginData.designation_id==4 || loginData.designation_id==5 ||loginData.designation_id==7" for="" ng-click="All_distributors = [];allDealerList =[];">
+                            <label for="">
                                 <input type="radio" name="TravelType" ng-model="form.TravelType" value="Area">
                                 Area
                             </label>
-                            <label for="" ng-click="get_distributor();getAllDealer()">
+                            <label for="">
                                 <input type="radio" name="TravelType" ng-model="form.TravelType" value="Party">
                                 Party
                             </label>
                         </div>
                     </div>
                     
-                    <!-- <div class="input-field field-input" ng-class="{'has-error': travelform.visitDate.$invalid && travelform.$submitted}" class="field-input">
+                    <div class="input-field field-input" ng-class="{'has-error': travelform.visitDate.$invalid && travelform.$submitted}" class="field-input">
                         <input type="date" class="validate" name="visitDate" ng-model="form.visitDate" min="{{travel.startDate}}" max="{{travel.endDate}}">
                         <label for="last_name" class="fix-label">Visit Date</label>
-                    </div> -->
-                    
-                    <div class="input-field field-input" ng-class="{'has-error': travelform.visitDate.$invalid && travelform.$submitted}" class="field-input">
-                        <input type="date" class="validate" name="visitDate" ng-model="form.visitDate" >
-                        <label for="last_name" class="fix-label">Visit Date</label>
                     </div>
-
+                    
                     <ng-container ng-if="form.TravelType == 'Area'">
                         <div ng-class="{'has-error': addressForm.stateName.$invalid && addressForm.$submitted}" class="field-input">
                             <label for="last_name" class="fix-label">State</label>
@@ -66,48 +61,14 @@
                                 </searchable-multiselect>
                             </div>
                         </div>
-
-                        <div class="field-input mt16" >
-                            <label  class="fix-label">Distributor</label>
-                            <div class="add-css-select pt0 selectopt no-padding  add2">
-                                <searchable-multiselect display-attr="Key" selected-items="search.drName" all-items="All_distributors" add-item="select_mul_dr(item)">
-                                </searchable-multiselect>
-                            </div>
-                        </div>
-
-                        <div class="field-input mt16" >
-                            <label class="fix-label">Dealer</label>
-                            <div class="add-css-select pt0 selectopt no-padding  add2">
-                                <searchable-multiselect display-attr="Key" selected-items="search.dealerName" all-items="allDealerList" add-item="select_mul_dealer(item)" >
-                                </searchable-multiselect>
-                            </div>
-                        </div>
-
                     </ng-container>
-                    <!-- <div class="field-input" ng-if="form.TravelType == 'Party'">
+                    <div class="field-input" ng-if="form.TravelType == 'Party'">
                         <label for="last_name" class="fix-label">Distributor</label>
                         <div class="add-css-select pt0 selectopt no-padding  add2">
                             <searchable-multiselect display-attr="Key" selected-items="search.drName" all-items="distributorData" add-item="select_mul_dr(item)" remove-item="remove_mul_dr(item)" >
                             </searchable-multiselect>
                         </div>
-                    </div> -->
-                    <ng-container ng-if="form.TravelType == 'Party'">
-                       
-                        <div class="field-input" >
-                            <label for="last_name" class="fix-label">Distributor</label>
-                            <div class="add-css-select pt0 selectopt no-padding  add2">
-                                <searchable-multiselect display-attr="Key" selected-items="search.drName" all-items="All_distributors" add-item="select_mul_dr(item)">
-                                </searchable-multiselect>
-                            </div>
-                        </div>
-                        <div class="field-input mt16" >
-                            <label for="last_name" class="fix-label">Dealer</label>
-                            <div class="add-css-select pt0 selectopt no-padding  add2">
-                                <searchable-multiselect display-attr="Key" selected-items="search.dealerName" all-items="allDealerList" add-item="select_mul_dealer(item)" >
-                                </searchable-multiselect>
-                            </div>
-                        </div>
-                    </ng-container>
+                    </div>
                     <div class="input-field field-input">
                         <input name="companyName"type="text" class="validate" name="remark" ng-model="form.remark" replace="[^a-zA-Z]" with="">
                         <label for="last_name">Purpose of visit</label>

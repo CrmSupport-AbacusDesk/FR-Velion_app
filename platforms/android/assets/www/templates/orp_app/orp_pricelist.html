@@ -1,101 +1,64 @@
-<ion-view view-title="Price List" name="Scan-view" hide-nav-bar="true">
-
+<ion-view view-title="Price List" name="Scan-view" hide-nav-bar="true" ng-init="search.selected='brand'" >
+    
     <ion-header-bar class="opr_ion_header">
         <div class="cs-left">
             <button class="back-button" ng-click="goToBackPageHandler()"><i class="material-icons">arrow_back</i></button>
             <h1 class="orp_title">Price List</h1>
         </div>
         <div class="cs-right">
-            <button ng-click="pricelistOpenModel()"><i class="material-icons">filter_list</i></button>
+            <button ng-click="pricelistOpenModel()">
+                <i class="material-icons">filter_list</i>
+                <span ng-if="filterCounter > 0" >{{filterCounter}}</span>
+            </button>
         </div>
     </ion-header-bar>
-
-
-    <ion-content>
+    
+    
+    <ion-content >
         
-        <div class="orp_seacrh">
+        <div class="orp_seacrh search_height" ng-class="{'search_active':suggestiveList.length}">
             <div class="figure">
-                <input type="text" placeholder="Search ">
-                <button><i class="material-icons">clear</i></button>
+                <input type="text" placeholder="Search" name="master_search" ng-model="search.master_search" ng-change="getSuggestiveData()">
+                <button ng-click="search.master_search= '';search.product_code='';suggestiveList=[];getProductPriceList();"><i class="material-icons">clear</i></button>
+
+                <div class="search-data">
+                    <ul>
+                        <li ng-repeat="row in suggestiveList" >
+                            <p ng-click="search.product_code=row.product_code;getProductPriceList()" >{{row.product_name}} ({{row.brand}}) ({{row.product_code}})</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="bx-listing">
+            
+            <a ng-repeat="row in productPriceList">
+                <div class="description des-height">
+                    <div class="cs-left">
+                        <h1>{{row.product_name}}   -   {{row.category}} </h1>
+                        <p>Brand : {{row.brand}}</p>
+                        <p>Product Code : {{row.product_code}}</p>
+                    </div>
+                    <div class="cs-right">
+                        <p class="price">{{row.price}} /-</p>
+                    </div>
+                </div>
+            </a>
+            
+        </div>
+        <div class="data-not-found" ng-if="productPriceList.length == 0" >
+            <div class="outer">
+                <div class="innear">
+                    <img src="img/data-not-found.svg" alt="">
+                    <h2>Temporarily , No Data Available!</h2>
+                </div>
             </div>
         </div>
 
-        <div class="bx-listing">
-
-            <a href="#/">
-                <div class="description">
-                    <div class="cs-left">
-                        <h1>Product Name</h1>
-                        <p>SR No. : OKAYA#$84THY75815266</p>
-                    </div>
-                    <div class="cs-right">
-                        <p class="price">25,0.00 /-</p>
-                    </div>
-                </div>
-            </a>
-
-            <a href="#/">
-                <div class="description">
-                    <div class="cs-left">
-                        <h1>Product Name</h1>
-                        <p>SR No. : OKAYA#$84THY75815266</p>
-                    </div>
-                    <div class="cs-right">
-                        <p class="price">25,0.00 /-</p>
-                    </div>
-                </div>
-            </a>
-
-            <a href="#/">
-                <div class="description">
-                    <div class="cs-left">
-                        <h1>Product Name</h1>
-                        <p>SR No. : OKAYA#$84THY75815266</p>
-                    </div>
-                    <div class="cs-right">
-                        <p class="price">25,0.00 /-</p>
-                    </div>
-                </div>
-            </a>
-
-            <a href="#/">
-                <div class="description">
-                    <div class="cs-left">
-                        <h1>Product Name #001</h1>
-                        <p>SR No. : OKAYA#$84THY75815266</p>
-                    </div>
-                    <div class="cs-right">
-                        <p class="price">25,0.00 /-</p>
-                    </div>
-                </div>
-            </a>
-
-            <a href="#/">
-                <div class="description">
-                    <div class="cs-left">
-                        <h1>Product Name #001</h1>
-                        <p>SR No. : OKAYA#$84THY75815266</p>
-                    </div>
-                    <div class="cs-right">
-                        <p class="price">25,0.00 /-</p>
-                    </div>
-                </div>
-            </a>
-
-            <a href="#/">
-                <div class="description">
-                    <div class="cs-left">
-                        <h1>Product Name #001</h1>
-                        <p>SR No. : OKAYA#$84THY75815266</p>
-                    </div>
-                    <div class="cs-right">
-                        <p class="price">25,0.00 /-</p>
-                    </div>
-                </div>
-            </a>
-        </div>        
+        <!-- <button class="scrool-top" ng-click="scrollToTop()"><i class="material-icons">keyboard_arrow_up</i></button> -->
+        
     </ion-content>
-    
     <script id="pricelist_filter" type="text/ng-template">
         <ion-modal-view>
             
@@ -104,29 +67,44 @@
                     <div class="fl-header">
                         <button ng-click="pricelistCloseModel()"><i class="material-icons">keyboard_arrow_down</i></button>
                         <p>FILTERS</p>
-                        <button ng-click="pricelistCloseModel()">Clear</button>
+                        <button ng-click="pricelistCloseModel();clearFilter()">Clear</button>
                     </div>
-
+                    
                     <div class="filter-body">
                         <div class="cs-left">
-                            <button class="active">Brand</button>
-                            <button>Category</button>
+                            <button ng-class="{'active':search.selected=='brand'}" ng-click="filterSelected('brand')" >Brand</button>
+                            <button ng-class="{'active':search.selected=='category'}" ng-click="filterSelected('category')" >Category</button>
                         </div>
-                        <div class="cs-right">
-                            <div class="inputss">
-                                <label><input type="checkbox"> <span>Okaya</span></label>
-                                <label><input type="checkbox"> <span>Nasaka</span></label>
-                                <label><input type="checkbox"> <span>Microtek</span></label>
+                        <div class="cs-right content-scroll"> 
+                            <div class="inputss" ng-if="search.selected=='brand'"  >
+                                <label ng-repeat="row in distinctBrandList" >
+                                    <input type="checkbox" name="'brand'+$index" ng-model="row.selectedBrand" > 
+                                    <span>{{row.brand}}</span>
+                                </label>
+                            </div>
+                            <div class="inputss" ng-if="search.selected=='category'" >
+                                <label ng-repeat="row in distinctCategoryList">
+                                    <input type="checkbox" name="'category'+$index" ng-model="row.selectedCategory">
+                                    <span>{{row.category}}</span>
+                                </label>
                             </div>
                         </div>
                     </div>
-
-                    <div class="md_footer">
+                    
+                    <div class="md_footer" ng-click="applyFilter();pricelistCloseModel()">
                         <button class="full">Apply</button>
                     </div>
                 </div>
             </div>
         </ion-modal-view>
-    </script>
-
+    </script>  
+    
+    
+    
+    
+    
+    
+    
+    
+    
 </ion-view>

@@ -56,7 +56,7 @@
                     </li>
                     
                     <li ng-if="row.activity_type == 'Meeting'" >
-                        <p>{{row.checkInTimeInFormat ? row.checkInTimeInFormat : 'N/A'}}</p>
+                        <p>{{row.checkInTimeInFormat ? row.created_by_name : 'N/A'}}</p>
                         <span>Start Time</span>
                     </li>
                     
@@ -66,7 +66,7 @@
                     </li>
                     
                     <li ng-if="row.activity_type != 'Meeting'">
-                        <p>{{row.checkInTimeInFormat ? row.checkInTimeInFormat : 'N/A'}}</p>
+                        <p>{{row.checkInTimeInFormat ? row.created_by_name : 'N/A'}}</p>
                         <span>{{row.activity_type}} Time</span>
                     </li>
                     
@@ -86,7 +86,7 @@
                     <p>{{row.dr_name ? row.dr_name : 'N/A'}}</p>
                     <span>{{row.dr_type_name ? row.dr_type_name : 'N/A'}}</span>
                 </div>
-                <!-- <a href="tel: {{row.mobile}}" class="dialer"><i class="material-icons">call</i></a> -->
+                <a href="tel: {{row.mobile}}" class="dialer"><i class="material-icons">call</i></a>
             </div>
             
             <div ng-if="row.remark" class="pdlr pb1">
@@ -116,18 +116,23 @@
             </div>
         </div>
         <ion-infinite-scroll immediate-check="false" ng-if="!noMoreListingAvailable" on-infinite="getCheckInListData('scroll')" distance="20%" class="myspinner">
-            
-        </ion-content>
         
-        
-        <ion-footer class="ft2_btns csm-footer-tabs cs-footerr bg-none cs-save-btn">
-            <a class="wp100 h35 padding0" style="line-height: 35px;" ng-if="data.canNewMeetingStart && data.canNewMeetingStart == 'No'"  href="#/tab/activity-meeting-end">
-                End Meeting with {{data.drName}}
-            </a>
-            
-            <div class="fix-add" ng-click="onGoToActionHandler('addActivity')"><i class="material-icons">add</i></div>
-        </ion-footer>
-        
-    </ion-view>
+    </ion-content>
     
     
+    <ion-footer class="csm-footer-tabs cs-footerr bg-none">
+        <a ng-if="data.canNewMeetingStart && data.canNewMeetingStart == 'No'"  href="#/tab/activity-meeting-end">
+            <div class="cs-save-btn no-padding">
+                <button class="wp100">End Meeting</button>
+            </div>
+        </a>
+    </ion-footer>
+    
+    <div class="fix-add" ng-click="onGoToActionHandler('addActivity')" ng-if="data.canNewMeetingStart && data.canNewMeetingStart == 'Yes'">
+        <a>
+            <i class="material-icons">add</i>
+        </a>
+    </div>
+    
+</ion-view>
+

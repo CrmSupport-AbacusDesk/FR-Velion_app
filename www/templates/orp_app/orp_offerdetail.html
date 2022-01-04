@@ -1,95 +1,346 @@
 <ion-view view-title="Offer Detail" name="Wallet-History-view" hide-nav-bar="true">
 
 
-    <ion-header-bar class="opr_ion_header no_boxshadow">
-        <div class="cs-left">
-            <button class="back-button" ng-click="goToBackPageHandler()"><i class="material-icons">arrow_back</i></button>
-            <h1 class="orp_title">Offer Detail</h1>
-        </div>
-    </ion-header-bar>
+  <ion-header-bar class="opr_ion_header no_boxshadow">
+    <div class="cs-left">
+      <button class="back-button" ng-click="goToBackPageHandler()"><i class="material-icons">arrow_back</i></button>
+      <h1 class="orp_title">Offer Detail</h1>
+    </div>
+  </ion-header-bar>
 
-    
-    <ion-content>
-        <div class="offerlist ofdetail offbg">
-            <div class="figure mt0">
-                <div class="desc">
-                    <div class="off">
-                        <h1>Holi Lover Offer #0001</h1>
-                        <p>Valid Upto : 5 April 2020 <a href="#/">Terms & Condition</a></p>
-                    </div>
-                </div>
-                <div class="thumb"><img src="img/holi_banner.jpg" alt=""></div>
+
+  <ion-content>
+    <div class="offerlist ofdetail offbg">
+      <div class="figure mt0">
+        <div class="desc">
+          <div class="off">
+            <h1>{{offer_data.title}} {{offer_data.offer_code}}</h1>
+            <p>Start Date : {{dateFormat(offer_data.start_date)}}</a></p>
+            <p>Valid Upto : {{dateFormat(offer_data.end_date)}} <a href="#/orptab/orp_term_condition">Terms & Condition</a></p>
+          </div>
+        </div>
+        <ion-slide-box class="cs-slide offer-slide" on-slide-changed="slideHasChanged($index)" auto-play="true" does-continue="true" slide-interval="2000">
+          <ion-slide ng-repeat="row in offer_data.banners">
+            <div class="box">
+              <img src="{{uploadURL+row.image_name}}">
             </div>
+          </ion-slide>
+        </ion-slide-box>
+      </div>
+    </div>
+
+    <div class="cs-desc mt0 pl16 pr16">
+      <p class="ng-binding" > <div class="in_div-font" ng-bind-html="offer_data.description"></div></p>
+    </div>
+
+    <div class="offerlist giftlist">
+      <!-- href="#/orptab/orp_giftdetail" -->
+      <a class="figure" ng-repeat="row in offer_data.gift_list" ng-click = "giftDetail(row.gift_id)">
+        <div class="desc">
+          <div class="point-in" ng-class="{'tic':offer_data.orp_wallet_point > row.points_required || offer_data.orp_wallet_point == row.points_required}">
+            <h1>{{row.points_required}}</h1>
+            <p>Points</p>
+          </div>
+          <div class="off">
+            <h1>{{row.gift_title}}</h1>
+            <!-- <button ng-if="loginData.orp_wallet_point > row.points_required" ng-click="redeemRequest()" >send redeem request</button> -->
+          </div>
         </div>
-        
-        <div class="offerlist giftlist">
-            <a class="figure" href="#/orptab/orp_giftdetail">
-                <div class="desc">
-                    <div class="point-in tic">
-                        <h1>25</h1>
-                        <p>Points</p>
-                    </div>
-                    <div class="off">
-                        <h1>Wrist watch</h1>
-                        <button>send redeem request</button>
-                    </div>
-                </div>
-                <div class="thumb"><img src="img/dft_product.svg" alt=""></div>
-            </a>
+        <div class="thumb" ng-if="!row.url"><img src="img/dft_product.svg" alt=""></div>
+        <div class="thumb" ng-if="row.url"><img src="{{uploadURL+row.url}}" alt=""></div>
+      </a>
+    </div>
 
-            <a class="figure" href="#/orptab/orp_giftdetail">
-                <div class="desc">
-                    <div class="point-in">
-                        <h1>25</h1>
-                        <p>Points</p>
-                    </div>
-                    <div class="off">
-                        <h1>Wrist watch</h1>
-                    </div>
-                </div>
-                <div class="thumb"><img src="img/dft_product.svg" alt=""></div>
-            </a>
-
-            <a class="figure" href="#/orptab/orp_giftdetail">
-                <div class="desc">
-                    <div class="point-in tic">
-                        <h1>25</h1>
-                        <p>Points</p>
-                    </div>
-                    <div class="off">
-                        <h1>Wrist watch</h1>
-                        <button>send redeem request</button>
-                    </div>
-                </div>
-                <div class="thumb"><img src="img/dft_product.svg" alt=""></div>
-            </a>
-
-            <a class="figure" href="#/orptab/orp_giftdetail">
-                <div class="desc">
-                    <div class="point-in">
-                        <h1>25</h1>
-                        <p>Points</p>
-                    </div>
-                    <div class="off">
-                        <h1>Wrist watch</h1>
-                    </div>
-                </div>
-                <div class="thumb"><img src="img/dft_product.svg" alt=""></div>
-            </a>
-
-            <a class="figure" href="#/orptab/orp_giftdetail">
-                <div class="desc">
-                    <div class="point-in">
-                        <h1>25</h1>
-                        <p>Points</p>
-                    </div>
-                    <div class="off">
-                        <h1>Wrist watch</h1>
-                    </div>
-                </div>
-                <div class="thumb"><img src="img/dft_product.svg" alt=""></div>
-            </a>
+    <div class="pd-left-right16">
+      <!-- <div class="order-tags ok_box">
+        <div class="tag-head">
+          <div class="two-heads">
+            <h1>Points</h1>
+          </div>
+          <div class="cp-scan">
+            <h1>{{offer_data.scanDetail.total_scan_coupon}}</h1>
+            <span>Scan</span>
+          </div>
         </div>
-        
-    </ion-content>
+
+        <div class="tag-body">
+          <div class="two-counts multi-count">
+            <ul>
+              <li>
+                <span style="color: #0080e6;">Bonus</span>
+                <p>{{offer_data.bonuspoint.bonus_point}}</p>
+              </li>
+
+              <li>
+                <span style="color: rgb(18, 168, 131);">Scan</span>
+                <p>{{offer_data.scanDetail.total_scan_point}}</p>
+              </li>
+              <li>
+                <span style="color: rgb(28, 195, 224);">Total(scan + bonus)</span>
+                <p>{{offer_data.bonuspoint.bonus_point + offer_data.scanDetail.total_scan_point}}</p>
+              </li>
+              <li>
+                <span style="color: red;">Redeem</span>
+                <p>{{offer_data.redeemDetail.total_redeem}}</p>
+              </li>
+              <li>
+                <span style="color: green;">Balance</span>
+                <p>{{offer_data.balancepoint}}</p>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div> -->
+      <div class="bonus-column" ng-repeat='row in BonusDetails'>
+        <div class="bonus-head">
+          <h2>{{row.subcategory}}</h2>
+          <span class="counter">{{row.scan_count.total_scan}}</span>
+        </div>
+        <!-- <div class="bonus-head">
+          <h2 class="ng-binding">{{row.subcategory}}</h2>
+          <span class="counter">10</span>
+        </div> -->
+        <div class="point-track">
+          <ul>
+            <li ng-class="{'active': slabs.rangeCompletion==true || slabs.range_start==0}" ng-repeat='slabs in row.slab'>
+              <span class="af-cirle"></span>
+              <span class="af-line" ng-class="{'complete' :slabs.rangeCompletionPercent == '100' || slabs.rangeCompletionPercent == '0'}" ng-style="{width:slabs.rangeCompletionPercent+'%'}" ng-show="slabs.rangeCompletionPercent"></span>
+              <!-- complete -->
+              <p>{{slabs.range_start}}</p>
+            </li>
+            <!-- <li>
+              <span class="af-cirle"></span>
+              <span class="af-line"></span>
+              <p>75</p>
+
+            </li>
+            <li>
+              <span class="af-cirle"></span>
+              <span class="af-line"></span>
+              <p>125</p>
+            </li>
+            <li>
+              <span class="af-cirle"></span>
+              <span class="af-line"></span>
+              <p>199</p>
+            </li>
+            <li>
+              <span class="af-cirle"></span>
+              <p>299</p>
+            </li> -->
+          </ul>
+        </div>
+
+        <div class="text-right" ng-If='row.sub_count.length'>
+          <a class="button button-clear button-positive" ng-click="data.scan_history.show();ScanHistory(row.sub_count)">
+            View Scan History
+          </a>
+        </div>
+
+
+      </div>
+
+
+      <div class="clcsd menu-changes point-btn">
+        <ul class="collapsible">
+          <!-- <li ng-class="{'active':offerCollapseActive==true}"> -->
+          <li class='active'>
+            <div class="collapsible-header">
+              <div class="pt-img">
+                <img src="img/points.png">
+              </div>
+              <div class="pt-content" ng-click="offerCollapseActive = !offerCollapseActive">
+                <div class="pt-lft">
+                  <h1>{{offer_data.balancepoint}} Point</h1>
+                  <p>{{offer_data.scanDetail.total_scan_coupon}} Scan</p>
+                </div>
+                <div class="pt-rht">
+                  <span>View details</span>
+                </div>
+              </div>
+            </div>
+            <div class="collapsible-body no-padding">
+              <div class="points-container">
+
+                <div class="pdlr">
+                  <div class="df flex-wrap jcc wp100">
+                    <div class="count-sec">
+                      <div class="ct-count">
+                        <img src="img/gift.png">
+                        <p>{{offer_data.unredeemedBonus}}</p>
+                      </div>
+                      <div class="ct-label">
+                        Gift
+                      </div>
+                    </div>
+
+                    <div class="count-sec">
+                      <div class="ct-count">
+                        <img src="img/bonus.png">
+                        <p>{{offer_data.scanDetail.scan_bonus}}</p>
+                      </div>
+                      <div class="ct-label">
+                        Bonus
+                      </div>
+                    </div>
+
+                    <div class="count-sec">
+                      <div class="ct-count">
+                        <img src="img/qr-code.png">
+                        <p>{{offer_data.scanDetail.total_scan_point}}</p>
+                      </div>
+                      <div class="ct-label">
+                        Scan
+                      </div>
+                    </div>
+
+                    <div class="count-sec">
+                      <div class="ct-count">
+                        <img src="img/hand-gesture.png">
+                        <p>{{offer_data.bonuspoint.bonus_point + offer_data.scanDetail.total_scan_point}}</p>
+                      </div>
+                      <div class="ct-label">
+                        Total
+                      </div>
+                    </div>
+
+                    <div class="count-sec">
+                      <div class="ct-count">
+                        <img src="img/redeem.png">
+                        <p>{{offer_data.redeemDetail.total_redeem}}</p>
+                      </div>
+                      <div class="ct-label">
+                        Redeem
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="go-btn mt10 padding6" ng-if="offer_data.balancepoint > 100">
+                <a class="padding0" ng-click="redeemRequest();">
+                  <img src="img/tap.png" alt="">
+                  <div class="g-content">
+                    <h1>Click To Redeem {{offer_data.balancepoint}} points</h1>
+                  </div>
+                </a>
+              </div>
+            </div>
+
+          </li>
+        </ul>
+      </div>
+
+
+
+
+    </div>
+
+    <!-- ng-if="offer_data.orp_wallet_point > gift_data.points_required || offer_data.orp_wallet_point == gift_data.points_required" -->
+
+    <!-- ng-if="offer_data.offer_pdf != ''" -->
+    <div class="h90">&nbsp;</div>
+  </ion-content>
+
+
+  <div class="fix-add pdf-btn" ng-if="offer_data.offer_pdf != ''" ng-click="openCataloguePdf(offer_data.offer_pdf, offer_data.offer_status)">
+    <a>
+      <img src="img/pdf.svg" alt="pdf">
+    </a>
+  </div>
+
+  <script id="gift_otp" type="text/ng-template">
+    <ion-modal-view>
+
+      <div class="orp_model">
+        <div class="model_container">
+          <button ng-click="otpgiftCloseModel()" class="model_cancel"><i class="material-icons">cancel</i></button>
+          <form name="form1" novalidate ng-submit="!form1.$invalid && checkOtp()">
+
+
+            <div class="mini_container">
+              <div class="md_heading"><h1>Microtek International Pvt Ltd</h1></div>
+
+              <div class="md_body">
+                <p>Are you sure to redeem your {{gift_data.points_required}} points?</p>
+                <p>Enter your 6 digit OTP number that sent to <span>+91 {{loginData.loginMobile}}</span></p>
+
+                <div class="orp-input" ng-class="{'has-error': form1.otp.$invalid && form1.$submitted}">
+                  <input type="text" placeholder="Enter OTP" ng-model="data.otp" minlength = "6" maxlength ="6" required limit-to = "6" name="otp" id= "otp" >
+                  <span class="error-left relative" ng-show="form1.$submitted && form1.otp.$error.required" >*Otp Required</span>
+                  <span class="error-left relative" ng-show="form1.$submitted && form1.otp.$error.minlength">*Otp Must be 6 Digit</span>
+                  <span class="error-left relative" ng-show="form1.$submitted && form1.otp.$error.maxlength">*Otp Must be 6 Digit</span>
+                </div>
+
+                <div class="term df ac" >
+                  <label>
+                    <input type="checkbox" ng-model="data.check"> I have read
+                  </label>
+                  <a class="ml5">Terms & Condition</a>
+                </div>
+              </div>
+            </div>
+            <div class="md_footer" ng-style="{'opacity':data.check != true? 0.4 : 1}">
+              <button type = "submit" ng-disabled="data.check != true" >SAVE</button>
+            </div>
+          </form>
+
+        </div>
+      </div>
+    </ion-modal-view>
+  </script>
+
+  <script id="scan_hist" type="text/ng-template">
+    <ion-modal-view style="background: rgba(0, 0, 0, 0.7);">
+      <ion-content class="padding">
+        <div class="modal-outer padding10 ">
+          <div class="modal-cs">
+            <div class="modal-head">
+              <h2 class="title">Scan History</h2>
+              <button class="button button-clear button-primary" ng-click="data.scan_history.hide()"><i class="material-icons">clear</i></button>
+            </div>
+            <div class="ledmd"  style="padding: 5px;">
+              <ion-scroll direction="xy" style="min-height: auto; max-height: 400px;">
+                <div class="bouns-table">
+                  <table>
+                    <tr>
+                      <th>Type</th>
+                      <th>Total Scan</th>
+                      <th>Scan Value</th>
+                      <th>Bonus Value</th>
+                    </tr>
+                    <tr ng-repeat='row in sub_count'>
+                      <td>{{row.product_bonus_category}}</td>
+                      <td>{{row.total_scan}}</td>
+                      <td>{{row.total_scan_value}}</td>
+                      <td>{{row.total_bonus_value}}</td>
+                    </tr>
+                    <!-- <tr>
+                      <td>1 sq mm</td>
+                      <td>10</td>
+                      <td>20</td>
+                      <td>30</td>
+                    </tr>
+                    <tr>
+                      <td>1 sq mm</td>
+                      <td>10</td>
+                      <td>20</td>
+                      <td>30</td>
+                    </tr>
+                    <tr>
+                      <th>Total</th>
+                      <th>30</th>
+                      <th>60</th>
+                      <th>90</th>
+                    </tr> -->
+                  </table>
+                </div>
+              </ion-scroll>
+            </div>
+          </div>
+        </div>
+      </ion-content>
+    </ion-modal-view>
+  </script>
 </ion-view>

@@ -1,0 +1,32 @@
+<ion-view view-title="Electrician Scan" hide-nav-bar="true">
+    <ion-content>
+        <div class="orp_alerts" ng-if="result_data.status == 'error'">
+            <div class="al_container">
+                <div class="icon"></a><i class="material-icons">clear</i></div>
+                <div class="al_body">
+                    <h1>Oops !</h1>
+                    <h2>{{result_data.statusMessage}}</h2>
+                </div>
+
+                <div class="al_footer">
+                    <button class="red_btn" ng-click="startScan('scan','','Approved',1)">Try Again</button>
+                    <a class="green_btn" style="width: 130px; margin-left: 16px;" href="#/orptab/orp_dashboard">Close</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="orp_alerts success" ng-if="result_data.status == 'success'">
+            <div class="al_container">
+                <div class="icon"><i class="material-icons">done</i></div>
+                <div class="al_body">
+                    <h1>Success</h1>
+                    <h2>{{result_data.outputData.points}} <span>Points Added in Your Wallet</span></h2>
+                </div>
+                <div class="al_footer">
+                    <button class="blue_btn" ng-click="startScan('scan','','Approved',1)">Scan More Product</button>
+                    <a class="green_btn" style="width: 130px; margin-left: 16px;" href="#/orptab/orp_wallet-history" >Complete</a>
+                </div>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

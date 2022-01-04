@@ -1,0 +1,66 @@
+<ion-view view-title="Outstanding" hide-nav-bar="true">
+
+  <ion-header-bar class="opr_ion_header">
+    <div class="cs-left">
+      <a class="back-a" href='#/orptab/orp_dashboard'><i class="material-icons">arrow_back</i></a>
+        <h1 class="orp_title">Outstanding</h1>
+      </div>
+    </ion-header-bar>
+
+
+    <ion-content>
+      <!-- <ion-refresher on-refresh="data.search = ''; onSetCurrentPageHandler();getOrderListData('onRefresh')">
+        <ion-refresher-content
+        pullingIcon="arrow-dropdown"
+        pullingText="Pull to refresh"
+        refreshingSpinner="circles"
+        refreshingText="Refreshing...">
+      </ion-refresher-content>
+    </ion-refresher> -->
+
+    <div class="">
+      <div class="playstore-tabs ch-tab">
+        <ul >
+          <li ng-class='{"active" : row.division == categoryClass}' ng-repeat='row in categoryList' ng-click='getOutstanding_details(row.division)'>{{row.division}}</li>
+          <!-- <li>PSD</li>
+            <li>H C</li> -->
+          </ul>
+        </div>
+
+        <div >
+          <div id="container"></div>
+        </div>
+
+        <div class="card-list card-change pt16">
+          <div class="da-tag" ng-repeat='row in outstandingData' ng-click='gotoBillingPage(row.value1,row.value2,categoryClass)'>
+            <div class="lf-sec">
+              <p>{{row.label}}</p>
+              <span>Days</span>
+            </div>
+            <div class="rt-sec">
+              <p>₹ {{row.y?row.y:0}}</p>
+              <span>Amount</span>
+            </div>
+            <span class="fr-tag"><i class="material-icons">keyboard_arrow_right</i></span>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="data-not-found" ng-if="!categoryList.length" >
+        <div class="outer">
+          <div class="innear">
+            <img src="img/data-not-found.svg" alt="">
+            <h2>No Outstanding Found!</h2>
+          </div>
+        </div>
+      </div>
+
+      <!-- <ion-infinite-scroll immediate-check="false" ng-if="!noMoreListingAvailable" on-infinite="getOrderListData('scroll')" distance="20%" class="myspinner">
+      </ion-infinite-scroll> -->
+
+      <div class="h50"></div>
+
+    </ion-content>
+  </ion-view>
+

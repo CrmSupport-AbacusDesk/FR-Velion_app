@@ -3,6 +3,10 @@
         <div class="orp-dashboard">
             <div class="logo"><img src="img/okaya_orp_logo.png" alt=""></div>
             <div class="cs-buttons">
+                <a class="notification" href="#/orptab/orp_notification">
+                    <span ng-if="dashboard_data.dr_data.unread_notification !='0'" ng-class="{'counter':dashboard_data.dr_data.unread_notification > 0}">{{dashboard_data.dr_data.unread_notification}} </span>
+                    <i class="material-icons" ng-class="dashboard_data.dr_data.unread_notification!='0' ? 'bell_moving' : ''">notifications</i>
+                </a>
                 <a class="orp-menu" href="#/orptab/orp_menus">
                     <svg xmlns="http://www.w3.org/2000/svg" width="17.5" height="14" viewBox="0 0 17.5 14">
                         <g id="Group_1860" data-name="Group 1860" transform="translate(5555 -3149)">
@@ -12,115 +16,344 @@
                         </g>
                     </svg>
                 </a>
-                <button class="notification">
-                    <span class="counter">5</span>
-                    <i class="material-icons">notifications</i>
-                </button>
             </div>
         </div>
-        
-        
+
+        <ion-slide-box ng-if="showslider" class="cs-slide" on-slide-changed="slideHasChanged($index)" auto-play="true" does-continue="true">
+            <ion-slide ng-repeat="row in dashboard_data.home_banner">
+                <div class="box">
+                    <img ng-src="{{fotoUrl(row.banner_name)}}" style="width: 100% !important;" />
+                </div>
+            </ion-slide>
+        </ion-slide-box>
+
         <div class="orp-info">
             <div class="ds-container">
-                <div class="ds-profile"><img src="img/outline_profile-icon.svg" alt=""></div>
-                
-                <div class="profile-info">
-                    <p>Your profile <span>70%</span> Complete</p>
-                    
-                    <div class="cmt-in"><div style="width: 70%;"></div></div>
-                    <p>Welcome Partner</p>
-                    <h1>Raj Batteries And Inverters - 3000450</h1>
-                    <p class="mb0">Ram Kumar Verma</p>
-                    <p class="mt0">9685741582</p>
+                <!-- ng-if="dashboard_data.dr_data.profile_image == null"  -->
+                <div class="ds-profile" ng-if="dashboard_data.dr_data.profile_image == null">
+                    <img src="img/outline_profile-icon.svg" alt="" style="height: auto; width: auto;">
                 </div>
-                
+                <div class="ds-profile" ng-if="dashboard_data.dr_data.profile_image != null">
+                    <img  src="{{uploadURL}}{{dashboard_data.dr_data.profile_image}}" alt="">
+                </div>
+
+                <div class="profile-info">
+                    <p>Your profile is <span>{{dashboard_data.dr_data.profile_percentage}}%</span> Complete</p>
+
+                    <div class="cmt-in"><div style="width: {{dashboard_data.dr_data.profile_percentage}}%;"></div></div>
+                    <p>Welcome Partner</p>
+                    <h1>{{dashboard_data.dr_data.dr_name}} <span ng-if="dashboard_data.dr_data.dr_code" >- {{dashboard_data.dr_data.dr_code}}</span></h1>
+                    <p class="mb0">{{dashboard_data.dr_data.contact_name}}</p>
+                    <p class="mt0">{{dashboard_data.dr_data.contact_mobile_no?dashboard_data.dr_data.contact_mobile_no :dashboard_data.dr_data.sfa_contact_no}}</p>
+                </div>
+
                 <div class="sale-count">
                     <div class="figure">
-                        <p>2547</p>
-                        <p>Today</p>
-                    </div>
-                    <div class="figure">
-                        <p>36524</p>
-                        <p>MTD</p>
-                    </div>
-                    <div class="figure">
-                        <p>1257496</p>
-                        <p>Total YTD</p>
-                    </div>
-                </div>
-                
-                <div class="scn-btns">
-                    <a class="fl-btn" href="#/orptab/orp_scan">
-                        <img src="img/qr-code_icon.svg" alt="">
-                        <div class="des">
-                            <p>QR Code Scan</p>
-                            <p>Click Here To Go "DLR SALE QR Code"</p>
+                        <div><a href="#/orptab/orp_wallet-history">
+                            <span>Points</span>
+                            <p>{{dashboard_data.dr_data.today_points?dashboard_data.dr_data.today_points:'0'}}</p></a>
                         </div>
-                    </a>
+                        <div class="text-bg">Today</div>
+                    </div>
+                    <div class="figure">
+                        <div><a href="#/orptab/orp_wallet-history">
+                            <span>Points</span>
+                            <p>{{dashboard_data.dr_data.orp_mtd_point?dashboard_data.dr_data.orp_mtd_point:'0'}}</p></a>
+                        </div>
+                        <div class="text-bg">Total MTD</div>
+                    </div>
+                    <div class="figure">
+                        <div><a href="#/orptab/orp_wallet-history">
+                            <span>Points</span>
+                            <p>{{dashboard_data.dr_data.orp_ytd_point?dashboard_data.dr_data.orp_ytd_point:'0'}}</p></a>
+                        </div>
+                        <div class="text-bg">Total YTD</div>
+                    </div>
                 </div>
-                
-                <div class="scn-btns">
-                    <a href="#/orptab/orp_scan_purchase">
-                        <p>DLR Purchase</p>
-                        <img src="img/qr-code_icon.svg" alt="">
-                    </a>
-                    
-                    <a href="#/orptab/orp_scan_sale">
-                        <p>DLR Sale</p>
-                        <img src="img/qr-code_icon.svg" alt="">
-                    </a>
-                </div>
-                
+
             </div>
         </div>
-        
-        
-        <div class="scheme_en-ds">
+
+        <div class="qr-btns single-btn" ng-show="loginData.loginTypeId == '6'">
+            <a ng-click="goToPage('orptab.orp_scan_purchase','distributor')" >
+                <img src="img/qr-code_icon.svg" class="animate__animated animate__bounceIn" alt="">
+                <p>Click Here For Scan</p>
+            </a>
+        </div>
+
+        <div class="qr-btns single-btn" ng-show="loginData.loginTypeId == '13'">
+            <a ng-click="startScan('scan','electrician_scan',dashboard_data.dr_data.orp_status,dashboard_data.dr_data.is_kyc_done)">
+                <img src="img/qr-code_icon.svg" class="animate__animated animate__bounceIn" alt="">
+                <p>Click Here For Scan</p>
+            </a>
+
+            <!-- <a ng-click="data.manual_code.show()">
+                <img src="img/keypad.png" style="filter: inherit;" class="animate__animated animate__bounceIn">
+                <p>Enter Manual Code</p>
+            </a> -->
+        </div>
+
+        <div class="qr-btns" ng-show="loginData.loginTypeId == '12'">
+            <a ng-click="goToPage('orptab.orp_scan_purchase','dealer_purchase')" >
+                <img src="img/qr-code_icon.svg" class="animate__animated animate__bounceIn" alt="">
+                <p>Retailer Purchase</p>
+            </a>
+
+            <!-- <a ng-click="showAlert()">
+                <img src="img/qr-code_icon.svg" class="animate__animated animate__bounceIn" alt="">
+                <p>Retailer Purchase</p>
+            </a> -->
+
+            <a ng-click="goToPage('orptab.orp_scan_sale','dealer_sale')" >
+                <img src="img/qr-code_icon.svg" class="animate__animated animate__bounceIn" alt="">
+                <p>Retailer Sale</p>
+            </a>
+        </div>
+
+        <div class="scheme_en-ds" ng-if ="dashboard_data.dr_data.orp_status == 'Approved' && dashboard_data.offer_data.length">
+            <!-- ng-if ="dashboard_data.offer_data" -->
             <div class="sc_container">
                 <div class="sc_head_info">
                     <div class="scheading"><h1>Scheme enrolled</h1></div>
-                    
-                    <div class="sc_info">
-                        <div class="desc">
-                            <h1>Golden Chance In A 2020 - 2021</h1>
-                            <p>Valid Upto : 31 March 2021</p>
+
+                    <div class="sc_info multi-schmes" ng-repeat='row in dashboard_data.offer_data'>
+                        <div class="al-item" ng-click="offerDetail(row.id)">
+                            <div class="desc">
+                                <h1>{{row.title}}</h1>
+                                <p>Valid Upto : {{dateFormat(row.end_date)}}</p>
+                            </div>
+                            <div class="thumb">
+                                <img ng-if = "row.offer_image == ''" src="img/dft_product.svg" alt="">
+                                <img ng-if = "row.offer_image != ''"  src="{{uploadURL+'orp/'+row.offer_image}}" alt="">
+                            </div>
                         </div>
-                        <div class="thumb"><img src="img/scheme_thumb.jpg" alt=""></div>
+                        <div class="sc_gift-info" >
+                            <p ng-repeat="gift in row.gift_list" ng-click="shmemeEnrolled(gift);giftSelected(gift)" ng-class="{'active':gift.isEnroll==true}">{{gift.gift_title}} <span style="font-weight:bold;">({{gift.points_required}} pt)</span></p>
+
+                        </div>
                     </div>
                 </div>
-                
-                <div class="sc_gift-info">
-                    <p class="active">Silver 200 GMS</p>
-                    <p class="active">Silver 450 GMS</p>
-                    <p class="active">Gold 15 GMS</p>
-                    <p>Royal Enfield Classic 300 Cc</p>
-                    <p>Maruti 800 Car</p>
-                    <p>Baleno Delta Diesel Car</p>
-                </div>
+
             </div>
         </div>
-        
-        <div class="ods-btns"> <!-- flt -->
-            <a href="#/orptab/orp_dealerlist"><img src="img/dealer_icon.svg" alt=""><p>My Dealers</p></a>
-            <a href="#/orptab/orp_wallet-history"><img src="img/wallet_icon.svg" alt=""><p>My Wallet</p></a>
-            <a href="#/orptab/orp_getreport"><img src="img/report_icon.svg" alt=""><p>Get Reports</p></a>
+
+        <div class="wallet_points pb0" ng-show="loginData.loginTypeId == '13'">
+            <a class="figure" href="#/orptab/orp_wallet-history">
+                <div class="pt-top">
+                    <div class="thumb dflt"></div>
+                    <div class="points">
+                        <p class="center">Points</p>
+                        <h1 class="center fw600">{{dashboard_data.dr_data.orp_wallet_point}}</h1>
+                    </div>
+                </div>
+                <div class="dlname text center padding6"><p class="font13">My Points</p></div>
+            </a>
+
+            <a class="figure" href="#/orptab/orp_support" ng-show="loginData.loginType =='Electrician'">
+                <div class="pt-top jcc">
+                    <div class="thumb ev_charger"></div>
+                </div>
+                <div class="dlname text center padding6"><p class="font13">Customer Support</p></div>
+            </a>
+
+            <!-- <div class="go-btn mt10 padding6" >
+                <a class="padding0" ng-click="redeemRequest();">
+                    <img src="img/tap.png" alt="">
+                    <div class="g-content">
+                        <h1>Click To Redeem {{offer_data.balancepoint}} points</h1>
+                    </div>
+                </a>
+            </div> -->
+
         </div>
-        
-        <div class="my-sale">
+
+        <div class="go-btn mb20 mt16">
+            <a href="tel: {{dashboard_data.dr_data.customer_care_no}}">
+                <img src="img/menu-icon/support_icon.svg" alt="">
+                <div class="g-content">
+                    <h1>Customer Care : {{dashboard_data.dr_data.customer_care_no}}</h1>
+                    <div class="df ac">
+                        <div class="ct_error">
+                            <i class="material-icons">keyboard_arrow_right</i>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="ods-btns"> <!-- flt -->
+            <a href="#/orptab/orp_dealerlist" ng-show="loginData.loginTypeId == '6'"><img src="img/dealer_icon.svg" alt=""><p>My Retailers</p></a>
+            <a href="#/orptab/orp_wallet-history" ng-show="loginData.loginType !='Electrician'"><img src="img/wallet_icon.svg" alt=""><p>My Points</p></a>
+            <a href="#/orptab/orp_account_statement" ng-show="loginData.loginType =='Distributor'"><img src="img/report_icon.svg" alt=""><p>A/C Statement</p></a>
+        </div>
+
+        <!-- <div class="pd-left-right16 mt20" ng-if="dashboard_data.credit_limit > dashboard_data.credit_exposure ">
+            <div class="amount-cabs">
+                <div class="cb-left">
+                    <span>Credit Limit</span>
+                    <p>₹ {{dashboard_data.credit_limit?dashboard_data.credit_limit:0}}</p>
+                </div>
+                <div class="cb-left green-bg"><a href="#/orptab/outstanding-details">
+                    <span>Total Outstanding</span>
+                    <p>₹ {{dashboard_data.outstanding?dashboard_data.outstanding:0}}</p></a>
+                </div>
+                <div class="cb-left "><a href="#/orptab/billing-list">
+                    <span>Over Due</span>
+                    <p>₹ {{dashboard_data.over_due?dashboard_data.over_due:0}}</p></a>
+                </div>
+            </div>
+        </div> -->
+
+        <div class="pd-left-right16 mt20" ng-show="loginData.loginType =='Distributor'">
+            <div class="amount-cabs">
+                <div class="cb-left">
+                    <span>Credit Limit</span>
+                    <p>₹ {{dashboard_data.credit_limit}}</p>
+                </div>
+                <div class="cb-left " ng-class="{'green-bg': dashboard_data.credit_limit >= dashboard_data.outstanding,'red-bg': dashboard_data.credit_limit < dashboard_data.outstanding}" ng-click='OutstandingRedirect()'>
+                    <span>Total Outstanding</span>
+                    <p>₹ {{dashboard_data.outstanding}}</p>
+                </div>
+                <!-- <div class="cb-left" ng-click='overdueRedirect()'>
+                    <span>Over Due</span>
+                    <p>₹ {{dashboard_data.dr_data.distributor_overdue?dashboard_data.dr_data.distributor_overdue:0}}</p>
+                </div> -->
+            </div>
+        </div>
+
+        <!-- <div class="text-box mt20" style="margin: 0px 16px;">
+            <h2>Account Details</h2>
+            <div class="order-tags">
+                <div class="tag-head border0">
+                    <h1>Outstanding</h1>
+                    <div class="filter-btns">
+                        <button class="font13 mr5 radius4">₹ {{dashboard_data.credit_limit}}</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="order-tags mb0">
+                <div class="tag-head border0">
+                    <h1>Credit Limit</h1>
+                    <div class="filter-btns">
+                        <button class="font13 mr5 radius4">₹ {{dashboard_data.outstanding}}</button>
+                    </div>
+                </div>
+            </div>
+
+        </div> -->
+
+
+        <div class="my-sale" ng-show="loginData.loginType !='Electrician'">
             <div class="s_head">
                 <h1>My Sales</h1>
             </div>
-            
             <div class="sl_counts">
-                <div class="figure">
-                    <p>YTD</p>
-                    <h1>&#8377; 25,500,00.00</h1>
+                <div class="figure" >
+                    <p>MTD</p>
+                    <h1> &#8377; {{dashboard_data.dr_data.orp_mtd_sale?dashboard_data.dr_data.orp_mtd_sale:'0'}}</h1>
+
                 </div>
                 <div class="figure">
                     <p>YTD</p>
-                    <h1>&#8377; 84,500.00</h1>
+                    <h1> &#8377; {{dashboard_data.dr_data.orp_ytd_sale?dashboard_data.dr_data.orp_ytd_sale:'0'}}</h1>
                 </div>
             </div>
         </div>
+        <div class="h90">&nbsp;</div>
     </ion-content>
+
+    <script id="add-remark" type="text/ng-template">
+        <ion-modal-view style="background: rgba(0, 0, 0, 0.7);">
+            <ion-content class="padding">
+                <div class="modal-outer">
+                    <div class="modal-cs">
+                        <div class="modal-head">
+                            <h2 class="title">Add Bank Details</h2>
+                            <button class="button button-clear button-primary" ng-click="data.remarkModel.hide()"><i class="material-icons">clear</i></button>
+                        </div>
+                        <form name='bank_details' novalidate ng-submit='!bank_details.invalid?saveBankDetails():""'>
+                            <div class="ledmd">
+                                <div class="cs-add-form">
+                                    <!-- <div class="input-field field-input mt0">
+                                        <textarea ng-model = "data.remark"  name = "remark" class="validate" style="height: 100px !important;" required></textarea>
+                                        <label for="last_name">Remark</label>
+                                    </div> -->
+
+                                    <!-- <div class="rg_heading">
+                                        <h4>Bank Details</h4>
+                                    </div> -->
+
+                                    <div  class="input-field field-input" ng-class="{'has-error': bank_details.acc_holder_name.$invalid && bank_details.$submitted}">
+                                        <input name="acc_holder_name"  id= "acc_holder_name" required ng-model="Bank_data.acc_holder_name"></input>
+                                        <label class="fix-label">Account Holder Name <span>*</span></label>
+
+                                        <span class="error-left relative" ng-show="bank_details.$submitted && bank_details.acc_holder_name.$error.required">* Account Holder Name Required</span>
+                                    </div>
+
+                                    <div  class="input-field field-input" ng-class="{'has-error': bank_details.acc_no.$invalid && bank_details.$submitted}">
+                                        <input name="acc_no"  id= "acc_no" required ng-model="Bank_data.acc_no"></input>
+                                        <label class="fix-label">Account Number <span>*</span></label>
+
+                                        <span class="error-left relative" ng-show="bank_details.$submitted && bank_details.acc_no.$error.required">* Account Number Required</span>
+                                    </div>
+
+                                    <div  class="field-input mt20" ng-class="{'has-error': bank_details.acc_type.$invalid && bank_details.$submitted}">
+                                        <!-- <input name="acc_type"  id= "acc_type" required ng-model="Bank_data.acc_type"></input> -->
+                                        <select class="browser-default" name="acc_type"  id="acc_type" required ng-model="Bank_data.acc_type">
+                                            <!-- <option value="" disabled selected>Account Type</option> -->
+                                            <option value="Saving" >Saving</option>
+                                            <option value="Current" >Current</option>
+                                        </select>
+                                        <label class="fix-label">Account Type <span>*</span></label>
+                                        <span class="error-left relative" ng-show="bank_details.$submitted && bank_details.acc_type.$error.required">* Account Type Required</span>
+                                    </div>
+
+                                    <div  class="input-field field-input" ng-class="{'has-error': bank_details.ifsc_code.$invalid && bank_details.$submitted}">
+                                        <input name="ifsc_code"  id= "ifsc_code" required ng-model="Bank_data.ifsc_code"></input>
+                                        <label class="fix-label">IFSC Code <span>*</span></label>
+                                        <span class="error-left relative" ng-show="bank_details.$submitted && bank_details.ifsc_code.$error.required">* IFSC Code Required</span>
+                                    </div>
+
+                                    <div class="or_upload grid-item" ng-if="!Bank_data.cancel_check_image && !data.cancel_check.length">
+                                        <label ng-click="onImageTypeHandler('cancel_check')">
+                                            <img src="img/upload_camera-icon.svg" alt="" class="camera_icon">
+                                            <p>Upload Cancel cheque</p>
+                                        </label>
+                                    </div>
+
+                                    <div class="scheme_en-ds registration_change">
+                                        <div class="sc_container">
+                                            <div class="sc_head_info">
+                                                <div class="sc_info multi-schmes">
+                                                    <div class="al-item" ng-repeat="row in data.cancel_check">
+                                                        <div class="thumb">
+                                                            <img src="{{row.src}}" alt="">
+                                                        </div>
+                                                        <div class="desc">
+                                                            <h4>Cancel Check</h4>
+                                                        </div>
+                                                        <button ng-click="delete_img($index)"><i class="material-icons">delete_sweep</i></button>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="sgsave">
+                                <button type='submit'>SUBMIT<i class="material-icons">arrow_right_alt</i></button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </ion-content>
+        </ion-modal-view>
+    </script>
+
 </ion-view>
+
+
+

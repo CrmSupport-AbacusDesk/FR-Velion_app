@@ -1,119 +1,109 @@
 <ion-view view-title="Scan - DLR Purchase" hide-nav-bar="true">
-
+    
     <ion-header-bar class="opr_ion_header">
         <div class="cs-left">
             <button class="back-button" ng-click="goToBackPageHandler()"><i class="material-icons">arrow_back</i></button>
-            <h1 class="orp_title">Scan - DLR Purchase</h1>
+            <h1 ng-if="data.activity == 'distributor'" class="orp_title">Distributor Sale Scan</h1>
+            <h1 ng-if="data.activity == 'dealer_purchase'" class="orp_title">Retailer Purchase Scan</h1>
         </div>
     </ion-header-bar>
-
-
     
     <ion-content>
-        
         <div class="scn-topbg">
-            <div class="orp-select">
-                <label>
-                    <p>Dealer Firm Name</p>
-                    <select>
-                        <option value="1">Ram Batteries </option>
-                        <option value="1">Ram Batteries </option>
-                    </select>
-                </label>
+            <div class="add-css-select pt0 selectopt no-padding" >
+                <searchable-multiselect display-attr="Key" selected-items="data.user_name" all-items="dealer_list" add-item="single_select(item)" >
+                </searchable-multiselect>
             </div>
             
-            <div class="firm_info mt16">
-                <p><span>Contact Person Name</span> <span>Pankaj Sharma</span></p>
-                <p><span>Contact Person Mobile </span> <span>+91 8886322259</span></p>
-                <p class="nodf"><span>Address</span><br><span>5E/7 , B.P., Railway Road, Near Neelam Chowk, NIT Faridabad, Haryana 121001</span></p>
+            <div class="firm_info mt16" ng-if="dealer_data.id">
+                <p ng-if="dealer_data.contact_name"><span>Contact Person Name</span> <span>{{dealer_data.contact_name}}</span></p>
+                <p ng-if="dealer_data.contact_mobile_no || dealer_data.sfa_contact_no"><span>Contact Person Mobile </span> <span>+91 {{dealer_data.contact_mobile_no?dealer_data.contact_mobile_no :dealer_data.sfa_contact_no}}</span></p>
+                <p class="nodf"><span>Address</span><br><span>{{dealer_data.street}} {{dealer_data.city}} {{dealer_data.district_name}} {{dealer_data.state_name}} {{dealer_data.pincode}}</span></p>
             </div>
         </div>
         
-        
-        
-        <div class="orp-date padding16">
+        <div class="orp-date padding16" ng-if="dealer_data.id && code_list.length > 0">
             <label>
-                <p>Date of Sale</p>
-                <input type="date">
+                <p ng-if="data.activity == 'distributor'">Date of Sale</p>
+                <p ng-if="data.activity == 'dealer_purchase'">Date of Purchase</p>
+                <input type="date" class="unstyled" ng-model = "dealer_data.date" max="{{currentDate}}" >
             </label>
         </div>
         
-        
-        <div class="op_pr_heading">
+        <div class="op_pr_heading" ng-if="dealer_data.id && code_list.length > 0">
             <h1>Product Information</h1>
-            <h2>Scan "<span>02</span>" Products</h2>
+            <h2>Scan "<span>{{code_list.length}}</span>" Products</h2>
         </div>
         
-        
-        <div class="product_info pb0">
-            <div class="figure">
+        <div class="product_info pr-multi-scans pb0" >
+            <div class="figure" ng-repeat = "row in code_list">
                 <div class="code_info">
                     <p>QR Code</p>
-                    <p>REFTG7854785TG</p>
+                    <p>{{row.coupon_code}}</p>
                 </div>
                 
                 <div class="prt">
                     <div class="cs-left">
-                        <h1>Product #0011</h1>
-                        <p>Code#2544</p>
+                        <h1>Product {{row.product_name}}</h1>
+                        <p>Code {{row.product_code}}</p>
                     </div>
                     <div class="cs-right">
-                        <h1>5000</h1>
+                        <h1>{{row.points}}</h1>
                         <p>Points</p>
                     </div>
                 </div>
             </div>
-            
-            <div class="figure">
-                <div class="code_info">
-                    <p>QR Code</p>
-                    <p>REFTG7854785TG</p>
-                </div>
-                
-                <div class="prt">
-                    <div class="cs-left">
-                        <h1>Product #0011</h1>
-                        <p>Code#2544</p>
-                    </div>
-                    <div class="cs-right">
-                        <h1>5000</h1>
-                        <p>Points</p>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- <div class="figure">
-                <div class="prt">
-                    <div class="cs-left">
-                        <h1>Product #0011</h1>
-                        <p>Code#2544</p>
-                    </div>
-                </div>
-                <div class="ong">
-                    <div class="cs-fig">
-                        <p>REFTG7854785TG</p>
-                        <p>QR Code</p>
-                    </div>
-                    <div class="cs-fig">
-                        <p>05 - 06 - 2020</p>
-                        <p>Date of Sale</p>
-                    </div>
-                </div>
-            </div> -->
         </div>
         
-        <div class="scn_more padding16" style="padding-top: 6px !important;">
-            <a href="#/">
-                <div class="thumb"><img src="img/qr_code_barcode.svg" alt=""></div>
-                <div class="desc"><h1>Scan More Product</h1></div>
+        
+        <div class="go-btn mt20 mb20 scan-btn" ng-if="dealer_data.id">
+            
+            <a ng-click="startScan('scan','')">
+                <img src="img/barcode.svg" alt="">
+                <div class="g-content">
+                    <h1 ng-if="code_list.length == 0">CLICK HERE TO SCAN</h1>
+                    <h1 ng-if="code_list.length > 0">CLICK HERE TO MORE SCAN</h1>
+                </div>
             </a>
         </div>
-
-        <div class="cs_orp-bttn padding16">
-            <a href="" class="active">SAVE</a>
+        
+        <div class="qr-btns mt16" ng-if="dealer_data.id" style="display: none;">
+            <a ng-click="startScan('scan','')" class="qr-blue">
+                <img src="img/qr_code_barcode.svg" alt="">
+                <p ng-if="code_list.length > 0">Scan More Product</p>
+                <p ng-if="code_list.length == 0">Scan Product</p>
+            </a>
+           
         </div>
-
-        
-        
+        <div class="cs_orp-bttn padding16" ng-if="code_list.length > 0 && dealer_data.id">
+            <a class="active" ng-click="saveDistributorSale()">SAVE</a>
+        </div>
     </ion-content>
+
+    <script id="scan-success-model" type="text/ng-template">
+            <ion-modal-view style="background: rgba(0, 0, 0, 0.7);">
+                <ion-content class="padding">
+                    <div class="modal-outer padding0">
+                        <div class="orp_alerts padding10" ng-class="{'success':result_data.status=='Success'}">
+                            <div class="al_container">
+                                <div class="icon">
+                                    <i ng-show="result_data.status=='Success'" class="material-icons">done</i>
+                                    <i ng-show="result_data.status=='Error'" class="material-icons">clear</i>
+                                </div>
+                                <div class="al_body">
+                                    <h1>{{result_data.status}}</h1>
+                                    <h2 ng-show="result_data.status=='Success'" >{{result_data.total_point}}<span> Points Added in Your Wallet</span></h2>
+                                    <h2 ng-show="result_data.status=='Error'" ><span> {{result_data.error_message}}</span></h2>
+                                </div>
+                                <div class="al_footer">
+                                    <button ng-show="result_data.status=='Success'" ng-click="scanSuccessCloseModel();startScan('scan','')" class="blue_btn">Scan More Product</button>
+                                    <button ng-show="result_data.status=='Error'"  ng-click="scanSuccessCloseModel();startScan('scan','')" class="red_btn">Try Again</button>
+                                    <a class="green_btn" style="width: 130px; margin-left: 16px;" ng-click="scanSuccessCloseModel()">Close</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ion-content>
+            </ion-modal-view>
+        </script>
 </ion-view>

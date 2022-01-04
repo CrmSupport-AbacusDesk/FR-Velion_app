@@ -1,0 +1,31 @@
+<ion-view view-title="Notification" name="Wallet-History-view"  hide-nav-bar="true" ng-init = "getnotificationList()">
+    
+    <ion-header-bar class="opr_ion_header">
+        <div class="cs-left">
+            <button class="back-button" ng-click="goToBackPageHandler()"><i class="material-icons">arrow_back</i></button>
+            <h1 class="orp_title">Notification</h1>
+        </div>
+    </ion-header-bar>
+    
+    <ion-content>
+        
+        <div class="orp_notification">
+            <!-- loop start -->
+            <a ng-repeat="row in notification_data" ng-class="{'new': row.read_flag == '1'}">
+                <p>{{row.description}}</p>
+                <span>{{dateTimeFormat(row.date_created)}}</span>
+            </a>
+            
+            <!-- loop end -->
+        </div>
+        
+        <div class="data-not-found" ng-if="notification_data.length == 0" >
+            <div class="outer">
+                <div class="innear">
+                    <img src="img/data-not-found.svg" alt="">
+                    <h2>Notification not Available!</h2>
+                </div>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

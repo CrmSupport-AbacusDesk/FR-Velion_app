@@ -1,0 +1,20 @@
+<ion-view view-title="Term & conditions" name="Wallet-History-view" hide-nav-bar="true">
+
+
+    <ion-header-bar class="opr_ion_header no_boxshadow">
+        <div class="cs-left">
+            <button class="back-button" ng-click="goToBackPageHandler()"><i class="material-icons">arrow_back</i></button>
+            <h1 class="orp_title">Term & Conditions</h1>
+        </div>
+    </ion-header-bar>
+
+    
+    <ion-content>
+        <div class="padding16">
+            <div class="terms">
+                <p ng-bind-html="offer_data.term_condition"></p>
+                <!-- <p><div [innerHTML]="offer_data.term_condition"></div></p> -->
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

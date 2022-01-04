@@ -4,42 +4,38 @@
         <a href="#/tab/lead-detail" class="cs-backbtn button button-icon icon ion-android-arrow-back font18 fff"></a>
     </ion-nav-buttons>
     
-    <!-- <ion-nav-buttons side="right" class="custom-right-btn">
+    <ion-nav-buttons side="right" class="custom-right-btn">
         <div ng-click="onShowPopUpHandler($event, drDetail.drData.id, 'leadDetail')" class="right-nav-btn nav-search">
             <a ><i class="material-icons">more_vert</i></a>
         </div>
-    </ion-nav-buttons> -->
+    </ion-nav-buttons>
     
     <ion-content>
-
-        <div class="sticky-column bdr-botm" ng-if="leadQuotationData.length != 0">
-            <div  class="coman-list margin0 radius0 no-shadow">
-                <div class="center-item padding10">
-                    <div class="cs-icon">{{dr_data.dr_name[0]}}</div>
-                    <div class="cs-content">
-                        <p>{{dr_data.dr_name}}</p>
-                        <span>{{dr_data.contact_mobile_no}}</span>
-                    </div>
-                    
-                    <a href="tel: {{dr_data.contact_mobile_no}}" class="dialer"><i class="material-icons">call</i></a>
+        <div class="coman-list clrd-bg sticky">
+            <div class="center-item">
+                <div class="cs-icon">{{drDetail.drData.dr_name[0] ? drDetail.drData.dr_name[0] : '--'}}</div>
+                <div class="cs-content">
+                    <p>{{drDetail.drData.dr_name ? drDetail.drData.dr_name : 'N/A'}}</p>
+                    <span>{{drDetail.drData.contact_name ? drDetail.drData.contact_name : 'N/A'}}</span>
+                    <a class="icon-content"><i class="material-icons">email</i> {{drDetail.drData.email ? drDetail.drData.email : 'N/A'}}</a>
                 </div>
+                
+                <a ng-if="drDetail.drData.contact_mobile_no" href="tel: {{drDetail.drData.contact_mobile_no}}" class="dialer"><i class="material-icons">call</i></a>
             </div>
         </div>
-
-        <div ng-click="GoToQuotationDetail(row.id)" ng-repeat = "row in leadQuotationData" class="coman-list">
+        <div ng-click = "onGoToQuotationDetailPage(row.id)" ng-repeat = "row in drDetail.quotationData" class="coman-list">
             <div class="top-head">
                 <ul>
                     <li>
-                        <p>{{dateFormat(row.date_created)}}</p>
-                        <span>Date</span>
-                    </li>
-                    <li>
                         <p>#QUO{{row.id ? row.id : '--'}}</p>
-                        <span>ID</span>
+                    </li>
+                </ul>
+                <ul class="left-auto">
+                    <li class="text-right">
+                        <span>{{row.dateCreatedInFormat ? row.dateCreatedInFormat : 'N/A'}}</span>
                     </li>
                 </ul>
             </div>
-
             <div class="pdlr">
                 <div class="cs-flex mt10">
                     <div class="bdr-field wp100">
@@ -57,8 +53,8 @@
                 
             </div>
         </div>
-
-        <div class="data-not-found" ng-if="leadQuotationData.length == 0">
+        
+        <div class="data-not-found" ng-if="!isRequestInProcess && drDetail.quotationData.length == 0" >
             <div class="outer">
                 <div class="innear">
                     <img src="img/data-not-found.svg" alt="">
@@ -70,9 +66,9 @@
         <div class="h50"></div>
     </ion-content>
     
-    <!-- <div class="fix-add">
+    <div class="fix-add">
         <a ng-click = "onGoToActionHandler('leadAddQuotation')">
             <i class="material-icons">add</i>
         </a>
-    </div> -->
+    </div>
 </ion-view>

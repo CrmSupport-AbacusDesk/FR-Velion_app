@@ -1,0 +1,136 @@
+<ion-view view-title="{{(cartSummaryData.order_id && cartSummaryData.order_id!='') ? 'Update' : 'Add'}} {{order_type}} Order">
+
+  <ion-nav-buttons side="left">
+      <a ng-click = "goToBackPageHandler()"  class="cs-backbtn button button-icon icon ion-android-arrow-back font18 fff"></a>
+  </ion-nav-buttons>
+
+  <ion-content class="">
+
+      <div class="padding16">
+          <div class="cs-add-form">
+              <div class="field-input">
+                  <label class="active fix-label" for="last_name">Order Date</label>
+                  <div class="input-field">
+                      <input type="date" ng-model="data.order_date" name="order_date" min="{{minDate}}" max="{{currentDate}}" class="validate">
+                  </div>
+              </div>
+
+              <div class="cs-radio cs-bodr mb16">
+                  <h2>Order Type</h2>
+
+                  <ion-list>
+                      <ion-radio name="payment_type" ng-model="data.payment_type" value="cash">Cash</ion-radio>
+                      <ion-radio name="payment_type" ng-model="data.payment_type" value="credit">Credit</ion-radio>
+                  </ion-list>
+              </div>
+
+              <div class="field-input df as mb15">
+                  <div class="add-css-select wp100 pt0 selectopt no-padding select-height add2">
+                      <searchandselect selecteditem="search.dr_name" values="dr_list" key="Key"  totalrecords="totalCategoryRecords" onscroll="onDrNameHandler(searchKey)"></searchandselect>
+                  </div>
+              </div>
+
+              <div class="field-input df as mb15">
+                  <div class="add-css-select wp100 pt0 selectopt no-padding select-height add2">
+                      <searchandselect selecteditem="search.categoryName" values="categoryList" key="Key"  totalrecords="totalCategoryRecords" onscroll="onGetCartItemDataHandler('fetchCategoryData', searchKey, pagenumber)"></searchandselect>
+                  </div>
+              </div>
+
+              <div ng-if="search.categoryName.Value" ng-class="{'has-error': addressForm.stateName.$invalid && addressForm.$submitted}" class="field-input">
+                  <div class="add-css-select pt0 selectopt no-padding pb16 add2  df afs">
+                      <searchable-multiselect display-attr="Key" selected-items="data.item" all-items="itemList" add-item="addItemInList(item,user)" remove-item="removeItemFromList(item)" class="wp100">
+                      </searchable-multiselect>
+                  </div>
+              </div>
+
+              <div class="cs-save-btn pt0">
+                  <button class="wp100 border-radius box-shadow-none " ng-class="{'btn-opacity':!data.item.length}" ng-disabled="!data.item.length" ng-click="onAddToCartHandler('Order');order_type == 'primary' ? '' : getDistributor()">Add To List</button>
+              </div>
+
+              </div>
+
+              <div class="cart-card pb0 mb16" ng-if="cartItemData.length > 0">
+                  <div class="list-heading">Item Information</div>
+                  <div  class="coman-list new-list" ng-repeat = "row in cartItemData">
+                      <div class="center-item">
+                          <div class="cs-content">
+                              <p>{{row.categoryName}}, {{row.subCategoryName}}, {{row.productName}},{{row.capacity}}</p>
+                              <span>{{row.productCode}}</span>
+                          </div>
+                          <a  class="dialer circle-btn" ng-click="removeItem($index)"><i class="material-icons">delete_sweep</i></a>
+                      </div>
+                      <div class="pdlr">
+                          <div class="cs-flex">
+                              <div class="bdr-field wp100">
+                                  <input type="number"  placeholder="Qty" name="qty" ng-model="row.qty" ng-change="calculateOrder()" >
+                              </div>
+
+                              <div class="bdr-field wp100">
+                                  <input type="number" placeholder="Warranty in Month" name="warranty" ng-model="row.warranty" >
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+              <div ng-if = "cartItemData.length > 0 && order_type == 'secondary'" class="field-input df as mb15">
+                  <div class="add-css-select wp100 pt0 selectopt no-padding select-height add2">
+                      <searchandselect selecteditem="search.assign_dr_name" values="assignDistributor" key="Key"  totalrecords="totalCategoryRecords" onscroll="onSearchDrNameHandler(searchKey)"></searchandselect>
+                  </div>
+              </div>
+
+              <div ng-if = "cartItemData.length" class="cs-radio padding0">
+                  <div class="" >
+                      <div class="input-field mt26">
+                          <textarea name="remark" ng-model="data.order_remarks" id="" cols="30" rows="10" style="height: 100px !important;"></textarea>
+                          <label class="active" for="last_name">Other Information</label>
+                      </div>
+                  </div>
+                  <div ng-click = "submitSfaOrderData()" class="cs-save-btn mt20">
+                      <button class="wp100">{{(cartSummaryData.order_id && cartSummaryData.order_id!='') ? 'UPDATE' : 'PLACE'}} ORDER</button>
+                  </div>
+
+              </div>
+          </div>
+
+
+
+          <!-- <div class="flex-input" ng-if = "cartItemData.length > 0 && order_type == 'secondary'">
+              <div class="input-field">
+                  <input  ng-model="data.dispatch_by_name" name="dispatch_by_name">
+                  <label class="active" for="last_name">Dispatch By</label>
+              </div>
+          </div> -->
+          <!-- <div class="summary-table" ng-if="cartItemData.length > 0">
+              <table>
+                  <tr>
+                      <td class="w130">Discount Amount</td>
+                      <td class="text-right" style="font-size: 14px;">{{getRoundAmountHandler(cartSummaryData.discountAmount)}}</td>
+                  </tr>
+                  <tr>
+                      <td>Pre Tax Total</td>
+                      <td class="text-right" style="font-size: 14px;">{{getRoundAmountHandler(cartSummaryData.discountedAmount)}}</td>
+                  </tr>
+                  <tr>
+                      <td>CGST Amount</td>
+                      <td class="text-right" style="font-size: 14px;">&#8377;  {{getRoundAmountHandler(cartSummaryData.cgstAmount)}}</td>
+                  </tr>
+                  <tr>
+                      <td>SGST Amount</td>
+                      <td class="text-right" style="font-size: 14px;">&#8377;  {{getRoundAmountHandler(cartSummaryData.sgstAmount)}}</td>
+                  </tr>
+                  <tr>
+                      <td>IGST Amount</td>
+                      <td class="text-right" style="font-size: 14px;">&#8377;  {{getRoundAmountHandler(cartSummaryData.igstAmount)}}</td>
+                  </tr>
+                  <tr>
+                      <td>Total(Rs) </td>
+                      <td class="text-right" style="font-size: 14px;">&#8377;  {{getRoundAmountHandler(cartSummaryData.itemFinalAmount)}}</td>
+                  </tr>
+              </table>
+          </div> -->
+
+
+      </div>
+  </ion-content>
+</ion-view>

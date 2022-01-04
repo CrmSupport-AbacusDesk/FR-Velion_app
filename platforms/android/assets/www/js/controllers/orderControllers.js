@@ -1,1466 +1,1657 @@
 
-app.controller('orderCtrl', function ($scope, $rootScope, searchSelect, $ionicModal, $state, myRequestDBService, myAllSharedService, $ionicLoading, $cordovaSQLite, $ionicPopup, $timeout, $ionicActionSheet, $cordovaImagePicker, Camera, $cordovaFileTransfer, $cordovaGeolocation, $cordovaToast, $location, $window, $ionicPlatform, $ionicHistory, $ionicModal,$stateParams, $ionicScrollDelegate, $ionicPopover) {
-    
-    $scope.loginData = myAllSharedService.loginData;
-    $scope.isRequestInProcess;
-    $scope.orderList = [];
-    
-    $scope.data = {};
-    $scope.search = {};
-    
-    $scope.data.isInsideLead = myAllSharedService.drTypeFilterData.isInsideLead;
-    
-    $scope.categoryList = [];
-    $scope.subCategoryList = [];
-    $scope.productList = [];
-    
-    $scope.drList = [];
-    $scope.drDeliveryByList = [];
-    
-    
-    $scope.cartItemData = [];
-    $scope.cartSummaryData = {};
-    $scope.drDetail = myAllSharedService.drTypeFilterData.drDetail;
-    
-    
-    $scope.drOrderTypeData = [];
-    $scope.deliveryByTypeList = [];
-    
-    $scope.currentPage = 1;
-    $scope.pageSize = 5;
-    
-    $scope.currentDate = moment().format('YYYY-MM-DD');
-    $scope.selectedDate = moment().format('YYYY-MM-DD');
-    
-    $scope.isSearchBarOpen = false;
-    $scope.currentActiveTab = 1;
-    $scope.noMoreListingAvailable = false;
-    
-    
-    // $scope.addOtherAddress = function()
-    // {
-    //     $scope.data.otherAddresModel.show();
-    // }
-    
-    // $scope.shippingAddressAction = function()
-    // {
-    
-    //     console.log('test');
-    
-    //     if($scope.data.address==0)
-    //     {
-    //         $scope.addOtherAddress();
-    //     }
-    //     else if($scope.data.address == 'Current')
-    //     {
-    //         console.log($scope.data);
-    
-    //     }
-    //     else
-    //     {
-    //         var index = $scope.dealerShippingAddress.findIndex(row=>row.id==$scope.data.address);
-    
-    //         $scope.data.state_name = $scope.dealerShippingAddress[index]['shipping_state'];
-    //         $scope.data.shippingAddress = $scope.dealerShippingAddress[index]['address'];
-    
-    //         console.log($scope.data);
-    
-    //     }
-    
-    
-    // }
-    
+app.controller('sfaOrderCtrl', function ($scope, $rootScope, searchSelect, $ionicModal, $state, myRequestDBService, myAllSharedService, $ionicLoading, $cordovaSQLite, $ionicPopup, $timeout, $ionicActionSheet, $cordovaImagePicker, Camera, $cordovaFileTransfer, $cordovaGeolocation, $cordovaToast, $location, $window, $ionicPlatform, $ionicHistory, $ionicModal,$stateParams, $ionicScrollDelegate, $ionicPopover) {
 
-    if($location.path() == 'billing-list') {
-        
-        console.log("hello");
-        // $scope.data.orderId = myAllSharedService.drTypeFilterData.orderId;
-        // $scope.getOrderDetailData();
-    }
-    
-    $scope.dealerShippingAddress = [];
-    $scope.drShippingArray = [{'address':'Other','id':0}];
-    $scope.getDetail = function(id)
-    {
-        
-        $scope.shippingForm.drId = id;
-        $ionicLoading.show({
-            template: '<ion-spinner icon="android"></ion-spinner><p>Loading...</p>'
-        });
-        
-        myRequestDBService.onGetPostRequest('/App_Order/getdrDetail',{dr_id:id})
-        .then(function(response) {
-            console.log(response);
-            
-            var tmpShippingArray = [];
-            
-            tmpShippingArray = response.data.shipping_address;
-            $scope.dealerShippingAddress = response.data.shipping_address;
-            
-            $scope.drShippingArray.push({'address':'Current Address','id':'Current'});
-            
-            for (var i = 0; i < tmpShippingArray.length; i++)
-            {
-                $scope.drShippingArray.push({'address':tmpShippingArray[i]['shipping_street']+' '+tmpShippingArray[i]['shipping_city']+' '+tmpShippingArray[i]['shipping_district']+' '+tmpShippingArray[i]['shipping_state']+' '+tmpShippingArray[i]['shipping_pincode'],id:tmpShippingArray[i]['id']})
-            }
-            
-            $scope.data.address='Current';
-            $scope.data.shippingAddress=response.data.street +' '+response.data.city +' '+response.data.district_name +' '+response.data.state_name +' '+response.data.pincode;
-            
-            
-            console.log($scope.drShippingArray);
-            
-            $ionicLoading.hide();
-            
-            
-        }, function (err) {
-            $ionicLoading.hide();
-            $ionicPopup.alert({
-                title: 'Error!',
-                template: 'Something went wrong !!'
-            });
-            console.error(err);
-        });
-        
-        console.log($scope.shippingForm);
-        
-    }
-    
-    
-    $scope.onAddToCartHandler = function(targetType) {
-        
-        let isInputEmpty = false;
-        let emptyMsg = '';
-        
-        if(!$scope.data.category) {
-            
-            isInputEmpty = true;
-            emptyMsg = 'Category Required!';
-            
-        } else  if(!$scope.data.sub_category ) {
-            
-            isInputEmpty = true;
-            emptyMsg = 'Sub Category Required!';
-            
-        } else  if(!$scope.data.product_id) {
-            
-            isInputEmpty = true;
-            emptyMsg = 'Product Required!';
-            
-        } else  if(!$scope.data.qty || $scope.data.qty < 0 || $scope.data.qty == 0) {
-            
-            isInputEmpty = true;
-            emptyMsg = 'Qty Required!';
-        }
-        
-        
-        // if(targetType != 'Requirement') {
-        
-        //     if(!$scope.data.amount || $scope.data.rate < 0 || $scope.data.rate == 0) {
-        
-        //         isInputEmpty = true;
-        //         emptyMsg = 'Amount Required!';
-        //     }
-        
-        
-        //     if(!$scope.data.gstPercent || $scope.data.gstPercent < 0 || $scope.data.gstPercent == 0) {
-        
-        //         isInputEmpty = true;
-        //         emptyMsg = 'GST Required!';
-        //     }
-        
-        //     if(!$scope.data.rate || $scope.data.rate < 0 || $scope.data.rate == 0) {
-        
-        //         isInputEmpty = true;
-        //         emptyMsg = 'Rate Required!';
-        //     }
-        // }
-        
-        if(isInputEmpty) {
-            
-            $ionicPopup.alert({
-                title: 'Error!',
-                template: emptyMsg
-            });
-            
-        } else {
-            
-            console.log($scope.data.dr_name);
-            
-            const isIndex = $scope.cartItemData.findIndex(row => row.productId == $scope.data.product_id);
-            
-            console.log(isIndex, $scope.productList);
-            
-            if(isIndex === -1) {
-                
-                $scope.cartItemData.push({
-                    
-                    categoryName: $scope.data.category,
-                    subCategoryName: $scope.data.sub_category,
-                    productName: $scope.data.product_name,
-                    productCode: $scope.data.product_code,
-                    productId: $scope.data.product_id,
-                    qty: $scope.data.qty,
-                    rate: $scope.data.rate,
-                    amount: $scope.data.qty * $scope.data.rate,
-                    discountPercent: $scope.data.discountPercent ? $scope.data.discountPercent : 0,
-                    discountAmount : $scope.data.discountAmount ? $scope.data.discountAmount : 0,
-                    discountedAmount: $scope.data.discountedAmount ? $scope.data.discountedAmount : 0,
-                    cgstPercent: $scope.data.cgstPercent,
-                    cgstAmount: $scope.data.cgstAmount,
-                    sgstPercent: $scope.data.sgstPercent,
-                    sgstAmount: $scope.data.sgstAmount,
-                    igstPercent: $scope.data.igstPercent,
-                    igstAmount: $scope.data.igstAmount,
-                    itemGstAmount : $scope.data.itemGstAmount,
-                    itemFinalAmount: $scope.data.itemFinalAmount
-                });
-                
-            } else {
-                
-                $scope.cartItemData[isIndex].qty = $scope.data.qty;
-                $scope.cartItemData[isIndex].rate = $scope.data.rate;
-                $scope.cartItemData[isIndex].amount = $scope.data.qty * $scope.data.rate;
-                
-                $scope.cartItemData[isIndex].discount = $scope.data.discountPercent;
-                $scope.cartItemData[isIndex].discountAmount = $scope.data.discountAmount;
-                $scope.cartItemData[isIndex].discountedAmount = $scope.data.discountedAmount;
-                
-                $scope.cartItemData[isIndex].cgstPercent = $scope.data.cgstPercent;
-                $scope.cartItemData[isIndex].cgstAmount = $scope.data.cgstAmount;
-                $scope.cartItemData[isIndex].sgstPercent = $scope.data.sgstPercent;
-                $scope.cartItemData[isIndex].sgstAmount = $scope.data.sgstAmount;
-                $scope.cartItemData[isIndex].igstPercent = $scope.data.igstPercent;
-                $scope.cartItemData[isIndex].igstAmount = $scope.data.igstAmount;
-                $scope.cartItemData[isIndex].itemGstAmount = $scope.data.itemGstAmount;
-                $scope.cartItemData[isIndex].itemFinalAmount = $scope.data.itemFinalAmount;
-                
-            }
-            
-            console.log($scope.cartItemData);
-            
-            $scope.search.product = { Key: "Select Product", Value: "" };
-            $scope.data.product_id = 0;
-            $scope.data.qty = 0;
-            $scope.data.rate = 0;
-            $scope.data.amount = 0;
-            
-            $scope.data.discountPercent = 0;
-            $scope.data.discountAmount = 0;
-            
-            $scope.data.discountedAmount = 0;
-            
-            $scope.data.cgstPercent = 0;
-            $scope.data.cgstAmount = 0;
-            
-            $scope.data.sgstPercent = 0;
-            $scope.data.sgstAmount = 0;
-            
-            $scope.data.igstPercent = 0;
-            $scope.data.igstAmount = 0;
-            
-            $scope.data.itemGstAmount = 0;
-            $scope.data.itemFinalAmount = 0;
-            
-            $scope.onCalculateSummaryTotalDataHandler();
-            
-            console.log($scope.cartItemData);
-            
-        }
-        
-    }
-    
-    $scope.onCalculateSummaryTotalDataHandler = function() {
-        
-        $scope.cartSummaryData.itemCount = $scope.cartItemData.length;
-        
-        $scope.cartSummaryData.preDiscountTotal = 0;
-        $scope.cartSummaryData.discountAmount = 0;
-        
-        $scope.cartSummaryData.discountedAmount = 0;
-        
-        $scope.cartSummaryData.cgstAmount = 0;
-        $scope.cartSummaryData.sgstAmount = 0;
-        $scope.cartSummaryData.igstAmount = 0;
-        $scope.cartSummaryData.itemGstAmount = 0;
-        
-        $scope.cartSummaryData.itemFinalAmount = 0;
-        
-        for (let index = 0; index < $scope.cartItemData.length; index++) {
-            
-            $scope.cartSummaryData.preDiscountTotal += $scope.cartItemData[index].amount;
-            $scope.cartSummaryData.discountAmount += $scope.cartItemData[index].discountAmount;
-            
-            $scope.cartSummaryData.discountedAmount += $scope.cartItemData[index].discountedAmount;
-            
-            $scope.cartSummaryData.cgstAmount += $scope.cartItemData[index].cgstAmount;
-            $scope.cartSummaryData.sgstAmount += $scope.cartItemData[index].sgstAmount;
-            $scope.cartSummaryData.igstAmount += $scope.cartItemData[index].igstAmount;
-            
-            $scope.cartSummaryData.itemGstAmount += $scope.cartItemData[index].itemGstAmount;
-            $scope.cartSummaryData.itemFinalAmount += $scope.cartItemData[index].itemFinalAmount;
-        }
-    }
-    
-    $scope.onCalculateItemTotalHandler = function(targetType) {
-        
-        let qty = 0;
-        let rate = 0;
-        let discountPercent = 0;
-        
-        let gstPercent = 0;
-        
-        let cgstPercent = 0;
-        let sgstPercent = 0;
-        let igstPercent = 0;
-        
-        let cgstAmount = 0;
-        let sgstAmount = 0;
-        let igstAmount = 0;
-        
-        if($scope.data.qty) {
-            qty = $scope.data.qty;
-        }
-        
-        if($scope.data.rate) {
-            rate = $scope.data.rate;
-        }
-        
-        if($scope.data.discountPercent) {
-            discountPercent = $scope.data.discountPercent;
-        }
-        
-        
-        
-        if($scope.data.gstPercent) {
-            gstPercent = $scope.data.gstPercent;
-        }
-        
-        $scope.data.amount = qty * rate;
-        $scope.data.discountAmount = $scope.data.amount * (discountPercent/100);
-        $scope.data.discountedAmount = $scope.data.amount - $scope.data.discountAmount;
-        
-        console.log($scope.data.state_name);
-        
-        let stateName;
-        if(targetType == 'Quotation') {
-            stateName = $scope.data.state_name;
-        }
-        
-        if(targetType == 'Order') {
-            stateName = $scope.data.state_name;
-        }
-        
-        if(stateName == 'DELHI') {
-            
-            let gstPercentApply = gstPercent/2;
-            
-            cgstPercent = gstPercentApply;
-            cgstAmount = amount * (cgstPercent/100);
-            
-            sgstPercent = gstPercentApply;
-            sgstAmount = $scope.data.discountedAmount * (sgstPercent/100);
-            
-            igstPercent = 0;
-            igstAmount = 0;
-            
-        } else {
-            
-            let gstPercentApply = gstPercent;
-            console.log(gstPercentApply);
-            
-            cgstPercent = 0;
-            cgstAmount = 0;
-            
-            sgstPercent = 0;
-            sgstAmount = 0;
-            
-            igstPercent = gstPercentApply;
-            igstAmount = $scope.data.discountedAmount * (igstPercent/100);
-        }
-        
-        $scope.data.cgstPercent = cgstPercent;
-        $scope.data.cgstAmount = cgstAmount;
-        
-        $scope.data.sgstPercent = sgstPercent;
-        $scope.data.sgstAmount = sgstAmount;
-        
-        $scope.data.igstPercent = igstPercent;
-        $scope.data.igstAmount = igstAmount;
-        
-        $scope.data.itemGstAmount = $scope.data.cgstAmount + $scope.data.sgstAmount + $scope.data.igstAmount;
-        
-        $scope.data.itemFinalAmount = $scope.data.discountedAmount + $scope.data.itemGstAmount;
-        
-        console.log($scope.data);
-    }
-    
-    
-    $scope.onDeleteFromCartHandler = function(index) {
-        
-        $ionicPopup.confirm({
-            
-            title: 'Are You Sure, You Want to Delete Item ?',
-            buttons: [{
-                
-                text: 'YES',
-                type: 'button-block button-outline button-stable',
-                onTap: function (e) {
-                    
-                    $scope.cartItemData.splice(index, 1);
-                }
-                
-            }, {
-                
-                text: 'NO',
-                type: 'button-block button-outline button-stable',
-                onTap: function (e) {
-                    
-                    console.log('You Are Not Sure');
-                }
-            }]
-            
-        });
-    }
-    
-    
-    $scope.onSaveRequirementHandler = function() {
-        
-        
-        $ionicPopup.confirm({
-            
-            title: 'Are You Sure, You Want to Save Requirement ?',
-            buttons: [{
-                
-                text: 'YES',
-                type: 'button-block button-outline button-stable',
-                onTap: function (e) {
-                    
-                    $ionicLoading.show({
-                        template: '<p>Loading...</p><ion-spinner icon="android"></ion-spinner>'
-                    });
-                    
-                    myRequestDBService.onSaveRequirementHandler(myAllSharedService.drTypeFilterData.drId, $scope.cartItemData).then(function(result) {
-                        
-                        console.log(result);
-                        
-                        $ionicLoading.hide();
-                        $state.go('tab.lead-requirement-list');
-                        
-                        
-                        $cordovaToast.show('Requirement Saved Successfully', 'short', 'bottom').then(function (success) {
-                            
-                        }, function (error) {
-                            
-                        });
-                        
-                    }, function (err) {
-                        
-                        $ionicLoading.hide();
-                        console.error(err);
-                    });
-                    
-                }
-                
-            }, {
-                
-                text: 'NO',
-                type: 'button-block button-outline button-stable',
-                onTap: function (e) {
-                    
-                    console.log('You Are Not Sure');
-                }
-            }]
-            
-        });
-        
-    }
-    
-    
-    $scope.onSaveQuotationHandler = function() {
-        
-        $ionicPopup.confirm({
-            
-            title: 'Are You Sure, You Want to Save Quotation ?',
-            buttons: [{
-                text: 'YES',
-                type: 'button-block button-outline button-stable',
-                onTap: function (e) {
-                    $ionicLoading.show({
-                        template: '<p>Loading...</p><ion-spinner icon="android"></ion-spinner>'
-                    });
-                    
-                    console.log(myAllSharedService.drTypeFilterData.drId);
-                    console.log($scope.cartItemData);
-                    console.log($scope.cartSummaryData);
-                    console.log($scope.data.quoteId);
-                    
-                    
-                    myRequestDBService.onSaveQuotationHandler(myAllSharedService.drTypeFilterData.drId, $scope.cartItemData, $scope.cartSummaryData, $scope.data.quoteId)
-                    .then(function(result)
-                    {
-                        console.log(result);
-                        $ionicLoading.hide();
-                        $state.go('tab.lead-quotation-list');
-                        $cordovaToast.show('Quotation Saved Successfully', 'short', 'bottom').then(function (success) {
-                        }, function (error) {
-                        });
-                    }, function (err) {
-                        $ionicLoading.hide();
-                        console.error(err);
-                    });
-                }
-            }, {
-                text: 'NO',
-                type: 'button-block button-outline button-stable',
-                onTap: function (e) {
-                    console.log('You Are Not Sure');
-                }
-            }]
-        });
-    }
-    
-    
-    // $scope.onSaveOrderHandler = function() {
-    
-    //     // if(!$scope.search.deliveryByName || !$scope.search.deliveryByName.Value) {
-    
-    //     //     $ionicPopup.alert({
-    //     //         title: 'Error!',
-    //     //         template: 'Delivery By Required!'
-    //     //     });
-    
-    //     //     return false;
-    //     // }
-    
-    //     $ionicPopup.confirm({
-    
-    //         title: 'Are You Sure, You Want to Save Order ?',
-    //         buttons: [{
-    
-    //             text: 'YES',
-    //             type: 'button-block button-outline button-stable',
-    //             onTap: function (e) {
-    
-    //                 $ionicLoading.show({
-    //                     template: '<p>Loading...</p><ion-spinner icon="android"></ion-spinner>'
-    //                 });
-    //                 console.log($scope.data.shippingAddress);
-    
-    //                 myRequestDBService.onSaveOrderHandler($scope.search.drName.Value, $scope.search.deliveryByName,$scope.data.shippingAddress, $scope.cartItemData, $scope.cartSummaryData)
-    //                 .then(function(result)
-    //                 {
-    //                     console.log(result);
-    //                     $ionicLoading.hide();
-    //                     $ionicHistory.goBack();
-    //                     $cordovaToast.show('Order Saved Successfully', 'short', 'bottom').then(function (success) {
-    //                     }, function (error) {
-    //                     });
-    //                 }, function (err) {
-    //                     $ionicLoading.hide();
-    //                     console.error(err);
-    //                 });
-    //             }
-    //         }, {
-    //             text: 'NO',
-    //             type: 'button-block button-outline button-stable',
-    //             onTap: function (e) {
-    //                 console.log('You Are Not Sure');
-    //             }
-    //         }]
-    
-    //     });
-    
-    // }
-    
-    
-    // $scope.getOrderListData = function(targetSRC) {
-    
-    //     if(!$scope.data.search && targetSRC != 'scroll') {
-    
-    //         $ionicLoading.show({
-    //             template: '<p>Loading...</p><ion-spinner icon="android"></ion-spinner>'
-    //         });
-    //     }
-    
-    //     $scope.isRequestInProcess = true;
-    
-    //     myRequestDBService.getOrderListData($scope.currentActiveTab, $scope.data.search, $scope.currentPage, $scope.pageSize).then(function(response) {
-    
-    //         console.log(response);
-    
-    //         const result = response.orderData;
-    
-    //         console.log(result);
-    
-    //         if(!$scope.data.search && targetSRC != 'scroll') {
-    //             $ionicLoading.hide();
-    //         }
-    
-    //         for (let index = 0; index < result.length; index++) {
-    
-    //             const isExist = $scope.orderList.findIndex(row => row.id == result[index].id);
-    //             if(isExist === -1) {
-    //                 $scope.orderList = $scope.orderList.concat(result);
-    //             }
-    //         }
-    
-    //         myAllSharedService.drTypeFilterData.orderList = $scope.orderList;
-    
-    //         $scope.isRequestInProcess = false;
-    
-    //         if(targetSRC == 'onLoad' || targetSRC == 'onRefresh') {
-    //             $scope.onPageScrollTopHandler();
-    //         }
-    
-    //         if(targetSRC == 'scroll') {
-    //             $scope.$broadcast('scroll.infiniteScrollComplete');
-    //         }
-    
-    //         if(targetSRC == 'onRefresh') {
-    
-    //             $scope.$broadcast('scroll.refreshComplete');
-    
-    //             $cordovaToast.show('Refreshed Successfully', 'short', 'bottom').then(function (success) {
-    
-    //             }, function (error) {
-    
-    //             });
-    //         }
-    
-    //         if(!result || result.length == 0) {
-    //             $scope.noMoreListingAvailable = true;
-    //         }
-    
-    //         console.log($scope.orderList);
-    
-    //         $scope.currentPage += 1;
-    
-    //     }, function (err) {
-    
-    //         $ionicLoading.hide();
-    //         $scope.isRequestInProcess = false;
-    //         console.error(err);
-    //     });
-    
-    // }
-    
-    
-    // $scope.stateList = [];
-    // $scope.districtList = [];
-    
-    // $scope.onGetSearchSelectDataHandler = function (type_info, searchKey, pagenumber) {
-    
-    //     console.log("function cal");
-    
-    
-    //     if(!searchKey)
-    //     {
-    //         $ionicLoading.show({
-    //             template: '<p>Loading...</p><ion-spinner icon="android"></ion-spinner>'
-    //         });
-    //     }
-    
-    //     if (fetchingRecords) return;
-    //     fetchingRecords = true;
-    
-    //     var targetArr = { type: type_info, state_name: $scope.search.stateName.Value, loginData: $scope.loginData };
-    
-    //     console.log(targetArr);
-    
-    //     searchSelect.onGetSearchSelectData(targetArr, searchKey, pagenumber)
-    //     .then(function (result)
-    //     {
-    //         console.log(result);
-    //         $ionicLoading.hide();
-    //         if (type_info == 'fetchStateData')
-    //         {
-    //             $scope.totalStateRecords = result.TotalRecords;
-    //             $scope.stateList = result.Records;
-    //         }
-    //         if (type_info == 'fetchDistrictData')
-    //         {
-    //             $scope.totalDistrictRecords = result.TotalRecords;
-    //             $scope.districtList = result.Records;
-    //         }
-    
-    //         fetchingRecords = false;
-    //     },function (errorMessage)
-    //     {
-    //         console.log(errorMessage);
-    //         window.console.warn(errorMessage);
-    //         fetchingRecords = false;
-    //     });
-    // };
-    
-    // let fetchingRecords = false;
-    
-    // $scope.onGetCartItemDataHandler = function (typeInfo, searchKey, pagenumber) {
-    
-    //     if(!searchKey) {
-    
-    //         $ionicLoading.show({
-    //             template: '<p>Loading...</p><ion-spinner icon="android"></ion-spinner>',
-    //         });
-    //     }
-    
-    //     if (fetchingRecords) return;
-    //     fetchingRecords = true;
-    
-    //     var targetArr = {
-    //         type: typeInfo,
-    //         categoryName: $scope.search.categoryName.Value,
-    //         subCategoryName: $scope.search.subCategoryName.Value,
-    //         product: $scope.search.product
-    //     };
-    
-    //     console.log(targetArr);
-    
-    //     searchSelect.getCartItemData(targetArr, searchKey, pagenumber,$scope.loginData)
-    //     .then(function (result) {
-    
-    //         $ionicLoading.hide();
-    //         console.log(result);
-    //         if (pagenumber === 1) {
-    
-    //             if (typeInfo == 'fetchCategoryData') {
-    
-    //                 $scope.totalCategoryRecords = result.TotalRecords;
-    //                 $scope.categoryList = result.Records;
-    //             }
-    
-    //             if (typeInfo == 'fetchSubCategoryData') {
-    
-    //                 $scope.totalSubCategoryRecords = result.TotalRecords;
-    //                 $scope.subCategoryList = result.Records;
-    //             }
-    
-    
-    //             if (typeInfo == 'fetchProductData') {
-    
-    //                 $scope.totalProductRecords = result.TotalRecords;
-    //                 $scope.productList = result.Records;
-    //             }
-    //         }
-    
-    //         fetchingRecords = false;
-    
-    //     }, function (errorMessage) {
-    
-    //         console.log(errorMessage);
-    //         window.console.warn(errorMessage);
-    //         fetchingRecords = false;
-    //     });
-    
-    // };
-    
-    // $scope.$watch('search.categoryName', function (newValue, oldValue) {
-    
-    //     if (newValue && newValue.Value && newValue.Value != oldValue.Value) {
-    
-    //         console.log('Go');
-    //         console.log($scope.search.categoryName);
-    
-    //         $scope.search.subCategoryName = { Key: "Select Sub Category", Value: "" };
-    //         $scope.search.product = { Key: "Select Product", Value: "" };
-    
-    //         $scope.subCategoryList = [];
-    //         $scope.productList = [];
-    
-    //         $scope.onGetCartItemDataHandler('fetchSubCategoryData', '', 1);
-    //     }
-    // });
-    
-    
-    // $scope.$watch('search.subCategoryName', function (newValue, oldValue) {
-    
-    //     if (newValue && newValue.Value && newValue.Value != oldValue.Value) {
-    
-    //         console.log('Go');
-    //         console.log($scope.search.categoryName);
-    //         console.log($scope.search.subCategoryName);
-    
-    //         $scope.search.product = { Key: "Select Product", Value: "" };
-    //         $scope.productList = [];
-    
-    //         $scope.onGetCartItemDataHandler('fetchProductData', '', 1);
-    //     }
-    // });
-    
-    // $scope.$watch('search.product', function (newValue, oldValue) {
-    
-    //     if (newValue && newValue.Value && newValue.Value != oldValue.Value) {
-    
-    //         console.log('Go');
-    //         if($location.path() == '/tab/lead-quotation-add' || $location.path() == '/tab/order-add') {
-    //             $scope.data.qty = 1;
-    //             $scope.data.rate = $scope.search.product.price;
-    //             $scope.data.amount = $scope.search.product.price;
-    //             $scope.onGetSearchSelectDataHandler('fetchStateData', '', 1);
-    
-    //             $ionicPopover.fromTemplateUrl('add-address', {
-    //                 scope: $scope,
-    //             }).then(function(popovers) {
-    //                 $scope.data.otherAddresModel = popovers;
-    //             });
-    //         }
-    //     }
-    // });
-    
-    // $scope.$watch('search.stateName', function (newValue, oldValue) {
-    
-    //     if (newValue && newValue.Value && newValue.Value != oldValue.Value) {
-    
-    //         console.log('Go');
-    //         console.log($scope.search.stateName);
-    
-    //         $scope.search.districtName = { Key: "Select District", Value: "" };
-    //         $scope.onGetSearchSelectDataHandler('fetchDistrictData', '', 1);
-    //     }
-    // });
-    
-    // $scope.$watch('search.drName', function (newValue, oldValue) {
-    
-    //     if (newValue && newValue.Value && newValue.Value != oldValue.Value) {
-    
-    //         console.log('Go');
-    //         console.log($scope.search.drName);
-    
-    //         $scope.getDetail($scope.search.drName.Value);
-    
-    //     }
-    // });
-    
-    // $scope.onGetDrTypeDataHandler = function (type_info, searchKey, pagenumber) {
-    
-    //     if(!searchKey) {
-    
-    //         $ionicLoading.show({
-    //             template: '<p>Loading...</p><ion-spinner icon="android"></ion-spinner>',
-    //         });
-    //     }
-    
-    //     if (fetchingRecords) return;
-    //     fetchingRecords = true;
-    
-    //     let typeId = '';
-    //     let typeName = '';
-    
-    //     if(type_info == 'orderFor') {
-    
-    //         typeId = $scope.data.typeId;
-    //         typeName = $scope.data.typeName;
-    
-    //     } else if( type_info == 'orderDeliveryBy') {
-    
-    //         typeId = $scope.data.deliveryByTypeId;
-    //         typeName = $scope.data.deliveryByTypeName;
-    //     }
-    
-    //     var targetArr = {
-    //         typeId: typeId,
-    //         typeName: typeName,
-    //         loginData: $scope.loginData,
-    //         searchData: searchKey,
-    //         networkType:1
-    //     };
-    
-    //     console.log(targetArr);
-    
-    //     searchSelect.onGetDrTypeDataHandler(targetArr, searchKey, pagenumber)
-    //     .then(function (result)
-    //     {
-    //         console.log(result);
-    //         $ionicLoading.hide();
-    //         let updatedDrData = result.leadData;
-    
-    //         for (let index = 0; index < updatedDrData.length; index++) {
-    
-    //             updatedDrData[index].Key = updatedDrData[index].dr_name + ' - (' + updatedDrData[index].contact_mobile_no + ')';
-    
-    //             updatedDrData[index].Value = updatedDrData[index].id;
-    //         }
-    
-    //         if(type_info == 'orderFor') {
-    
-    //             $scope.drList = updatedDrData;
-    //             $scope.totalDrRecords = 0;
-    
-    //         } else if( type_info == 'orderDeliveryBy') {
-    
-    //             $scope.drDeliveryByList = updatedDrData;
-    //             $scope.totalDeliveryByDrRecords = 0;
-    //         }
-    
-    //         fetchingRecords = false;
-    
-    //     }, function (errorMessage) {
-    
-    //         console.log(errorMessage);
-    //         window.console.warn(errorMessage);
-    //         fetchingRecords = false;
-    //     });
-    // };
-    
-    
-    $scope.onGetAllLeadType = function()
-    {
-        $ionicLoading.show({
-            template: '<ion-spinner icon="android"></ion-spinner><p>Loading...</p>'
-        });
-        
-        var parameter = { function_name: 'getLeadType' };
-        myRequestDBService.sfaPostServiceRequest("/Okaya_LMS/getPostData", parameter).then(function (response) {
-            console.log(response);
-            $scope.drOrderTypeData = response.data;
-            console.log($scope.drOrderTypeData);
-            $ionicLoading.hide();
-        }); 
-    }
-    
-    
-    $scope.categoryListData = [];
-    $scope.onGetProductCategoryList = function () {
-        $ionicLoading.show({
-            template: '<ion-spinner icon="android"></ion-spinner><p>Loading...</p>'
-        });
-        
-        var parameter = { function_name: 'getProductCategoryList' };
-        myRequestDBService.sfaPostServiceRequest("/Okaya_LMS/getPostData", parameter).then(function (response) {
-            console.log(response);
-            $scope.categoryListData = response.data;
-            console.log($scope.categoryListData);
-            $ionicLoading.hide();
-        });
-    }
-    
-    
-    $scope.subCategoryData = [];
-    $scope.onGetSubcategoryList = function () {
-        $ionicLoading.show({
-            template: '<ion-spinner icon="android"></ion-spinner><p>Loading...</p>'
-        });
-        
-        var parameter = { function_name: 'getProductSubCategory','category':$scope.data.category };
-        myRequestDBService.sfaPostServiceRequest("/Okaya_LMS/getPostData", parameter).then(function (response) {
-            console.log(response);
-            $scope.subCategoryData = response.data;
-            console.log($scope.subCategoryData);
-            $ionicLoading.hide();
-        });
-    }
-    
-    $scope.productListData = [];
-    $scope.onGetProductList = function () {
-        $ionicLoading.show({
-            template: '<ion-spinner icon="android"></ion-spinner><p>Loading...</p>'
-        });
-        
-        var parameter = { function_name: 'getProductList', 'category': $scope.data.category, 'sub_category': $scope.data.sub_category };
-        myRequestDBService.sfaPostServiceRequest("/Okaya_LMS/getPostData", parameter).then(function (response) {
-            console.log(response);
-            $scope.productListData = response.data;
-            console.log($scope.productListData);
-            $ionicLoading.hide();
-        });
-    }
-    
-    
-    $scope.allLeadData = [];
-    $scope.getLeadDataonChangeLeadType = function(type)
-    {
-        $ionicLoading.show({
-            template: '<ion-spinner icon="android"></ion-spinner><p>Loading...</p>'
-        });
-        
-        var parameter = { function_name: 'getAssignLeadList','type_name':type };
-        myRequestDBService.sfaPostServiceRequest("/Okaya_LMS/getPostData", parameter).then(function (response) {
-            console.log(response);
-            $scope.allLeadData = response.data;
-            console.log($scope.allLeadData);
-            $ionicLoading.hide();
-        }); 
-    }
-    
-    
-    $scope.single_select = function(item)
-    {
-        $scope.data.dr_name = new Array();
-        $scope.data.dr_name.push(item.Key);
-        console.log($scope.data.dr_name);
-        
-        $scope.data.dr_data = item;
-        
-    }
-    
-    $scope.onGetDeliveryByTypeListHandler = function() {
-        
-        myRequestDBService.onGetDeliveryByTypeListHandler()
-        .then(function(response)
-        {
-            console.log(response);
-            $scope.deliveryByTypeList = response.typeData;
-        }, function (err) {
-            console.error(err);
-        });
-    }
-    
-    
-    $scope.onGetAllLeadType = function () {
-        $ionicLoading.show({
-            template: '<ion-spinner icon="android"></ion-spinner><p>Loading...</p>'
-        });
-        
-        var parameter = { function_name: 'getLeadType' };
-        myRequestDBService.sfaPostServiceRequest("/Okaya_LMS/getPostData", parameter).then(function (response) {
-            console.log(response);
-            $scope.drOrderTypeData = response.data;
-            console.log($scope.drOrderTypeData);
-            $ionicLoading.hide();
-        });
-    }
-    
-    $scope.getOrderDetailData = function() {
-        
-        $ionicLoading.show({
-            template: '<p>Loading...</p><ion-spinner icon="android"></ion-spinner>'
-        });
-        
-        myRequestDBService.onGetOrderData($scope.data.orderId)
-        .then(function(response)
-        {
-            console.log(response);
-            $scope.orderDetail = response.orderData[0];
-            $ionicLoading.hide();
-        }, function (err) {
-            $ionicLoading.hide();
-            console.error(err);
-        });
-    }
-    
-    
-    $scope.getDrDetailData = function(drId)
-    {
-        myRequestDBService.getDrDetailData(drId)
-        .then(function(response) {
-            console.log(response);
-            $scope.drDetail = response;
-            myAllSharedService.drTypeFilterData.drDetail = JSON.parse(JSON.stringify( $scope.drDetail));
-            
-            $scope.data.typeId = $scope.drDetail.drData.type_id;
-            $scope.search.drName = { Key: $scope.drDetail.drData.dr_name, Value: $scope.drDetail.drData.id };
-        }, function (err) {
-            console.error(err);
-        });
-    }
-    
-    
-    $scope.onSaveLeadOrderData = function()
-    {
-        
-        var orderData = {};
-        
-        if ($scope.drDetail.dr_id)
-        {
-            orderData.dr_name = $scope.drDetail.dr_name;
-            orderData.dr_id = $scope.drDetail.dr_id;
-        }
-        else
-        {
-            orderData.dr_name = $scope.data.dr_data.Key;
-            orderData.dr_id = $scope.data.dr_data.Value;
-        }
-        orderData.dispatch_by_name = $scope.data.dispatch_by_name;
-        orderData.dispatch_by_id = $scope.data.dispatch_by_id;
-        orderData.orderDetail = $scope.cartSummaryData;
-        orderData.order_item = $scope.cartItemData;
+  $scope.loginData = myAllSharedService.loginData;
+  $scope.isRequestInProcess;
+  $scope.orderList = [];
 
-        $ionicPopup.confirm({
-            
-            title: 'Are You Sure, You Want to Save Order ?',
-            buttons: [{
-                
-                text: 'YES',
-                type: 'button-block button-outline button-stable',
-                onTap: function (e) {
-                    
-                    $ionicLoading.show({
-                        template: '<p>Loading...</p><ion-spinner icon="android"></ion-spinner>'
-                    });
-                    // console.log($scope.data.shippingAddress);
-                    
-                    var parameter = { function_name: 'submitOrder', 'data': orderData};
-                    myRequestDBService.sfaPostServiceRequest("/Okaya_LMS/getPostData", parameter).then(function (response) {
-                        console.log(response);
-                        if(response.status=='Success')
-                        {
-                            $state.go('tab.lead-order-list');
-                        }
-                        // $scope.drOrderTypeData = response.data;
-                        // console.log($scope.drOrderTypeData);
-                        $ionicLoading.hide();
-                    });
-                }
-            }, {
-                text: 'NO',
-                type: 'button-block button-outline button-stable',
-                onTap: function (e) {
-                    console.log('You Are Not Sure');
-                }
-            }]
-            
-        });
-        
-        
-        
-    }
-    
-    $scope.onGoToOrderAddHandler = function() {
-        
-        myAllSharedService.drTypeFilterData.isInsideLead = 'No';
-        myAllSharedService.drTypeFilterData.orderId = '';
-        myAllSharedService.drTypeFilterData.drId = '';
-        
-        $state.go('tab.order-add');
-    }
-    
-    if($location.path() == '/tab/order-detail') {
-        
-        $scope.data.orderId = myAllSharedService.drTypeFilterData.orderId;
-        $scope.getOrderDetailData();
-    }
-    
-    
-    $scope.onGoToOrderDetailPage = function(orderId) {
-        
-        myAllSharedService.drTypeFilterData.orderId = orderId;
-        $state.go('tab.order-detail');
-    }
-    
-    
-    
-    if($location.path() == '/tab/all-order-list') {
-        
-        $scope.getOrderListData('onLoad');
-    }
-    
-    
-    $scope.slectedProductInformation = function(product_id)
-    {
-        
-        var index = $scope.productListData.findIndex(row=>row.id == product_id);
-        
-        $scope.data.rate = $scope.productListData[index].price;
-        $scope.data.product_name = $scope.productListData[index].product_name;
-        $scope.data.product_code = $scope.productListData[index].product_code;
-        $scope.data.qty = 1;
-        
-        $scope.onCalculateItemTotalHandler();
-    }
-    $scope.drDetail = {};
-    if ($location.path() == '/tab/order-add')
-    {
-        $scope.drDetail.dr_id = myRequestDBService.dr_id;
-        $scope.drDetail.dr_name = myRequestDBService.dr_name;
-        $scope.drDetail.contact_mobile_no = myRequestDBService.contact_mobile_no;
-        $scope.data.type = myRequestDBService.type_name;
-        $scope.onGetAllLeadType();
-        $scope.onGetProductCategoryList();
-        
-    }
-    
-    
-    $scope.orderDispatchByData = [];
-    
-    $scope.onDeliveryByTypeChangeHandler = function (dispatchBy) {
-        
-       
-        $scope.orderDispatchByData = [];
-        
-        var url;
-        
-        if (dispatchBy=='Dealer')
-        {
-            url = 'getDealerData';
-        }
-        else
-        {
-            url = "getDistributorData";
-        }
-        
-        if(dispatchBy != 'Company')
-        {
-            $ionicLoading.show({
-                template: '<p>Loading...</p><ion-spinner icon="android"></ion-spinner>',
-                duration: 100
-            });
-            
-            myRequestDBService.onGetPostRequest('/App_Expense/' + url, '')
-            .then(function (result) {
-                console.log(result);
-                $scope.search.dealerName = [];
-                
-                $scope.orderDispatchByData = result.data;
-                
-                fetchingRecords = false;
-                
-            }, function (errorMessage) {
-                console.log(errorMessage);
-                window.console.warn(errorMessage);
-                $ionicLoading.hide();
-                fetchingRecords = false;
-            });
-        }
-        
-    }
+  $scope.data = {};
+  $scope.search = {};
 
-    $scope.dispatch_by_select = function (item) {
-        console.log(item);
-        $scope.data.dispatch_by = new Array();
-        $scope.data.dispatch_by.push(item.Key);
-        console.log($scope.data.dispatch_by);
-        $scope.data.dispatch_by_id = item.Value;
-        $scope.data.dispatch_by_name = item.Key;
+  $scope.data.isInsideLead = myAllSharedService.drTypeFilterData.isInsideLead;
+  $rootScope.isAttendanceStart  = myAllSharedService.loginData.startAttendance;
 
-    }
-    
-    
-    
-    $scope.onModifyTypeHandler = function(type) {
-        
-        $scope.currentActiveTab = type;
-        $scope.onSetCurrentPageHandler();
-        
-        $scope.getOrderListData('onLoad');
-    }
-    
-    
-    $scope.onSeachActionHandler = function(type) {
-        
-        if(type == 'open') {
-            
-            $scope.isSearchBarOpen = true;
-            
-            setTimeout(() => {
-                
-                $('#searchData').focus();
-                
-            }, 1000);
-        }
-        
-        if(type == 'close') {
-            
-            $scope.data.search = '';
-            $scope.isSearchBarOpen = false;
-            $scope.onSetCurrentPageHandler();
-            
-            $scope.getOrderListData('onLoad');
-        }
-    }
-    
-    $scope.shippingForm = {};
-    
-    $scope.submitAddress = function()
-    {
-        
-        $scope.shippingForm.state = $scope.search.stateName.Value;
-        $scope.shippingForm.district = $scope.search.districtName.Value;
-        $scope.shippingForm.city = $scope.data.city;
-        $scope.shippingForm.pincode = $scope.data.pincode;
-        $scope.shippingForm.street = $scope.data.street;
-        
-        $scope.data.otherAddresModel.hide();
-        
-        $ionicLoading.show({
-            template: '<ion-spinner icon="android"></ion-spinner><p>Loading...</p>'
-        });
-        
-        myRequestDBService.onGetPostRequest('/App_Order/addShippingAddress',$scope.shippingForm)
-        .then(function(response) {
-            console.log(response);
-            
-            if(response.status=='Success')
-            {
-                $scope.data.state_name = $scope.shippingForm.state_name;
-                $scope.drShippingArray.push({id:response.insertId,address:$scope.shippingForm.street+' '+$scope.shippingForm.city+' '+$scope.shippingForm.district+' '+$scope.shippingForm.state+' '+$scope.shippingForm.pincode});
-                
-                $scope.data.address = response.insertId;
-                $scope.data.shippingAddress = $scope.shippingForm.street+' '+$scope.shippingForm.city+' '+$scope.shippingForm.district_name+' '+$scope.shippingForm.state_name+' '+$scope.shippingForm.pincode;
-                
-                console.log($scope.data);
-            }
-            else
-            {
-                $ionicPopup.alert({
-                    title: 'Error!',
-                    template: 'Something went wrong !!'
-                });
-            }
-            
-            $ionicLoading.hide();
-            
-            
-        }, function (err) {
-            $ionicLoading.hide();
-            $ionicPopup.alert({
-                title: 'Error!',
-                template: 'Something went wrong !!'
-            });
-            console.error(err);
-        });
-        
-        console.log($scope.shippingForm);
-        
-    }
-    
-    
-    $scope.test =function()
-    {
-        console.log("test");
-        
-    }
-    $scope.onSetCurrentPageHandler = function() {
-        
-        $scope.currentPage = 1;
-        $scope.orderList = [];
-        
-        $scope.onPageScrollTopHandler();
-        
-        $scope.noMoreListingAvailable = false;
-    }
-    
-    $scope.onPageScrollTopHandler = function() {
-        
-        $ionicScrollDelegate.scrollTop();
-    }
-    
-    $scope.goToBackPageHandler = function() {
-        $ionicHistory.goBack();
-    }
-    
-    
-    $scope.getRoundAmountHandler = function(val) {
-        return val.toFixed(2);
-    }
-    
-    
-    
-    // $scope.onGetTypeListForOrderCreateHandler = function() {
-    
-    //     myRequestDBService.getDrAllTypeData()
-    //     .then(function(response) {
-    //         console.log(response);
-    //         $scope.drOrderTypeData = response.allTypeData;
-    //     }, function (err) {
-    //         console.error(err);
-    //     });
-    // }
-    
-    
-    // $scope.onDrTypeChangeHandler = function() {
-    
-    //     const isIndex = this.drOrderTypeData.findIndex(row => row.id == $scope.data.typeId);
-    //     $scope.data.typeName = this.drOrderTypeData[isIndex].type;
-    
-    //     $scope.search.drName = { Key: "Select "+$scope.data.typeName+"*", Value: "" };
-    //     $scope.onGetDrTypeDataHandler('orderFor', '', 1);
-    // }
-    
-    
-    // if($location.path() == '/tab/lead-requirement-add' || $location.path() == '/tab/lead-quotation-add' || $location.path() == '/tab/order-add') {
-    
-    //     $scope.search.categoryName = { Key: "Select Category", Value: "" };
-    //     $scope.search.subCategoryName = { Key: "Select Sub Category", Value: "" };
-    //     $scope.search.product = { Key: "Select Product", Value: "" };
-    //     $scope.search.stateName = { Key: "Select State *", Value: "" };
-    //     $scope.search.districtName = { Key: "Select District *", Value: "" };
-    
-    //     $scope.onGetCartItemDataHandler('fetchCategoryData', '' , 1);
-    //     setTimeout(() => {
-    //         $scope.onGetSearchSelectDataHandler('fetchStateData', '', 1);
-    //     }, 500);
-    
-    //     if($location.path() == '/tab/order-add') {
-    
-    //         $scope.search.drName = { Key: "Select Company *", Value: "" };
-    
-    //         $scope.onGetTypeListForOrderCreateHandler();
-    //         $scope.onGetDeliveryByTypeListHandler();
-    
-    //         $scope.data.drId = myAllSharedService.drTypeFilterData.drId;
-    
-    //         if(myAllSharedService.drTypeFilterData.isInsideLead == 'Yes') {
-    //             $scope.getDrDetailData($scope.data.drId);
-    //         }
-    
-    //         $ionicPopover.fromTemplateUrl('add-address', {
-    //             scope: $scope,
-    //         }).then(function(popovers) {
-    //             $scope.data.otherAddresModel = popovers;
-    //         });
-    //     }
-    
-    //     if($location.path() == '/tab/lead-quotation-add') {
-    
-    //         $scope.data.quoteId = myAllSharedService.drTypeFilterData.quoteId;
-    
-    //         if(myAllSharedService.drTypeFilterData.quoteId)
-    //         {
-    //             $scope.quoteDetail = myAllSharedService.drTypeFilterData.quoteDetail;
-    //             console.log($scope.quoteDetail);
-    
-    //             $scope.quoteDetail.itemData.forEach(itemRow => {
-    
-    //                 $scope.search.categoryName = {Key: itemRow.category, Value: itemRow.category};
-    //                 $scope.search.subCategoryName = {Key: itemRow.sub_category, Value: itemRow.sub_category};
-    
-    //                 const productKey = itemRow['product_name'] + ' - (' + itemRow['product_code'] + ')';
-    //                 $scope.search.product = {
-    
-    //                     Key: productKey,
-    //                     Value: itemRow.product_id,
-    //                     product_name: itemRow.product_name,
-    //                     product_code: itemRow.product_code,
-    //                     product_id: itemRow.product_id
-    //                 };
-    
-    //                 $scope.data.gstPercent = itemRow.cgst_percent+itemRow.sgst_percent+itemRow.igst_percent;
-    //                 $scope.data.qty = itemRow.qty;
-    //                 $scope.data.rate = itemRow.rate;
-    //                 $scope.data.discount = itemRow.dis_percent;
-    //                 $scope.data.amount = itemRow.item_total;
-    
-    //                 $scope.data.cgstPercent = itemRow.cgst_percent;
-    //                 $scope.data.cgstAmount = itemRow.cgst_amount;
-    //                 $scope.data.sgstPercent = itemRow.sgst_percent;
-    //                 $scope.data.sgstAmount = itemRow.sgst_amount;
-    //                 $scope.data.igstPercent = itemRow.igst_percent;
-    //                 $scope.data.igstAmount = itemRow.igst_amount;
-    //                 $scope.data.itemFinalAmount = itemRow.item_net_total;
-    //                 $scope.data.discountPercent = itemRow.dis_percent
-    //                 $scope.data.discountAmount = itemRow.dis_amt
-    //                 $scope.data.discountedAmount = itemRow.item_total
-    
-    //                 console.log(itemRow);
-    
-    //                 console.log($scope.data);
-    
-    //                 $scope.onAddToCartHandler('Quotation');
-    
-    //             });
-    
-    //             setTimeout(() => {
-    
-    //                 $scope.search.categoryName = { Key: "Select Category", Value: "" };
-    //                 $scope.search.subCategoryName = { Key: "Select Sub Category", Value: "" };
-    //                 $scope.search.product = { Key: "Select Product", Value: "" };
-    
-    //             }, 2000);
-    
-    //         }
-    //     }
-    // }
-    
+  $scope.categoryList = [];
+  $scope.subCategoryList = [];
+  $scope.productList = [];
+
+  $scope.drList = [];
+  $scope.drDeliveryByList = [];
+
+
+  $scope.cartItemData = [];
+  $scope.cartSummaryData = {};
+  $scope.drDetail = myAllSharedService.drTypeFilterData.drDetail;
+
+  $scope.drOrderTypeData = [];
+  $scope.deliveryByTypeList = [];
+
+  $scope.currentPage = 1;
+  $scope.pageSize = 20;
+
+  // $scope.currentDate =  new Date();
+  $scope.currentDate = moment().format('YYYY-MM-DD');
+  $scope.minDate = moment().subtract(7, 'days').format('YYYY-MM-DD');
+
+  $scope.isSearchBarOpen = false;
+  $scope.order_type = myAllSharedService.drTypeFilterData.order_type;
+  $scope.noMoreListingAvailable = false;
+
+  let fetchingRecords = false;
+
+  $scope.changeStatus = function(statusType)
+  {
+      console.log(statusType);
+
+      $scope.data.statusModel.show();
+      $scope.data.statusType = statusType;
+  }
+
+  // if($location.path() == '/sfa-order-detail')
+  // {
+  //     $ionicPopover.fromTemplateUrl('add-status', {
+  //         scope: $scope,
+  //     }).then(function(popovers) {
+  //         $scope.data.statusModel = popovers;
+  //     });
+  // }
+
+
+  $scope.onGetCartItemDataHandler = function (typeInfo, searchKey, pagenumber) {
+
+      if(!searchKey) {
+
+          $ionicLoading.show({
+              template: '<p>Loading...</p><ion-spinner icon="android"></ion-spinner>',
+              duration: 100
+          });
+      }
+
+      if (fetchingRecords) return;
+      fetchingRecords = true;
+
+      var targetArr = {
+          type: typeInfo,
+          categoryName: $scope.search.categoryName.Value,
+          subCategoryName: $scope.search.subCategoryName.Value,
+          product: $scope.search.product,
+          dr_id:$scope.data.dr_id ? $scope.data.dr_id : 0
+      };
+
+      console.log(targetArr);
+
+      myRequestDBService.getOrderData(targetArr, searchKey, pagenumber)
+      .then(function (result)
+      {
+          console.log(result);
+          if (pagenumber === 1) {
+
+              if (typeInfo == 'fetchCategoryData') {
+
+                  $scope.totalCategoryRecords = result.TotalRecords;
+                  $scope.categoryList = result.Records;
+              }
+
+              if (typeInfo == 'fetchSubCategoryData') {
+
+                  $scope.totalSubCategoryRecords = result.TotalRecords;
+                  $scope.subCategoryList = result.Records;
+              }
+
+
+              if (typeInfo == 'fetchProductData') {
+
+                  $scope.totalProductRecords = result.TotalRecords;
+                  $scope.productList = result.Records;
+              }
+          }
+
+          fetchingRecords = false;
+
+      }, function (errorMessage) {
+          console.log(errorMessage);
+          window.console.warn(errorMessage);
+          $ionicLoading.hide();
+          fetchingRecords = false;
+      });
+
+  };
+
+  $scope.onDrNameHandler = function (searchKey) {
+
+      if(!searchKey) {
+
+          $ionicLoading.show({
+              template: '<p>Loading...</p><ion-spinner icon="android"></ion-spinner>',
+              duration: 100
+          });
+      }
+
+      if (fetchingRecords) return;
+      fetchingRecords = true;
+
+      var data = {
+          search: searchKey,
+          order_type: $scope.order_type,
+      };
+
+      // console.log(targetArr);
+
+      myRequestDBService.sfaPostServiceRequest('/App_Order/get_dr_lists',data)
+      .then(function (result)
+      {
+          console.log(result);
+
+          $scope.dr_list = result.dr_list;
+
+          fetchingRecords = false;
+
+      }, function (errorMessage) {
+          console.log(errorMessage);
+          window.console.warn(errorMessage);
+          $ionicLoading.hide();
+          fetchingRecords = false;
+      });
+
+  };
+
+  $scope.onSearchDrNameHandler = function (searchKey) {
+
+      if(!searchKey) {
+
+          $ionicLoading.show({
+              template: '<p>Loading...</p><ion-spinner icon="android"></ion-spinner>',
+              duration: 100
+          });
+      }
+
+      if (fetchingRecords) return;
+      fetchingRecords = true;
+
+      var data = {
+          search: searchKey,
+          dr_id: $scope.data.dr_id,
+      };
+
+      // console.log(targetArr);
+
+      myRequestDBService.sfaPostServiceRequest('/App_Order/assignDistributor',data)
+      .then(function (result)
+      {
+          console.log(result);
+
+          $scope.assignDistributor = result.dr_list;
+
+          fetchingRecords = false;
+
+      }, function (errorMessage) {
+          console.log(errorMessage);
+          window.console.warn(errorMessage);
+          $ionicLoading.hide();
+          fetchingRecords = false;
+      });
+
+  };
+
+
+  $scope.assignDistributor = [];
+
+
+  $scope.getAssignDistributor = function()
+  {
+      $scope.search.assign_dr_name = { Key: "Select Distributor", Value: "" };
+
+      $ionicLoading.show({
+          template: '<p>Loading...</p><ion-spinner icon="android"></ion-spinner>'
+      });
+
+      var data={dr_id:$scope.data.dr_id}
+
+
+      myRequestDBService.sfaPostServiceRequest('/App_Order/assignDistributor',data)
+      .then(function(response) {
+
+          console.log(response);
+
+          if(response.status=='Success')
+          {
+              $scope.assignDistributor = response.dr_list;
+              $ionicLoading.hide();
+              console.log($scope.assignDistributor);
+
+              if($scope.data.order_id)
+              {
+                  $scope.search.assign_dr_name = { Key: $scope.data.dispatch_by_name, Value: $scope.data.dispatch_by };
+              }
+              // $scope.data.statusModel.hide();
+
+          }
+
+
+      }, function (err) {
+
+          console.error(err);
+      });
+
+  }
+
+
+  $scope.dis_list = [];
+  $scope.getDistributor = function()
+  {
+      myRequestDBService.getDistributor($scope.order_type)
+      .then(function(resp)
+      {
+          console.log(resp);
+          $scope.dis_list = resp.dis_list;
+      });
+  }
+
+  $scope.edit_order = function(orderId,orderData)
+  {
+      myAllSharedService.drTypeFilterData.orderId = orderId;
+      myAllSharedService.drTypeFilterData.orderData = orderData;
+
+      $scope.getDrDetailData(orderData.dr_id);
+      console.log(orderData);
+
+      $state.go("tab.sfa-order-add");
+  }
+
+  $scope.getDrDetailData = function(drId) {
+
+      console.log(drId);
+
+      myRequestDBService.getDrDetailData(drId).then(function(response)
+      {
+          console.log(response);
+          if(response.status!='error')
+          {
+              $scope.drDetail = response;
+              myAllSharedService.drTypeFilterData.drDetail = JSON.parse(JSON.stringify( $scope.drDetail));
+
+              $scope.data.typeId = $scope.drDetail.drData.type_id;
+              $scope.search.drName = { Key: $scope.drDetail.drData.dr_name, Value: $scope.drDetail.drData.id };
+              $scope.search.drDetail = $scope.drDetail.drData;
+              console.log($scope.search.drDetail);
+          }
+          else
+          {
+              $scope.search.drDetail = {};
+          }
+      }, function (err) {
+
+          console.error(err);
+      });
+  }
+
+  $scope.dr_list = [];
+  $scope.order_no = 0;
+  $scope.get_dr_list = function()
+  {
+      console.log($scope.order_type);
+
+      myRequestDBService.get_dr_list({order_type:$scope.order_type})
+      .then(function(resp)
+      {
+          console.log(resp);
+          $scope.dr_list = resp.dr_list;
+          $scope.order_no = resp.order_no.order_no;
+      });
+  }
+
+  $scope.clear_data  = function()
+  {
+      $scope.cartSummaryData = {};
+      $scope.cartItemData = [];
+      myAllSharedService.drTypeFilterData.orderData = {};
+  }
+
+  if($location.path() == '/tab/sfa-order-add')
+  {
+      if(!$rootScope.isAttendanceStart)
+      {
+          $ionicHistory.goBack();
+
+          $ionicPopup.alert({
+              title: 'Error!',
+              template: 'To continue, Start Work Time !'
+          });
+      }
+      else
+      {
+
+
+          var label
+
+          if($scope.order_type=='secondary')
+          {
+              label = 'Dealer';
+          }
+          else
+          {
+              label = 'Distributor';
+          }
+          $scope.itemList = [];
+
+          $scope.search.categoryName = { Key: "Select Category", Value: "" };
+          $scope.search.subCategoryName = { Key: "Select Sub Category", Value: "" };
+          $scope.search.product = { Key: "Select Product", Value: "" };
+          $scope.search.dr_name = { Key: "Select "+label, Value: "" };
+          $scope.search.assign_dr_name = { Key: "Select Distributor", Value: "" };
+
+          $scope.data.payment_type = 'cash';
+          console.log(myAllSharedService.drTypeFilterData.orderData);
+
+          if(myAllSharedService.drTypeFilterData.orderData && myAllSharedService.drTypeFilterData.orderData.order_type != undefined) {
+
+              myAllSharedService.drTypeFilterData.referFrom = null;
+              $scope.cartSummaryData = {};
+              $scope.order_type = myAllSharedService.drTypeFilterData.orderData.order_type;
+              $scope.data = myAllSharedService.drTypeFilterData.orderData;
+              $scope.search.dr_name = { Key: $scope.data.dr_name, Value: $scope.data.dr_id };
+              $scope.data.order_date = new Date($scope.data.order_date);
+              $scope.get_dr_list();
+              console.log($scope.search);
+              console.log($scope.cartItemData);
+              $scope.data.dr_id = $scope.data.dr_id;
+              $scope.data.basicAmount = $scope.data.item_total;
+              $scope.data.grandTatal = $scope.data.net_total;
+              $scope.data.netAmount = $scope.data.sub_total;
+              $scope.data.sgstAmount = $scope.data.sgst_amt;
+              $scope.data.igstAmount = $scope.data.igst_amt;
+              $scope.data.cgstAmount = $scope.data.cgst_amt;
+              $scope.data.discountedAmount = $scope.data.dis_amt;
+              $scope.data.order_id = $scope.data.id;
+              $scope.data.payment_type = $scope.data.payment_type;
+
+              $scope.onGetCartItemDataHandler('fetchCategoryData', '' , 1);
+
+
+              if($scope.data.dr_id && $scope.order_type=='secondary')
+              {
+                  $scope.getAssignDistributor();
+                  $scope.getDistributor();
+
+              }
+              $scope.cartItemData = [];
+
+              $scope.data.itemData.forEach(element => {
+                  $scope.cartItemData.push({
+                      warranty: element.warranty,
+                      categoryName: element.category,
+                      subCategoryName: element.sub_category,
+                      productName: element.product_name,
+                      productCode: element.product_code,
+                      qty: element.qty,
+                      rate: element.rate,
+                      discount: element.dis_percent,
+                      discountAmount : element.dis_amt,
+                      igst: element.igst_percent,
+                      cgst: element.cgst_percent,
+                      sgst: element.sgst_percent,
+                      cgstAmount: element.cgst_amount,
+                      sgstAmount: element.sgst_amount,
+                      igstAmount: element.igst_amount,
+                      subTotal : element.amount,
+                      netTotal : element.item_total,
+                      grandTotal : element.item_net_total,
+                  });
+
+              });
+
+              $scope.cartSummaryData.order_id = $scope.data.id;
+              $scope.cartSummaryData.discountAmount = $scope.data.dis_amt;
+              $scope.cartSummaryData.discountedAmount = $scope.data.item_total;
+              $scope.cartSummaryData.cgstAmount = $scope.data.cgst_amt;
+              $scope.cartSummaryData.sgstAmount = $scope.data.sgst_amt;
+              $scope.cartSummaryData.igstAmount = $scope.data.igst_amt
+              $scope.cartSummaryData.itemFinalAmount = $scope.data.net_total;
+
+          }
+          else if(myAllSharedService.drTypeFilterData.dr_id && myAllSharedService.drTypeFilterData.referFrom =='network')
+          {
+              $scope.data.order_date = new Date();
+              $scope.get_dr_list();
+              console.log("welcome");
+              $scope.data.dr_id = myAllSharedService.drTypeFilterData.dr_id;
+              $scope.order_type = myAllSharedService.drTypeFilterData.order_type;
+              $scope.search.dr_name = { Key: myAllSharedService.drTypeFilterData.dr_name, Value:myAllSharedService.drTypeFilterData.dr_id };
+
+              $scope.onGetCartItemDataHandler('fetchCategoryData', '' , 1);
+
+              console.log("In Else", myAllSharedService.drTypeFilterData);
+
+              if($scope.data.dr_id && $scope.order_type =='secondary')
+              {
+                  $scope.getAssignDistributor();
+                  $scope.getDistributor();
+
+              }
+
+          }
+          else {
+              myAllSharedService.drTypeFilterData.referFrom = null;
+              $scope.data.order_date = new Date();
+              $scope.get_dr_list();
+          }
+
+          console.log($scope.data);
+      }
+  }
+
+  $scope.onGoToOrderAddHandler = function()
+  {
+      if($location.path() == '/tab/sfa-order-list') {
+
+          myAllSharedService.drTypeFilterData.isInsideLead = 'No';
+          myAllSharedService.drTypeFilterData.orderId = '';
+      }
+
+      myAllSharedService.drTypeFilterData.order_type = $scope.order_type;
+      $state.go('tab.sfa-order-add');
+  }
+
+  $scope.tmpOrderList = [];
+  $scope.getOrderListData = function(targetSRC) {
+
+      if(!$scope.data.search && targetSRC != 'scroll')
+      {
+          $ionicLoading.show({
+              template: '<p>Loading...</p><ion-spinner icon="android"></ion-spinner>'
+          });
+      }
+      $scope.isRequestInProcess = true;
+
+      var requestPost = {
+          order_type:$scope.order_type,
+          searchData:$scope.data.search,
+          start:$scope.currentPage,
+          pageLimit:$scope.pageSize,
+          createdBy:$scope.data.orderCreatedBy,
+          targetPage: 'List',
+          drId:$scope.data.dr_id
+      }
+
+      myRequestDBService.sfaPostServiceRequest('/App_Order/order_list',requestPost)
+      .then(function(response)
+      {
+          console.log(response);
+          const result = response.orderData;
+          console.log(result);
+          if(!$scope.data.search && targetSRC != 'scroll') {
+              $ionicLoading.hide();
+          }
+          for (let index = 0; index < result.length; index++) {
+
+              const isExist = $scope.orderList.findIndex(row => row.id == result[index].id);
+              if(isExist === -1) {
+                  $scope.orderList = $scope.orderList.concat(result);
+              }
+          }
+
+          $scope.tmpOrderList = $scope.orderList;
+          myAllSharedService.drTypeFilterData.orderList = $scope.orderList;
+          $scope.isRequestInProcess = false;
+
+          if(targetSRC == 'onLoad' || targetSRC == 'onRefresh') {
+              $scope.onPageScrollTopHandler();
+          }
+          if(targetSRC == 'scroll') {
+              $scope.$broadcast('scroll.infiniteScrollComplete');
+          }
+          if(targetSRC == 'onRefresh')
+          {
+              $scope.$broadcast('scroll.refreshComplete');
+              $cordovaToast.show('Refreshed Successfully', 'short', 'bottom').then(function (success) {
+              }, function (error) {
+              });
+          }
+          if(!result || result.length == 0) {
+              $scope.noMoreListingAvailable = true;
+          }
+          $scope.currentPage += 1;
+      }, function (err)
+      {
+          $ionicLoading.hide();
+          $scope.isRequestInProcess = false;
+          console.error(err);
+      });
+
+  }
+
+  $scope.filterOrderListList = function(search)
+  {
+      search = search.toLowerCase();
+
+      console.log(search);
+
+    console.log($scope.tmpOrderList);
+
+      $scope.orderList = $scope.tmpOrderList.filter(row=>row.created_by_name.toLowerCase().includes(search) || row.dr_name.toLowerCase().includes(search) || row.order_status.toLowerCase().includes(search) || row.payment_type.toLowerCase().includes(search) || row.state_name.toLowerCase().includes(search) || row.city.toLowerCase().includes(search) || row.district_name.toLowerCase().includes(search));
+
+      // || row.dr_name.includes(search) || row.order_status.includes(search) || row.payment_type.includes(search) || row.state_name.includes(search) || row.city.includes(search) || row.district_name.includes(search)
+
+      console.log(searchArray);
+
+  }
+
+  if($location.path() == '/tab/sfa-order-list')
+  {
+      console.log(myAllSharedService.drTypeFilterData);
+      if(myAllSharedService.drTypeFilterData.order_type != undefined)
+      {
+          $scope.order_type = myAllSharedService.drTypeFilterData.order_type;
+          $scope.data.orderCreatedBy = myAllSharedService.drTypeFilterData.orderCreatedBy;
+          if(myAllSharedService.drTypeFilterData.referFrom=='network')
+          {
+              $scope.data.dr_id = myAllSharedService.drTypeFilterData.drId;
+
+          }
+      }
+      else
+      {
+          $scope.order_type = 'primary';
+          $scope.data.orderCreatedBy = 'me';
+      }
+      $scope.getOrderListData('onLoad');
+  }
+
+  $scope.check_val = function()
+  {
+      console.log($scope.data.discountPercent);
+      console.log($scope.data.gstPercent);
+
+      if($scope.data.discountPercent != null && $scope.data.discountPercent != undefined)
+      {
+          if($scope.data.discountPercent > 100)
+          {
+              $scope.data.discountPercent = 100;
+          }
+      }
+
+      if($scope.data.gstPercent != null && $scope.data.gstPercent != undefined)
+      {
+          if($scope.data.gstPercent > 100)
+          {
+              $scope.data.gstPercent = 100;
+          }
+      }
+  }
+  $scope.data.totalItemQty = 0;
+  $scope.data.basicAmount = 0;
+  $scope.data.discountAmount = 0;
+  $scope.data.discountedAmount = 0;
+  $scope.data.cgstAmount = 0;
+  $scope.data.sgstAmount = 0;
+  $scope.data.igstAmount = 0;
+  $scope.data.itemGstAmount = 0;
+  $scope.data.netAmount = 0;
+  $scope.calculateOrderAmount = function(orderArray = [])
+  {
+      $scope.data.totalItemQty = 0;
+      $scope.data.basicAmount = 0;
+      $scope.data.discountedAmount = 0;
+      $scope.data.cgstAmount = 0;
+      $scope.data.sgstAmount = 0;
+      $scope.data.igstAmount = 0;
+      $scope.data.netAmount = 0;
+      $scope.data.grandTatal = 0;
+
+      for (var i = 0; i < orderArray.length; i++)
+      {
+          $scope.data.totalItemQty = parseInt(orderArray[i]['qty'])+$scope.data.totalItemQty;
+          $scope.data.basicAmount = parseFloat(orderArray[i]['subTotal']) + $scope.data.basicAmount;
+          $scope.data.netAmount = parseFloat(orderArray[i]['netTotal']) + parseFloat($scope.data.netAmount);
+          $scope.data.subToatlAmount = parseFloat(orderArray[i]['netTotal']) + $scope.data.subToatlAmount;
+          $scope.data.discountedAmount = parseFloat(orderArray[i]['discountAmount']) + parseFloat($scope.data.discountedAmount);
+          $scope.data.cgstAmount = parseFloat(orderArray[i]['cgstAmount'])+parseFloat($scope.data.cgstAmount);
+          $scope.data.sgstAmount = parseFloat(orderArray[i]['sgstAmount'])+parseFloat($scope.data.sgstAmount);
+          $scope.data.igstAmount = parseFloat(orderArray[i]['igstAmount'])+parseFloat($scope.data.igstAmount);
+          $scope.data.grandTatal = parseFloat(orderArray[i]['grandTotal']) + parseFloat($scope.data.grandTatal);
+      }
+
+      console.log($scope.data.netAmount);
+
+
+  }
+
+  $scope.onAddToCartHandler = function(targetType) {
+
+      console.log(targetType);
+      console.log($scope.data.item);
+
+      for (var i = 0; i < $scope.data.item.length; i++)
+      {
+          var index = $scope.itemList.findIndex(row=>row.Key==$scope.data.item[i]);
+
+          var itemrate=$scope.itemList[index]['price'] ? $scope.itemList[index]['price'] : 0;
+          var itemqty=$scope.itemList[index]['qty'] ? $scope.itemList[index]['qty'] : 1;
+          var itemSubtotal = parseFloat(itemrate) * parseInt(itemqty);
+          var gst = $scope.itemList[index]['gst'] ? $scope.itemList[index]['gst'] : 0;
+          var itemIgst = $scope.itemList[index]['gst'] ? $scope.itemList[index]['gst'] : 0;
+          var itemCgst = $scope.itemList[index]['gst'] ? $scope.itemList[index]['gst']/2 :0;
+          var itemSgst = $scope.itemList[index]['gst'] ? $scope.itemList[index]['gst']/2 : 0;
+          var itemdiscount = $scope.itemList[index]['discount'] ? $scope.itemList[index]['discount'] : 0;
+          var itemdiscountAmount = parseFloat(itemSubtotal)*parseInt(itemdiscount)/100;
+          var itemIgstAmount = parseFloat(itemSubtotal) * itemIgst/100;
+          var itemCgstAmount = parseFloat(itemSubtotal) * itemCgst/100;
+          var itemSgstAmount = parseFloat(itemSubtotal) * itemSgst/100;
+          var itemNettotal=parseFloat(itemSubtotal) - parseFloat(itemdiscountAmount);
+
+
+          console.log(index);
+          var idx = $scope.cartItemData.findIndex(row=>row.productCode==$scope.itemList[index]['product_code']);
+
+          if(idx == -1)
+          {
+              $scope.cartItemData.push({
+                  categoryName:$scope.itemList[index]['category'],
+                  subCategoryName:$scope.itemList[index]['sub_category'],
+                  productName:$scope.itemList[index]['product_name'],
+                  productCode:$scope.itemList[index]['product_code'],
+                  productId:$scope.itemList[index]['id'],
+                  qty:itemqty,
+                  discount:itemdiscount,
+                  gst:gst,
+                  rate:itemrate,
+                  igst:itemIgst,
+                  cgst:itemCgst,
+                  sgst:itemSgst,
+                  subTotal:itemSubtotal,
+                  discountAmount:itemdiscountAmount,
+                  netTotal : itemNettotal,
+                  igstAmount:itemIgstAmount,
+                  cgstAmount:itemCgstAmount,
+                  sgstAmount:itemSgstAmount,
+                  grandTotal:parseFloat(itemNettotal) - (parseFloat(itemIgstAmount)+ parseFloat(itemCgstAmount) + parseFloat(itemSgstAmount)),
+                  warranty:$scope.itemList[index]['warranty'],
+              });
+          }
+
+      }
+
+      $scope.data.item = [];
+
+      console.log($scope.cartItemData);
+
+
+      $scope.calculateOrderAmount($scope.cartItemData);
+
+  }
+
+
+  $scope.calculateItemTotal = function(itemArray = [])
+  {
+      console.log(itemArray);
+
+      for (var i = 0; i < itemArray.length; i++)
+      {
+          itemArray[i]['subTotal'] = parseFloat(itemArray[i]['rate']) * parseInt(itemArray[i]['qty']);
+          itemArray[i]['igst'] = parseInt(itemArray[i]['gst']);
+          itemArray[i]['cgst'] = itemArray[i]['gst']!=0 ? parseInt(itemArray[i]['gst'])/2:0;
+          itemArray[i]['sgst'] = itemArray[i]['gst']!=0 ? parseInt(itemArray[i]['gst'])/2:0;
+          itemArray[i]['igstAmount'] = parseFloat(itemArray[i]['subTotal']) * itemArray[i]['igst']/100;
+          itemArray[i]['cgstAmount'] = parseFloat(itemArray[i]['subTotal']) * itemArray[i]['cgst']/100;
+          itemArray[i]['sgstAmount'] = parseFloat(itemArray[i]['subTotal']) * itemArray[i]['sgst']/100;
+          itemArray[i]['discountAmount'] = parseFloat(itemArray[i]['subTotal'])*parseInt(itemArray[i]['discount'])/100;
+          itemArray[i]['netTotal'] = parseFloat(itemArray[i]['subTotal']) - parseFloat(itemArray[i]['discountAmount']);
+          itemArray[i]['grandTotal'] = parseFloat(itemArray[i]['netTotal']) - (parseFloat(itemArray[i]['igstAmount'])+ parseFloat(itemArray[i]['cgstAmount']) + parseFloat(itemArray[i]['sgstAmount']));
+      }
+
+      $scope.calculateOrderAmount(itemArray);
+
+  }
+
+  $scope.removeItem = function(index)
+  {
+      $scope.cartItemData.splice(index,1);
+      console.log($scope.cartItemData);
+      $scope.calculateItemTotal($scope.cartItemData);
+
+
+
+  }
+
+  $scope.calculateOrder = function()
+  {
+
+      console.log($scope.cartItemData);
+
+      $scope.calculateItemTotal($scope.cartItemData);
+  }
+  $scope.submitSfaOrderData = function()
+  {
+      $scope.data.order_type  = $scope.order_type;
+      $scope.data.order_date  = moment($scope.data.order_date).format('YYYY-MM-DD');
+      $scope.data.itemArray  = $scope.cartItemData;
+      console.log($scope.data);
+
+      if($scope.data.dr_id)
+      {
+          if($scope.order_type=='secondary' && !$scope.data.dispatch_by)
+          {
+              $ionicPopup.alert({
+                  title: 'Error!',
+                  template: "Distributor not selected !!"
+              });
+              return;
+          }
+
+          if($scope.data.itemArray.length==0)
+          {
+              $ionicPopup.alert({
+                  title: 'Error!',
+                  template: "No any item add in cart!"
+              });
+              return;
+          }
+          else
+          {
+
+              $ionicPopup.confirm({
+
+                  title: 'Are You Sure, You Want to Submit ?',
+                  buttons: [{
+
+                      text: 'YES',
+                      type: 'button-block button-outline button-stable',
+                      onTap: function (e) {
+
+                          $ionicLoading.show({
+                              template: '<p>Loading...</p><ion-spinner icon="android"></ion-spinner>'
+                          });
+
+                          myRequestDBService.sfaPostServiceRequest('/App_Order/onSubmitOrder',$scope.data)
+                          .then(function(response)
+                          {
+                              if(response.status=='Success')
+                              {
+                                  $ionicLoading.hide();
+                                  $state.go('tab.sfa-order-list');
+                                  $cordovaToast.show('Order Saved Successfully', 'short', 'bottom').then(function (success) {
+                                  }, function (error) {
+                                  });
+                              }
+                              console.log(response);
+
+                          }, function (err) {
+
+                              $ionicPopup.alert({
+                                  title: 'Error!',
+                                  template: 'Something went wrong !!'
+                              });
+
+                              console.error(err);
+                          });
+
+
+                      }
+                  },
+                  {
+
+                      text: 'NO',
+                      type: 'button-block button-outline button-stable',
+                      onTap: function (e) {
+                          console.log('You Are Not Sure');
+                      }
+                  }]
+              });
+
+          }
+
+      }
+      else
+      {
+          $ionicPopup.alert({
+              title: 'Error!',
+              template: (($scope.order_type == 'primary') ? 'Distributor' : 'Dealer')+" Does Not Selected!"
+          });
+          return;
+      }
+
+
+
+
+
+  }
+
+  $scope.onCalculateSummaryTotalDataHandler = function() {
+
+      $scope.cartSummaryData.itemCount = $scope.cartItemData.length;
+
+      $scope.cartSummaryData.preDiscountTotal = 0;
+      $scope.cartSummaryData.discountAmount = 0;
+
+      $scope.cartSummaryData.discountedAmount = 0;
+
+      $scope.cartSummaryData.cgstAmount = 0;
+      $scope.cartSummaryData.sgstAmount = 0;
+      $scope.cartSummaryData.igstAmount = 0;
+      $scope.cartSummaryData.itemGstAmount = 0;
+
+      $scope.cartSummaryData.itemFinalAmount = 0;
+
+      for (let index = 0; index < $scope.cartItemData.length; index++) {
+
+          $scope.cartSummaryData.preDiscountTotal += $scope.cartItemData[index].amount;
+          $scope.cartSummaryData.discountAmount += $scope.cartItemData[index].discountAmount;
+
+          $scope.cartSummaryData.discountedAmount += $scope.cartItemData[index].discountedAmount;
+
+          $scope.cartSummaryData.cgstAmount += $scope.cartItemData[index].cgstAmount;
+          $scope.cartSummaryData.sgstAmount += $scope.cartItemData[index].sgstAmount;
+          $scope.cartSummaryData.igstAmount += $scope.cartItemData[index].igstAmount;
+
+          $scope.cartSummaryData.itemGstAmount += $scope.cartItemData[index].itemGstAmount;
+          $scope.cartSummaryData.itemFinalAmount += $scope.cartItemData[index].itemFinalAmount;
+      }
+  }
+
+  $scope.onCalculateItemTotalHandler = function(targetType)
+  {
+
+      console.log($scope.data.dr_id);
+      console.log(myAllSharedService.drTypeFilterData.drDetail);
+      if(myAllSharedService.drTypeFilterData.drDetail.drData)
+      {
+          $scope.search.drDetail = myAllSharedService.drTypeFilterData.drDetail.drData;
+      }
+
+
+      let qty = 0;
+      let rate = 0;
+      let discountPercent = 0;
+      let gstPercent = 0;
+      let cgstPercent = 0;
+      let sgstPercent = 0;
+      let igstPercent = 0;
+      let cgstAmount = 0;
+      let sgstAmount = 0;
+      let igstAmount = 0;
+
+      if($scope.data.qty)
+      {
+          qty = $scope.data.qty;
+      }
+
+      if($scope.data.rate)
+      {
+          rate = $scope.data.rate;
+      }
+
+      if($scope.data.discountPercent)
+      {
+          discountPercent = $scope.data.discountPercent;
+      }
+
+      if($scope.data.gstPercent)
+      {
+          gstPercent = $scope.data.gstPercent;
+      }
+
+      $scope.data.amount = qty * rate;
+      $scope.data.discountAmount = $scope.data.amount * (discountPercent/100);
+      $scope.data.discountedAmount = $scope.data.amount - $scope.data.discountAmount;
+
+      let stateName;
+      if(targetType == 'Quotation') {
+          stateName = $scope.drDetail.drData.state_name;
+      }
+
+      if(targetType == 'Order') {
+          console.log($scope.search);
+
+          if($scope.search.drDetail == undefined || !$scope.search.drDetail.state_name)
+          {
+              if($scope.search.drDetail == undefined)
+              {
+                  $ionicPopup.alert({
+                      title: 'Error!',
+                      template: 'Please Select '+(($scope.order_type == 'primary') ? 'Distributor' : 'Dealer')+'!'
+                  });
+              }
+              else
+              {
+                  $ionicPopup.alert({
+                      title: 'Error!',
+                      template: (($scope.order_type == 'primary') ? 'Distributor' : 'Dealer')+"'s State Does Not Exists!"
+                  });
+              }
+          }
+          else
+          {
+              stateName = $scope.search.drDetail.state_name;
+          }
+      }
+
+      if(stateName == 'DELHI')
+      {
+          let gstPercentApply = gstPercent/2;
+
+          cgstPercent = gstPercentApply;
+          cgstAmount = amount * (cgstPercent/100);
+
+          sgstPercent = gstPercentApply;
+          sgstAmount = $scope.data.discountedAmount * (sgstPercent/100);
+
+          igstPercent = 0;
+          igstAmount = 0;
+
+      }
+      else
+      {
+          let gstPercentApply = gstPercent;
+          console.log(gstPercentApply);
+
+          cgstPercent = 0;
+          cgstAmount = 0;
+
+          sgstPercent = 0;
+          sgstAmount = 0;
+
+          igstPercent = gstPercentApply;
+          igstAmount = $scope.data.discountedAmount * (igstPercent/100);
+      }
+
+      $scope.data.cgstPercent = cgstPercent;
+      $scope.data.cgstAmount = cgstAmount;
+
+      $scope.data.sgstPercent = sgstPercent;
+      $scope.data.sgstAmount = sgstAmount;
+
+      $scope.data.igstPercent = igstPercent;
+      $scope.data.igstAmount = igstAmount;
+
+      $scope.data.itemGstAmount = $scope.data.cgstAmount + $scope.data.sgstAmount + $scope.data.igstAmount;
+
+      $scope.data.itemFinalAmount = $scope.data.discountedAmount + $scope.data.itemGstAmount;
+      console.log($scope.data);
+  }
+
+
+  $scope.onDeleteFromCartHandler = function(index) {
+
+      $ionicPopup.confirm({
+
+          title: 'Are You Sure, You Want to Delete Item ?',
+          buttons: [{
+
+              text: 'YES',
+              type: 'button-block button-outline button-stable',
+              onTap: function (e) {
+
+                  $scope.cartItemData.splice(index, 1);
+              }
+
+          }, {
+
+              text: 'NO',
+              type: 'button-block button-outline button-stable',
+              onTap: function (e) {
+
+                  console.log('You Are Not Sure');
+              }
+          }]
+
+      });
+  }
+
+
+  $scope.onSaveRequirementHandler = function() {
+
+      $ionicPopup.confirm({
+
+          title: 'Are You Sure, You Want to Save Requirement ?',
+          buttons: [{
+
+              text: 'YES',
+              type: 'button-block button-outline button-stable',
+              onTap: function (e) {
+
+                  $ionicLoading.show({
+                      template: '<p>Loading...</p><ion-spinner icon="android"></ion-spinner>'
+                  });
+
+                  myRequestDBService.onSaveRequirementHandler(myAllSharedService.drTypeFilterData.drId, $scope.cartItemData).then(function(result) {
+
+                      console.log(result);
+
+                      $ionicLoading.hide();
+                      $state.go('tab.lead-requirement-list');
+
+
+                      $cordovaToast.show('Requirement Saved Successfully', 'short', 'bottom').then(function (success) {
+
+                      }, function (error) {
+
+                      });
+
+                  }, function (err) {
+
+                      $ionicLoading.hide();
+                      console.error(err);
+                  });
+
+              }
+
+          }, {
+
+              text: 'NO',
+              type: 'button-block button-outline button-stable',
+              onTap: function (e) {
+
+                  console.log('You Are Not Sure');
+              }
+          }]
+
+      });
+
+  }
+
+
+  $scope.onSaveQuotationHandler = function() {
+
+      $ionicPopup.confirm({
+
+          title: 'Are You Sure, You Want to Save Quotation ?',
+          buttons: [{
+
+              text: 'YES',
+              type: 'button-block button-outline button-stable',
+              onTap: function (e) {
+
+                  $ionicLoading.show({
+                      template: '<p>Loading...</p><ion-spinner icon="android"></ion-spinner>'
+                  });
+
+                  myRequestDBService.onSaveQuotationHandler(myAllSharedService.drTypeFilterData.drId, $scope.cartItemData, $scope.cartSummaryData, $scope.data.quoteId).then(function(result) {
+
+                      console.log(result);
+
+                      $ionicLoading.hide();
+                      $state.go('tab.lead-quotation-list');
+
+                      $cordovaToast.show('Quotation Saved Successfully', 'short', 'bottom').then(function (success) {
+
+                      }, function (error) {
+
+                      });
+
+                  }, function (err) {
+
+                      $ionicLoading.hide();
+                      console.error(err);
+                  });
+
+              }
+
+          }, {
+
+              text: 'NO',
+              type: 'button-block button-outline button-stable',
+              onTap: function (e) {
+
+                  console.log('You Are Not Sure');
+              }
+          }]
+
+      });
+
+  }
+
+  $scope.onSaveOrderHandler = function() {
+
+      if($scope.order_type == 'secondary' && !$scope.data.dispatch_by) {
+
+          $ionicPopup.alert({
+              title: 'Error!',
+              template: 'Distributor Required!'
+          });
+
+          return false;
+      }
+
+      $ionicPopup.confirm({
+
+          title: 'Are You Sure, You Want to Save Order ?',
+          buttons: [{
+
+              text: 'YES',
+              type: 'button-block button-outline button-stable',
+              onTap: function (e) {
+
+                  $ionicLoading.show({
+                      template: '<p>Loading...</p><ion-spinner icon="android"></ion-spinner>'
+                  });
+
+                  $scope.cartSummaryData.order_date = $scope.data.order_date;
+
+                  if($scope.cartSummaryData.order_date)
+                  {
+                      $scope.cartSummaryData.order_date = moment($scope.cartSummaryData.order_date).format('YYYY-MM-DD');
+                  }
+
+                  $scope.cartSummaryData.dr_id = $scope.data.dr_id;
+                  $scope.cartSummaryData.dispatch_by = $scope.data.dispatch_by_name;
+                  $scope.cartSummaryData.order_no = $scope.order_no;
+                  $scope.cartSummaryData.order_type = $scope.order_type;
+
+                  myRequestDBService.onSaveOrder($scope.cartItemData, $scope.cartSummaryData).then(function(result)
+                  {
+                      console.log(result);
+                      $ionicLoading.hide();
+                      // $ionicHistory.goBack();
+                      $state.go('tab.sfa-order-list');
+                      $cordovaToast.show('Order Saved Successfully', 'short', 'bottom').then(function (success) {
+                      }, function (error) {
+                      });
+                  }, function (err) {
+                      $ionicLoading.hide();
+                      console.error(err);
+                  });
+              }
+          }, {
+
+              text: 'NO',
+              type: 'button-block button-outline button-stable',
+              onTap: function (e) {
+                  console.log('You Are Not Sure');
+              }
+          }]
+      });
+
+  }
+
+
+
+  $scope.itemList = [];
+  $scope.getItemList = function(value)
+  {
+      console.log(value);
+
+      $ionicLoading.show({
+          template: '<p>Loading...</p><ion-spinner icon="android"></ion-spinner>'
+      });
+
+      var data = {category:value}
+      $scope.itemList = [];
+      myRequestDBService.sfaPostServiceRequest('/App_Order/getItemList',data)
+      .then(function(response) {
+
+          console.log(response);
+          $ionicLoading.hide();
+
+          if(response.status=='Success')
+          {
+
+              $scope.itemList = response.data;
+          }
+
+
+      }, function (err) {
+
+          console.error(err);
+      });
+  }
+
+
+  $scope.orderData={};
+  $scope.saveStatus = function()
+  {
+
+      if($scope.orderData.status=='Reject' && !$scope.orderData.reason)
+      {
+          $ionicPopup.alert({
+              title: 'Error!',
+              template: 'Reason Required!'
+          });
+          return;
+      }
+      else
+      {
+          $ionicLoading.show({
+              template: '<p>Loading...</p><ion-spinner icon="android"></ion-spinner>'
+          });
+
+
+          myRequestDBService.sfaPostServiceRequest('/App_Order/saveOrderStatus',$scope.orderData)
+          .then(function(response) {
+
+              console.log(response);
+
+              if(response.status=='Success')
+              {
+                  $ionicLoading.hide();
+                  $scope.data.statusModel.hide();
+                  $scope.getOrderDetailData();
+
+              }
+
+
+          }, function (err) {
+
+              console.error(err);
+          });
+      }
+
+
+  }
+
+
+
+  $scope.$watch('search.dr_name', function (newValue, oldValue) {
+
+      if (newValue && newValue.Value && newValue.Value != oldValue.Value) {
+
+          console.log(newValue);
+
+          $scope.data.dr_id = newValue.Value;
+          $scope.data.dr_name = newValue.Key;
+          $scope.data.type_name = newValue.type_name;
+
+          $scope.onGetCartItemDataHandler('fetchCategoryData', '' , 1)
+
+          if($scope.order_type=='secondary')
+          {
+              $scope.getAssignDistributor();
+          }
+          //     // $scope.search.subCategoryName = { Key: "Select Sub Category", Value: "" };
+          //     // $scope.search.product = { Key: "Select Product", Value: "" };
+
+          //     // $scope.subCategoryList = [];
+          //     // $scope.productList = [];
+
+          //     // $scope.getItemList(newValue.Value);
+      }
+  });
+
+  $scope.$watch('search.assign_dr_name', function (newValue, oldValue) {
+
+      if (newValue && newValue.Value && newValue.Value != oldValue.Value) {
+
+          console.log(newValue);
+
+          $scope.data.dispatch_by = newValue.Value;
+          $scope.data.dispatch_by_name = newValue.Key;
+
+      }
+  });
+
+
+  $scope.$watch('search.categoryName', function (newValue, oldValue) {
+
+      if (newValue && newValue.Value && newValue.Value != oldValue.Value) {
+
+          console.log(newValue);
+          $scope.getItemList(newValue.Value);
+          // console.log($scope.search.categoryName);
+
+          // $scope.search.subCategoryName = { Key: "Select Sub Category", Value: "" };
+          // $scope.search.product = { Key: "Select Product", Value: "" };
+
+          // $scope.subCategoryList = [];
+          // $scope.productList = [];
+
+      }
+  });
+
+
+  // $scope.$watch('search.subCategoryName', function (newValue, oldValue) {
+
+  //     if (newValue && newValue.Value && newValue.Value != oldValue.Value) {
+
+  //         console.log('Go');
+  //         console.log($scope.search.categoryName);
+  //         console.log($scope.search.subCategoryName);
+
+  //         $scope.search.product = { Key: "Select Product", Value: "" };
+  //         $scope.productList = [];
+
+  //         $scope.onGetCartItemDataHandler('fetchProductData', '', 1);
+  //     }
+  // });
+
+  $scope.$watch('search.product', function (newValue, oldValue) {
+
+      if (newValue && newValue.Value && newValue.Value != oldValue.Value) {
+
+          console.log('Go');
+          if($location.path() == '/tab/lead-quotation-add' || $location.path() == '/tab/order-add') {
+              $scope.data.qty = 1;
+              $scope.data.rate = $scope.search.product.price;
+              $scope.data.amount = $scope.search.product.price;
+          }
+      }
+  });
+
+
+  $scope.onGetDrTypeDataHandler = function (type_info, searchKey, pagenumber) {
+
+      if(!searchKey) {
+
+          // $ionicLoading.show({
+          //     template: '<p>Loading...</p><ion-spinner icon="android"></ion-spinner>',
+          //     duration: 3000
+          // });
+          $ionicLoading.show({
+              template: '<p>Loading...</p><ion-spinner icon="android"></ion-spinner>'
+          });
+      }
+
+      if (fetchingRecords) return;
+      fetchingRecords = true;
+
+      let typeId = '';
+      let typeName = '';
+
+      if(type_info == 'orderFor') {
+
+          typeId = $scope.data.typeId;
+          typeName = $scope.data.typeName;
+
+      } else if( type_info == 'orderDeliveryBy') {
+
+          typeId = $scope.data.deliveryByTypeId;
+          typeName = $scope.data.deliveryByTypeName;
+      }
+
+      var targetArr = {
+          typeId: typeId,
+          typeName: typeName,
+          loginData: $scope.loginData,
+          searchData: searchKey,
+      };
+
+      console.log(targetArr);
+
+      searchSelect.onGetDrTypeDataHandler(targetArr, searchKey, pagenumber)
+      .then(function (result) {
+          console.log(result);
+          $ionicLoading.hide();
+          let updatedDrData = result.leadData;
+
+          for (let index = 0; index < updatedDrData.length; index++) {
+
+              updatedDrData[index].Key = updatedDrData[index].dr_name + ' - (' + updatedDrData[index].contact_mobile_no + ')';
+
+              updatedDrData[index].Value = updatedDrData[index].id;
+          }
+
+          if(type_info == 'orderFor') {
+
+              $scope.drList = updatedDrData;
+              $scope.totalDrRecords = 0;
+
+          } else if( type_info == 'orderDeliveryBy') {
+
+              $scope.drDeliveryByList = updatedDrData;
+              $scope.totalDeliveryByDrRecords = 0;
+          }
+
+          fetchingRecords = false;
+
+      }, function (errorMessage) {
+
+          console.log(errorMessage);
+          window.console.warn(errorMessage);
+          fetchingRecords = false;
+      });
+  };
+
+
+
+  $scope.onGetTypeListForOrderCreateHandler = function() {
+
+      myRequestDBService.onGetTypeListForOrderCreateHandler().then(function(response) {
+
+          console.log(response);
+          $scope.drOrderTypeData = response.typeData;
+
+      }, function (err) {
+
+          console.error(err);
+      });
+  }
+
+
+  $scope.onDrTypeChangeHandler = function() {
+
+      const isIndex = this.drOrderTypeData.findIndex(row => row.id == $scope.data.typeId);
+      $scope.data.typeName = this.drOrderTypeData[isIndex].type;
+
+      $scope.search.drName = { Key: "Select "+$scope.data.typeName+"*", Value: "" };
+      $scope.onGetDrTypeDataHandler('orderFor', '', 1);
+  }
+
+
+  $scope.onGetDeliveryByTypeListHandler = function() {
+
+      myRequestDBService.onGetDeliveryByTypeListHandler().then(function(response) {
+
+          console.log(response);
+          $scope.deliveryByTypeList = response.typeData;
+
+      }, function (err) {
+
+          console.error(err);
+      });
+  }
+
+
+
+  $scope.getOrderDetailData = function() {
+
+      $ionicLoading.show({
+          template: '<p>Loading...</p><ion-spinner icon="android"></ion-spinner>'
+      });
+
+      myRequestDBService.onOrderDeatil($scope.data.orderId).then(function(response) {
+
+          console.log(response);
+
+          $scope.orderDetail = response.orderData[0];
+
+          $ionicLoading.hide();
+
+      }, function (err) {
+
+          $ionicLoading.hide();
+          console.error(err);
+      });
+  }
+
+
+
+
+
+
+  if($location.path() == '/tab/sfa-order-detail') {
+
+      $scope.data.orderId = myAllSharedService.drTypeFilterData.orderId;
+      $scope.getOrderDetailData();
+
+      $ionicPopover.fromTemplateUrl('add-status', {
+          scope: $scope,
+      }).then(function(popovers) {
+          $scope.data.statusModel = popovers;
+      });
+  }
+
+
+  $scope.onGoToOrderDetailPage = function(orderId)
+  {
+      myAllSharedService.drTypeFilterData.orderId = orderId;
+      $state.go('tab.sfa-order-detail');
+  }
+
+
+  if($location.path() == '/tab/lead-requirement-add' || $location.path() == '/tab/lead-quotation-add') {
+
+      $scope.search.categoryName = { Key: "Select Category", Value: "" };
+      $scope.search.subCategoryName = { Key: "Select Sub Category", Value: "" };
+      $scope.search.product = { Key: "Select Product", Value: "" };
+
+      $scope.onGetCartItemDataHandler('fetchCategoryData', '' , 1);
+
+      if($location.path() == '/tab/order-add') {
+
+          $scope.search.drName = { Key: "Select Company *", Value: "" };
+
+          $scope.onGetTypeListForOrderCreateHandler();
+          $scope.onGetDeliveryByTypeListHandler();
+
+          console.log('Rectangle');
+          $scope.data.drId = myAllSharedService.drTypeFilterData.drId;
+
+          console.log(myAllSharedService.drTypeFilterData.isInsideLead);
+
+          if(myAllSharedService.drTypeFilterData.isInsideLead == 'Yes') {
+              $scope.getDrDetailData($scope.data.drId);
+          }
+      }
+
+      if($location.path() == '/tab/lead-quotation-add') {
+
+          $scope.data.quoteId = myAllSharedService.drTypeFilterData.quoteId;
+
+          if(myAllSharedService.drTypeFilterData.quoteId) {
+
+              $scope.quoteDetail = myAllSharedService.drTypeFilterData.quoteDetail;
+
+              $scope.quoteDetail.itemData.forEach(itemRow => {
+
+                  $scope.search.categoryName = {Key: itemRow.category, Value: itemRow.category};
+                  $scope.search.subCategoryName = {Key: itemRow.sub_category, Value: itemRow.sub_category};
+
+                  const productKey = itemRow['product_name'] + ' - (' + itemRow['product_code'] + ')';
+                  $scope.search.product = {
+
+                      Key: productKey,
+                      Value: itemRow.product_id,
+                      product_name: itemRow.product_name,
+                      product_code: itemRow.product_code,
+                      product_id: itemRow.product_id
+                  };
+
+                  $scope.data.qty = itemRow.qty;
+                  $scope.data.rate = itemRow.rate;
+                  $scope.data.discount = itemRow.dis_percent;
+                  $scope.data.amount = itemRow.item_total;
+
+                  $scope.onAddToCartHandler('Quotation');
+
+              });
+
+              setTimeout(() => {
+
+                  $scope.search.categoryName = { Key: "Select Category", Value: "" };
+                  $scope.search.subCategoryName = { Key: "Select Sub Category", Value: "" };
+                  $scope.search.product = { Key: "Select Product", Value: "" };
+
+              }, 2000);
+
+          }
+      }
+  }
+
+
+  $scope.onModifyTypeHandler = function(type)
+  {
+      $scope.data.orderCreatedBy = type;
+      $scope.onSetCurrentPageHandler();
+      $scope.getOrderListData('onLoad');
+  }
+
+
+  $scope.onSeachActionHandler = function(type) {
+
+      if(type == 'open') {
+
+          $scope.isSearchBarOpen = true;
+
+          setTimeout(() => {
+
+              $('#searchData').focus();
+
+          }, 1000);
+      }
+
+      if(type == 'close') {
+
+          $scope.data.search = '';
+          $scope.isSearchBarOpen = false;
+          // $scope.onSetCurrentPageHandler();
+
+          $scope.getOrderListData('onLoad');
+      }
+  }
+
+  $scope.onSetCurrentPageHandler = function()
+  {
+      $scope.currentPage = 1;
+      $scope.orderList = [];
+      $scope.onPageScrollTopHandler();
+      $scope.noMoreListingAvailable = false;
+  }
+
+  $scope.onPageScrollTopHandler = function()
+  {
+      $ionicScrollDelegate.scrollTop();
+  }
+
+  $scope.goToBackPageHandler = function()
+  {
+      $ionicHistory.goBack();
+  }
+
+
+  $scope.data.item = [];
+  $scope.addItemInList = function (value) {
+      console.log(value);
+
+      var idx = $scope.data.item.findIndex(row=>row==value.Key)
+      if(idx != -1)
+      {
+          $scope.data.item.splice(idx,1);
+      }
+      else
+      {
+          $scope.data.item.push(value.Key)
+      }
+      console.log($scope.data.item);
+
+  };
+
+  $scope.removeItemFromList = function (value) {
+      console.log(value);
+
+      var idx = $scope.data.item.indexOf(value);
+      $scope.data.item.splice(idx,1);
+  };
+
+  $scope.getRoundAmountHandler = function(val) {
+      if(val!=0)
+      {
+          return val.toFixed(2);
+      }
+      else
+      {
+          return val;
+      }
+  }
+
+  setTimeout(() => {
+
+      console.log('last console');
+      console.log($scope.data);
+
+
+  }, 5000);
+
+
+
+
 })
 
 

@@ -1,0 +1,106 @@
+<ion-view view-title="Leaderboard" name="Leaderboard"  hide-nav-bar="true">
+
+  <div class="orp_profile borad-chng">
+    <div class="p_head">
+      <div class="cs-left">
+        <button><i class="material-icons" ng-click="goToBackPageHandler()">arrow_back</i></button>
+        <p>Leaderboard</p>
+      </div>
+
+    </div>
+
+    <div class="winner_board" >
+
+
+      <div class="profile_info">
+        <div class="thumb">
+          <img ng-if="LeaderboardThree_data[1].profile_image != null " src="{{LeadBoarduploadURL}}{{LeaderboardThree_data[1].profile_image}}" class="default">
+          <img ng-if="LeaderboardThree_data[1].profile_image == null " src="img/profile.svg" class="default">
+          <span>2</span>
+        </div>
+        <div class="pro_info">
+          <h1>{{LeaderboardThree_data[1].electrician_name}}</h1>
+          <p class="pt-count">{{LeaderboardThree_data[1].total_scan}}</p>
+        </div>
+      </div>
+
+      <div class="profile_info winner">
+        <div class="thumb">
+          <img ng-if="LeaderboardThree_data[0].profile_image != null " src="{{LeadBoarduploadURL}}{{LeaderboardThree_data[0].profile_image}}" class="default">
+          <img ng-if="LeaderboardThree_data[0].profile_image == null " src="img/profile.svg" class="default">
+          <!-- <div class="crown">
+            <img src="img/crown.png">
+          </div> -->
+          <span>1</span>
+        </div>
+        <div class="pro_info">
+          <h1>{{LeaderboardThree_data[0].electrician_name}}</h1>
+          <p class="pt-count">{{LeaderboardThree_data[0].total_scan}}</p>
+        </div>
+      </div>
+
+      <div class="profile_info">
+        <div class="thumb">
+          <img ng-if="LeaderboardThree_data[2].profile_image != null " src="{{LeadBoarduploadURL}}{{LeaderboardThree_data[2].profile_image}}" class="default">
+          <img ng-if="LeaderboardThree_data[2].profile_image == null " src="img/profile.svg" class="default">
+
+          <span>3</span>
+        </div>
+        <div class="pro_info">
+          <h1>{{LeaderboardThree_data[2].electrician_name}}</h1>
+          <p class="pt-count">{{LeaderboardThree_data[2].total_scan}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ion-content>
+
+
+    <div class="profile_container box-shadow-none border-radius z-index-none padding13">
+      <div class="win-list">
+        <div class="round-tab">
+          <ul>
+            <li ng-class="{'active' : ActiveCategory=='Week'}" ng-click='getLeaderboardData("Week");ActiveCategory="Week"'>
+              <a >Week</a>
+            </li>
+            <li  ng-class="{'active' : ActiveCategory=='Month'}" ng-click='getLeaderboardData("Month");ActiveCategory="Month"'>
+              <a >Month</a>
+            </li>
+          </ul>
+        </div>
+        <div class="data-not-found " ng-if="(ActiveCategory=='Week' && !LeaderboardRest_data.length && loadingdata==true) || (ActiveCategory=='Month' && !LeaderboardRest_data.length && loadingdata==true)">
+          <div class="outer">
+              <div class="innear">
+                  <img src="img/data-not-found.svg" alt="">
+                  <h2 ng-if='!LeaderboardThree_data.length'>No record this {{ActiveCategory}}</h2>
+                  <h2 ng-if='LeaderboardThree_data.length'>Only 3 winners this {{ActiveCategory}}</h2>
+
+              </div>
+          </div>
+        </div>
+        <div class="win-container" ng-repeat='row in LeaderboardRest_data'>
+          <div class="serial-count">
+            <span>{{4+$index}}</span>
+          </div>
+          <div class="win-thumb ">
+            <img ng-if="row.profile_image != null " src="{{LeadBoarduploadURL}}{{row.profile_image}}" style="height: 100%;width:100%;border-radius: 100%;">
+            <img ng-if="row.profile_image == null " src="img/profile.svg" class="default">
+
+          </div>
+          <div class="have-content">
+            <h1>{{row.electrician_name}}</h1>
+            <p>{{row.district_name}} , {{row.state_name}}</p>
+          </div>
+          <div class="point_total">
+            <p>
+              <!-- <i class="material-icons">settings_input_hdmi</i> -->
+              <i class="material-icons">stars</i> {{row.total_scan}}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </ion-content>
+</ion-view>
+

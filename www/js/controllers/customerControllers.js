@@ -1438,7 +1438,7 @@ app.controller('customerCtrl', function ($scope, $rootScope, searchSelect, $ioni
             myAllSharedService.drTypeFilterData.followUpId = $scope.data.followUpId;
             myAllSharedService.drTypeFilterData.drId = $scope.data.drId;
             
-            $state.go('tab.sfa_dr_activity');
+            $state.go('tab.lead-activity-list');
             
         } else if(type == 'leadRequirementList') {
             
@@ -1540,7 +1540,7 @@ app.controller('customerCtrl', function ($scope, $rootScope, searchSelect, $ioni
     }
     
     
-    if ($location.path() == '/tab/lead-detail' || $location.path() == '/tab/sfa_dr_activity' || $location.path() == '/tab/sfa_dr_followup' || $location.path() == '/tab/lead-requirement-list' || $location.path() == '/tab/lead-quotation-list' || $location.path() == '/tab/lead-order-list') {
+    if($location.path() == '/tab/lead-detail' || $location.path() == '/tab/lead-activity-list' || $location.path() == '/tab/lead-followup-list' || $location.path() == '/tab/lead-requirement-list' || $location.path() == '/tab/lead-quotation-list' || $location.path() == '/tab/lead-order-list') {
         
         $scope.data.drId = myAllSharedService.drTypeFilterData.drId;
         
@@ -1562,7 +1562,7 @@ app.controller('customerCtrl', function ($scope, $rootScope, searchSelect, $ioni
     });
     
     
-    if ($location.path() == '/tab/sfa_dr_followup') {
+    if($location.path() == '/tab/lead-followup-list') {
         
         $ionicPopover.fromTemplateUrl('add-remark', {
             scope: $scope,

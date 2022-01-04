@@ -642,18 +642,7 @@
 .ion-refreshing,
 .ion-ios7-reloading {
   -webkit-animation: spin 1s infinite linear;
-  -moz-animation: spin 1s infinite linear;
-  -o-animation: spin 1s infinite linear;
   animation: spin 1s infinite linear;
-}
-
-@-moz-keyframes spin {
-  0% {
-    -moz-transform: rotate(0deg);
-  }
-  100% {
-    -moz-transform: rotate(359deg);
-  }
 }
 
 @-webkit-keyframes spin {
@@ -665,36 +654,19 @@
   }
 }
 
-@-o-keyframes spin {
-  0% {
-    -o-transform: rotate(0deg);
-  }
-  100% {
-    -o-transform: rotate(359deg);
-  }
-}
-
-@-ms-keyframes spin {
-  0% {
-    -ms-transform: rotate(0deg);
-  }
-  100% {
-    -ms-transform: rotate(359deg);
-  }
-}
-
 @keyframes spin {
   0% {
-    transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
   }
   100% {
-    transform: rotate(359deg);
+    -webkit-transform: rotate(359deg);
+            transform: rotate(359deg);
   }
 }
 
 .ion-loading-a {
   -webkit-animation-timing-function: steps(8, start);
-  -moz-animation-timing-function: steps(8, start);
   animation-timing-function: steps(8, start);
 }
 
@@ -3101,6 +3073,4 @@
 .ion-xbox:before {
   content: "";
 }
- 
-
- /*# sourceMappingURL= ionicons.css.map */
+/*# sourceMappingURL=ionicons.css.map */

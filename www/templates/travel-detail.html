@@ -27,16 +27,27 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="pdlr ">
-                        <div class="cs-text">
-                            <p>Created By: <strong>{{travelPlanDetail.createdByName}}</strong></p>
-                        </div>
+                    <div class="pdlr pt10">
+                        <!-- commented -->
                         
-                        <div class="cs-grid pt10">
+                        <!-- <div class="cs-grid">
+                            <div class="bdr-field wp100" ng-Class="{'approved-bg': travelPlanDetail.acStatus == 'Approved', 'pending-bg': travelPlanDetail.acStatus == 'Pending', 'reject-bg': travelPlanDetail.acStatus == 'Reject'}">
+                                <span>A/C Status</span>
+                                <p>{{travelPlanDetail.acStatus}}</p>
+                                <a class="fix-icon-btn" ng-if="travelPlanDetail.acStatus != 'Approved' && $root.modelPlanType == 'teamTravelPlan'" ng-click="changeStatus('acStatus')"><i class="material-icons">create</i></a>
+                            </div>
+                            
+                            <div class="bdr-field wp100">
+                                <span>Advance Pay</span>
+                                <p>&#8377;  {{travelPlanDetail.advancePaymentAmt ? travelPlanDetail.advancePaymentAmt : '0'}}</p>
+                            </div>
+                        </div> -->
+                        
+                        <div class="cs-grid">
                             <div class="bdr-field wp100" ng-repeat="row in travelPlanDetail.approval" ng-Class="{'approved-bg': row.status == 'Approved', 'pending-bg': row.status == 'Pending', 'reject-bg': row.status == 'Reject'}">
                                 <span>{{row.designation}} Status</span>
                                 <p>{{row.name}} / {{row.status}}</p>
-                                <!-- <a class="fix-icon-btn" ><i class="material-icons">create</i></a> -->
+                                <a class="fix-icon-btn" ng-if="row.status == 'Pending' && $root.modelPlanType == 'teamTravelPlan' && loginData.loginId == row.assign_user_id" ng-click="changeStatus('seniorStatus',row.approvalId)"><i class="material-icons">create</i></a>
                             </div>
                         </div>
                         
@@ -87,21 +98,27 @@
                     <label for="ac-{{$index+1}}" class="header-label">{{row.date | date:'d MMM y'}}</label>
                     <article  ng-class="{'cs-art' : classActive==true}">
                         <div class="plan-list box-shadow-none border1px" ng-repeat = "val in row.data">
-                            <div class="df jcsb head-font">
-                                <span >Plan Details</span><span>Status : <strong ng-class="{'pending-clr':val.status=='Pending','approved-clr':val.status=='Done'}">{{val.status}}</strong></span>
-                            </div>
+                            <span style="font-size: 12px;">Plan Details</span>
                             <div class="cs-grid">
                                 <div class="bdr-field wp100 mt5">
                                     <span>{{val.TravelType}}</span>
                                     <p>{{val.city}} {{val.district}} {{val.state}} {{val.drName}}</p>
                                 </div>
                             </div>
-                            <div ng-if="val.TravelType=='Party'" >
-                                <span style="font-size: 12px;">PJP Remark</span>
-                                <div class="cs-grid">
-                                    <div class="bdr-field wp100 mt5 mb0">
-                                        <p>{{val.pjp_remark ? val.pjp_remark : 'N/A'}}</p>
-                                    </div>
+                            <span style="font-size: 12px;">Checkin Details</span>
+                            <div class="cs-grid" ng-repeat="data in row.area_checkin">
+                                <div class="bdr-field wp100 mt5 mb0">
+                                    <span>Party Name</span>
+                                    <p>{{data.dr_name}}</p>
+                                </div>
+                                <div class="bdr-field wp100 mt5 mb0">
+                                    <span>Mobile No.</span>
+                                    <p>{{data.mobile}}</p>
+                                </div>
+                            </div>
+                            <div class="cs-grid" ng-if="row.area_checkin.length == 0">
+                                <div class="bdr-field wp100 mt5 mb0">
+                                    <p>No Data Available!</p>
                                 </div>
                             </div>
                         </div>
@@ -109,13 +126,8 @@
                 </figure>
             </section>
         </div>
-        <div class="h70">&nbsp;</div>
     </ion-content>
-    <div class="footer-bar">
-        <button class="edit-btn" ng-repeat="row in travelPlanDetail.approval" ng-if="row.status == 'Pending' && $root.modelPlanType == 'teamTravelPlan' && loginData.loginId == row.assign_user_id" ng-click="changeStatus('seniorStatus',row.approvalId)">
-            <img src="img/edit.svg" ><p>Changes Status <span>Click here to change travel status</span></p>
-        </button>
-    </div>
+    
     <script id="add-status" type="text/ng-template">
         <ion-modal-view style="background: rgba(0, 0, 0, 0.7);">
             <ion-content class="padding">

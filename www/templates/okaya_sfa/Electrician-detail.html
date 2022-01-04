@@ -1,0 +1,181 @@
+<ion-view view-title="Electrician Detail">
+
+  <ion-nav-buttons side="left">
+    <a href="#/tab/Electrician-list"
+    class="cs-backbtn button button-icon icon ion-android-arrow-back font18 fff"></a>
+  </ion-nav-buttons>
+
+  <!-- <ion-nav-buttons side="right" class="custom-right-btn">
+    <div ng-if="drDetail.drData.type_name=='Dealer'" class="right-nav-btn nav-search">
+      <a ng-click="goToEditPage()"><i class="material-icons">edit</i></a>
+    </div>
+  </ion-nav-buttons> -->
+
+  <ion-content>
+    <div ng-if="drDetail && drDetail.drData" class="coman-list clrd-bg margin0 radius0 no-shadow">
+      <div class="center-item">
+        <div class="cs-icon large">
+          <img ng-if="!drDetail.drData.profile_image" src="img/profile.svg" class="default wp70">
+          <img ng-if="drDetail.drData.profile_image" ng-click="showImages(0,drDetail.drData.profile_image)"
+          src="{{uploadURL}}{{drDetail.drData.profile_image}}">
+        </div>
+        <div class="cs-content">
+          <p>{{drDetail.drData.dr_name ? drDetail.drData.dr_name : 'N/A'}}</p>
+          <span>{{drDetail.drData.dr_code}}</span>
+          <a ng-if="drDetail.drData.email" class="icon-content"><i class="material-icons">email</i>
+            {{drDetail.drData.email ? drDetail.drData.email : ''}}</a>
+          </div>
+          <a ng-if="drDetail.drData.sfa_contact_no" href="tel: {{drDetail.drData.sfa_contact_no}}"
+          class="dialer"><i class="material-icons">call</i></a>
+        </div>
+
+
+        <div class="pdlr dflex-data mt10">
+          <div class="bdr-field wp100">
+            <span>Contact</span>
+            <p><a href="tel:{{drDetail.drData.contact_mobile_no}}">{{drDetail.drData.contact_mobile_no?drDetail.drData.contact_mobile_no:"N/A"}}</a></p>
+          </div>
+
+          <div class="bdr-field wp100">
+            <span>Email</span>
+            <p><a href="mailto:{{drDetail.drData.email}}">{{drDetail.drData.email?drDetail.drData.email:"N/A"}}</a></p>
+          </div>
+        </div>
+        <div class="pdlr dflex-data">
+          <div class="bdr-field wp100">
+            <span>DOB</span>
+            <p>{{drDetail.drData.orp_dob | date: 'dd MMM yyyy'}}</p>
+          </div>
+
+          <div class="bdr-field wp100">
+            <span>Date Anniversary</span>
+            <p>{{drDetail.drData.orp_date_anniversary | date: 'dd MMM yyyy'}}</p>
+          </div>
+        </div>
+        <div class="pdlr dflex-data">
+          <div class="bdr-field wp100">
+            <span>Address</span>
+            <p>{{drDetail.drData.street}} {{drDetail.drData.city}} {{drDetail.drData.district_name}} {{drDetail.drData.state_name}} {{drDetail.drData.pincode}} India</p>
+          </div>
+        </div>
+
+
+      </div>
+
+      <!-- <div class="profile_container"> -->
+        <div ng-if="drDetail.drData.gst_no || drDetail.drData.orp_pan_no || drDetail.drData.orp_pol_cert_no" class="other-info">
+          <ul>
+            <li ng-if="drDetail.drData.gst_no">
+              <p>{{drDetail.drData.gst_no}}</p>
+              <span>GST Number</span>
+            </li>
+            <li ng-if="drDetail.drData.orp_pan_no">
+              <p>{{drDetail.drData.orp_pan_no}}</p>
+              <span>PAN Number</span>
+            </li>
+            <li ng-if="drDetail.drData.orp_pol_cert_no">
+              <p>{{drDetail.drData.orp_pol_cert_no}}</p>
+              <span>Pollution Cert. No.</span>
+            </li>
+
+          </ul>
+        </div>
+        <div class="pd-left-right16">
+          <div class="text-box">
+            <h2>Bank Details</h2>
+            <div class="right_text">
+              <p class="done" ng-if="drDetail.drData.is_kyc_done==1"><i class="material-icons">check_circle</i> KYC DONE</p>
+              <p class="pending" ng-if="drDetail.drData.is_kyc_done==0"><i class="material-icons">watch_later</i> KYC PENDING</p>
+            </div>
+            <div class="text-box mt10 pb0">
+              <table class="detail_table">
+                <tr>
+                  <th>Account Holder</th>
+                  <td>{{drDetail.drData.acc_holder_name?drDetail.drData.acc_holder_name:"N/A"}}</td>
+                </tr>
+                <tr>
+                  <th>Account Number</th>
+                  <td>{{drDetail.drData.acc_no?drDetail.drData.acc_no:"N/A"}}</td>
+                </tr>
+                <tr>
+                  <th>Account Type</th>
+                  <td>{{drDetail.drData.acc_type?drDetail.drData.acc_type:"N/A"}}</td>
+                </tr>
+                <tr>
+                  <th>IFSC Code</th>
+                  <td>{{drDetail.drData.ifsc_code?drDetail.drData.ifsc_code:"N/A"}}</td>
+                </tr>
+              </table>
+            </div>
+            <div class="scheme_en-ds registration_change" ng-if="drDetail.drData.cancel_check_image">
+              <div class="sc_container">
+                <div class="sc_head_info">
+                  <div class="sc_info multi-schmes">
+                    <div class="al-item">
+                      <div class="thumb">
+                        <img ng-click="openModel(drDetail.drData.cancel_check_image)" src="{{uploadURL}}/{{drDetail.drData.cancel_check_image}}" alt="">
+                      </div>
+                      <div class="desc">
+                        <h1>Cancel cheque</h1>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <div class="text-box">
+            <h2>Document Details
+            </h2>
+            <div class="scheme_en-ds registration_change" ng-if="drDetail.drData.document.length">
+              <div class="sc_container">
+                <div class="sc_head_info">
+                  <div class="sc_info multi-schmes">
+                    <div class="al-item" ng-repeat="row in drDetail.drData.document">
+                      <div class="thumb">
+                        <img ng-click="openModel(row.document_name)" src="{{uploadURL}}/{{row.document_name}}" alt="">
+                      </div>
+                      <div class="desc">
+                        <h1>{{row.document_type}}</h1>
+                        <p>{{row.document_number}}</p>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- </div> -->
+
+        <div class="h70"></div>
+      </ion-content>
+      <div class="bar bar-footer bar-balanced" ng-if='drDetail.drData.orp_status=="Pending" &&  loginData.channelSalesLogin==true'>
+        <div class="ods-btns" style="width: 100%;" > <!-- flt -->
+          <button class="button button-balanced" ng-click="updateStatus('Approve',drDetail.drData.id)">APPROVE</button>
+          <button class="button button-assertive" ng-click="updateStatus('Reject',drDetail.drData.id)">REJECT</button>
+        </div>
+      </div>
+
+      <script id="add-status" type="text/ng-template">
+        <ion-modal-view style="background: rgba(0, 0, 0, 0.7);">
+          <ion-content class="padding">
+            <div class="modal-outer fancy-box-model">
+              <div class="modal-cs">
+                <button class="fix-close" ng-click="data.statusModel.hide()"><i class="material-icons">clear</i></button>
+                <div class="lg-img">
+                  <img src="{{uploadURL}}/{{imageSRC}}" alt="">
+                </div>
+              </div>
+            </div>
+          </ion-content>
+        </ion-modal-view>
+      </script>
+
+    </ion-view>
+

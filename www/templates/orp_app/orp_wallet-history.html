@@ -1,58 +1,58 @@
-<ion-view view-title="Wallet History" name="Wallet-History-view" hide-nav-bar="true">
+<ion-view view-title="Wallet History" name="Wallet-History-view" hide-nav-bar="true" >
 
 
     <ion-header-bar class="opr_ion_header">
         <div class="cs-left">
-            <button class="back-button" ng-click="goToBackPageHandler()"><i class="material-icons">arrow_back</i></button>
+            <a class="back-button" href="#/orptab/orp_dashboard" ><i class="material-icons">arrow_back</i></a>
             <h1 class="orp_title">Wallet History</h1>
         </div>
     </ion-header-bar>
 
-    
+
     <ion-content>
-        
+
         <div class="stc-section">
             <div class="wallet_info">
                 <h2>Wallet Points</h2>
-                <h1>2512</h1>
-                <p>Last transaction 14 mins ago</p>
-                <p class="ttp"><span>"242"</span> Product Total Scan</p>
+                <h1>{{wallet_data.orp_wallet_point?wallet_data.orp_wallet_point:'0'}}</h1>
+                <p class="sm-font" ng-if="wallet_data.orp_wallet_update_date !='0000-00-00 00:00:00'">Last transaction {{dateTimeFormat(wallet_data.orp_wallet_update_date)}}</p>
+                <p class="ttp"><span>"{{wallet_data.product_count}}"</span> Product Total Scan</p>
             </div>
-            
-            
-            <div class="cs-tabs">
+
+
+            <div class="cs-tabs mb0" ng-show="loginData.loginType !='Electrician'">
                 <div class="tab_container">
-                    <button class="active"><p>DLR Purchase History</p></button>
-                    <button><p>DLR Sale History</p></button>
+                    <button ng-class="{'active':data.type=='purchase'}" ng-click="getWalletData();data.type ='purchase'"><p>Purchase History</p></button>
+                    <button ng-class="{'active':data.type=='sale'}" ng-click="getWalletData();data.type ='sale'"><p>Sale History</p></button>
                 </div>
             </div>
         </div>
-        
-        <div class="wl_update pt0">
-            <div class="figure">
+
+        <div class="wl_update" ng-show="loginData.loginType !='Electrician'">
+            <div class="figure" >
                 <div class="thumb"><img src="img/redeem-points.svg" alt=""></div>
                 <div class="description">
-                    <p><span>DLR Purchase Wallet Points</span> <span>Update : 12 Feb 2019</span></p>
-                    <h1>2652</h1>
+                    <p ng-if="data.type=='purchase'"><span>Purchase Wallet Points</span> <span ng-if="wallet_data.updated_date !='0000-00-00 00:00:00' && wallet_data.updated_date != null">Update : {{dateFormat(wallet_data.updated_date)}}</span></p>
+                    <p ng-if="data.type=='sale'"><span>Sale Wallet Points</span> <span ng-if="wallet_data.updated_date !='0000-00-00 00:00:00' && wallet_data.updated_date != null">Update : {{dateFormat(wallet_data.updated_date)}}</span></p>
+                    <h1>{{wallet_data.total}}</h1>
                 </div>
             </div>
         </div>
-        
-        
-        
+
+
+
         <div class="wallet_points multicolor">
-            <a href="#/orptab/orp_wallet-detail" class="figure">
+            <a  class="figure" ng-repeat="row in wallet_data.category_data" ng-click="getCategoryWiseData(row.category)" ng-if="loginData.loginType=='Dealer' || loginData.loginType=='Distributor'">
                 <div class="pt-top">
                     <div class="thumb inverter_battery"></div>
                     <div class="points">
-                        <p>Get Point</p>
-                        <h1>252514</h1>
+                        <p>Points</p>
+                        <h1>{{row.category_point}}</h1>
                     </div>
                 </div>
-                <div class="cat-name"><h1>Inverter Battery</h1></div>
+                <div class="cat-name"><h1>{{row.category}}</h1></div>
             </a>
-            
-            <a href="#/orptab/orp_wallet-detail" class="figure">
+            <!-- <a href="#/orptab/orp_wallet-detail" class="figure">
                 <div class="pt-top">
                     <div class="thumb microtek_inverter"></div>
                     <div class="points">
@@ -62,7 +62,7 @@
                 </div>
                 <div class="cat-name"><h1>Microtek Inverter</h1></div>
             </a>
-            
+
             <a href="#/orptab/orp_wallet-detail" class="figure">
                 <div class="pt-top">
                     <div class="thumb e_rickshaw"></div>
@@ -73,7 +73,7 @@
                 </div>
                 <div class="cat-name"><h1>E Rickshaw</h1></div>
             </a>
-            
+
             <a href="#/orptab/orp_wallet-detail" class="figure">
                 <div class="pt-top">
                     <div class="thumb automotive"></div>
@@ -84,7 +84,7 @@
                 </div>
                 <div class="cat-name"><h1>Automotive</h1></div>
             </a>
-            
+
             <a href="#/orptab/orp_wallet-detail" class="figure">
                 <div class="pt-top">
                     <div class="thumb ev_charger"></div>
@@ -95,7 +95,7 @@
                 </div>
                 <div class="cat-name"><h1>EV Charger</h1></div>
             </a>
-            
+
             <a href="#/orptab/orp_wallet-detail" class="figure">
                 <div class="pt-top">
                     <div class="thumb okaya_solar"></div>
@@ -105,12 +105,31 @@
                     </div>
                 </div>
                 <div class="cat-name"><h1>Okaya Solar</h1></div>
+            </a> -->
+        </div>
+
+        <div class="wallet_points" ng-if="loginData.loginType=='Electrician'">
+            <a class="figure" ng-repeat="row in coupan_list">
+                <div class="pt-top">
+                    <div class="thumb dflt"></div>
+                    <div class="points">
+                        <p>Point</p>
+                        <h1>{{row.points}}</h1>
+                    </div>
+                </div>
+
+                <div class="pt-infos">
+                    <div class="name af-none">
+                        <p>{{row.product_name}} </p>
+                        <p><span>{{row.product_code}}</span></p>
+                        <p>{{row.coupon_code}}</p>
+                    </div>
+                    <div class="date"><p>Scan Date | <span>{{dateFormat(row.date)}}</span></p></div>
+                </div>
+                <div ng-if="wallet_data.type == 'sale' && loginData.loginTypeId=='6'" class="dlname"><p>Retailer : {{row.dealer_name}}</p></div>
+                <div ng-if="wallet_data.type == 'purchase' && loginData.loginTypeId=='12'" class="dlname"><p>Distributor : {{row.distributor_name}}</p></div>
             </a>
         </div>
-        
-        
-        
-        
-        
+
     </ion-content>
 </ion-view>

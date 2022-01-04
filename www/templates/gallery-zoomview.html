@@ -1,9 +1,9 @@
-<div class="modal image-modal transparent cs-modal_ion-slide" on-swipe-down="closeModal()">
+<div class="modal image-modal transparent" on-swipe-down="closeModal()">
     <ion-slide-box on-slide-changed="slideChanged(index)" active-slide="activeSlide">
-      <ion-slide ng-repeat="row in allImages">
+      <ion-slide ng-repeat="row in newsEventImagesData">
    
         <ion-scroll direction="xy" scrollbar-x="false" scrollbar-y="false" on-double-tap="zoom(activeSlide)"zooming="true"min-zoom="{{zoomMin}}" style="width: 100%; height: 100%; overflow-x: hidden; overflow-y: hidden;"delegate-handle="scrollHandle{{$index}}" on-scroll="" on-release="" overflow-scroll="false">
-        <div class="image" style="background-image: url( {{uploadURL}}/{{row.image}} )"></div>
+        <div class="image" style="background-image: url( {{orpURL}}/{{row.image}} )"></div>
         
       </ion-scroll>
     </ion-slide>

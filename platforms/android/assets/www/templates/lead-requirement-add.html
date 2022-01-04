@@ -7,13 +7,13 @@
     <ion-content>
         <div class="coman-list clrd-bg sticky">
             <div class="center-item">
-                <div class="cs-icon">{{drDetail.dr_name[0] ? drDetail.dr_name[0] : '--'}}</div>
+                <div class="cs-icon">{{drDetail.drData.dr_name[0] ? drDetail.drData.dr_name[0] : '--'}}</div>
                 <div class="cs-content">
-                    <p>{{drDetail.dr_name ? drDetail.dr_name : 'N/A'}}</p>
-                    <span>{{drDetail.contact_name ? drDetail.contact_name : 'N/A'}}</span>
-                    <a class="icon-content"><i class="material-icons">email</i> {{drDetail.email ? drDetail.email : 'N/A'}}</a>
+                    <p>{{drDetail.drData.dr_name ? drDetail.drData.dr_name : 'N/A'}}</p>
+                    <span>{{drDetail.drData.contact_name ? drDetail.drData.contact_name : 'N/A'}}</span>
+                    <a class="icon-content"><i class="material-icons">email</i> {{drDetail.drData.email ? drDetail.drData.email : 'N/A'}}</a>
                 </div>
-                <a ng-if="drDetail.contact_mobile_no" href="tel: {{drDetail.contact_mobile_no}}" class="dialer"><i class="material-icons">call</i></a>
+                <a ng-if="drDetail.drData.contact_mobile_no" href="tel: {{drDetail.drData.contact_mobile_no}}" class="dialer"><i class="material-icons">call</i></a>
             </div>
         </div>
 

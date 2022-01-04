@@ -1,0 +1,140 @@
+<ion-view view-title="Account Statement" hide-nav-bar="true" ng-init = "GET_ACCOUNT_STATEMENT()">
+
+  <!-- <ion-header-bar class="opr_ion_header">
+    <div class="cs-left">
+      <button class="back-button" ng-click="goToBackPageHandler()"><i class="material-icons">arrow_back</i></button>
+      <h1 class="orp_title">Account Statement</h1>
+    </div>
+  </ion-header-bar> -->
+
+  <ion-nav-buttons side="left">
+    <a ng-click="goToBackPageHandler()" class="cs-backbtn button button-icon icon ion-android-arrow-back font18 fff"></a>
+  </ion-nav-buttons>
+  <ion-header-bar class="opr_ion_header">
+    <div class="cs-left wp100">
+      <button class="back-button" ng-click="goToBackPageHandler()"><i class="material-icons">arrow_back</i></button>
+      <h1 class="orp_title">Account Statement</h1>
+      <button class="back-button right"  ng-click="dashboardFilter=true"><i class="material-icons">tune</i> Filter</button>
+
+      <!-- <button ng-show="(data.date_from || data.date_to) && dateFilter==false"  ng-click="data.date_from='';data.date_to='';getCategoryWiseData('IB')" class="back-button right" ><i class="material-icons">date_range</i> Clear</button> -->
+
+
+      <!-- <button ng-show="(!data.date_from && !data.date_to) && dateFilter==false" class="back-button right" ng-click="dateFilter=true"><i class="material-icons">date_range</i> Filter</button>
+      <button ng-show="(data.date_from || data.date_to) && dateFilter==false"  class="back-button right" ng-click="data.date_from='';data.date_to='';getCategoryWiseData('IB')"><i class="material-icons">date_range</i> Clear</button> -->
+
+    </div>
+  </ion-header-bar>
+
+
+
+
+  <ion-content>
+
+    <div class="transaction-view" ng-if="opening_balance.description" >
+      <button>
+        <div class="tr-img">
+          <img src="img/credit_amt.svg">
+        </div>
+        <div class="tr-content">
+          <!-- <p>{{!opening_balance.document_number?"":opening_balance.document_number}}</p> -->
+          <span>{{opening_balance.document_date}}</span>
+        </div>
+      <div class="tr-info credit_amt">
+          <div class="info-up" >
+            <p>{{opening_balance.debit_amount!=0?opening_balance.debit_amount:''}}<span>Cr</span></p>
+          </div>
+          <div class="info-down">
+            <p>{{opening_balance.balance}}<span>Bal</span></p>
+          </div>
+        </div>
+      </button>
+    </div>
+
+    <div class="transaction-view" ng-repeat= "row in ACCOUNT_STATEMENT">
+      <button>
+        <div class="tr-img" ng-if='row.credit_amount!=0'>
+          <img src="img/credit_amt.svg">
+        </div>
+        <div class="tr-img" ng-if='row.debit_amount!=0'>
+          <img src="img/debit_amt.svg">
+        </div>
+        <div class="tr-content">
+          <h1>{{!row.document_type?row.description:row.document_type}}</h1>
+          <p>{{!row.document_number?"":row.document_number}}</p>
+          <span>{{row.document_date}}</span>
+        </div>
+      <div ng-class="{'tr-info debit_amt':row.debit_amount!=0,'tr-info credit_amt':row.credit_amount!=0}">
+          <div class="info-up" ng-if='row.debit_amount!=0'>
+            <p>{{row.debit_amount!=0?row.debit_amount:''}}<span>Dr</span></p>
+          </div>
+          <div class="info-up" ng-if='row.credit_amount!=0'>
+            <p>{{row.credit_amount!=0?row.credit_amount:''}}<span>Cr</span></p>
+          </div>
+          <div class="info-down">
+            <p>{{row.balance}}<span>Bal</span></p>
+          </div>
+        </div>
+      </button>
+    </div>
+
+    <div class="data-not-found" ng-if="ACCOUNT_STATEMENT.length == 0" >
+      <div class="outer">
+        <div class="innear">
+          <img src="img/data-not-found.svg" alt="">
+          <h2>Account Statement Not Found!</h2>
+        </div>
+      </div>
+    </div>
+  </ion-content>
+
+  <div class="popover-model" ng-class="{'active':dashboardFilter==true}">
+    <div class="filter-modal">
+        <div class="filter-head">
+            <button  class="close-modal" ng-click="dashboardFilter=false" ><i class="material-icons">keyboard_arrow_down</i></button>
+            <h2>Filter</h2>
+            <span ng-click="GET_ACCOUNT_STATEMENT();dashboardFilter=false;dash_filter.type='Transaction';dash_filter.date_from=null;dash_filter.date_to=null;dash_filter.transaction='All'">Clear</span>
+        </div>
+        <div class="filter-body">
+            <div class="filtr-btn">
+                <!-- <button class="active">Source</button> -->
+                <!-- <button ng-class="{'active':dash_filter.type=='User'}"   ng-click="dash_filter.type = 'User'" ng-if="dash_filter.dashboard_type == 'Team' ">User</button> -->
+                <button ng-class="{'active':dash_filter.type=='Transaction'}" ng-click="dash_filter.type = 'Transaction'">Transactional</button>
+                <button ng-class="{'active':dash_filter.type=='Date'}"   ng-click="dash_filter.type = 'Date'">Date</button>
+            </div>
+
+            <div class="padding16" ng-if="dash_filter.type=='Transaction'">
+                <div class="cs-radio cs-bodr border0 padding0">
+                    <ion-list>
+                      <ion-radio name="transaction" ng-model="dash_filter.transaction" value='All'>All</ion-radio>
+                        <ion-radio name="transaction" ng-model="dash_filter.transaction" value='Credit'>Credit</ion-radio>
+                        <ion-radio name="transaction" ng-model="dash_filter.transaction" value='Debit'>Debit</ion-radio>
+                    </ion-list>
+                </div>
+            </div>
+
+            <div class="cs-add-form pd-left-right16" ng-if="dash_filter.type=='Date'">
+                <div class="input-field field-input mt25">
+                    <input type="date" ng-model="dash_filter.date_from" name="date_from" ng-required="true"
+                    class="validate" required>
+                    <label class="active" for="last_name">Date From</label>
+                </div>
+
+                <div class="input-field field-input mt25">
+                    <input name="date_to" ng-model="dash_filter.date_to" type="date" ng-required="true"
+                    class="validate" required>
+                    <label class="active" for="last_name">Date To</label>
+                </div>
+            </div>
+
+            <button class="footer-btn"  ng-click="GET_ACCOUNT_STATEMENT(dash_filter);dashboardFilter=false;" >Apply</button>
+        </div>
+    </div>
+</div>
+
+
+  <div class="fix-add">
+    <a ng-click="downloadAccountStatement();">
+      <i class="material-icons">cloud_download</i>
+    </a>
+  </div>
+</ion-view>

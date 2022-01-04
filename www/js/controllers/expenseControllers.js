@@ -6,7 +6,7 @@ app.controller('expenseCtrl', function ($scope, $rootScope, searchSelect, $ionic
     
     $scope.form = {};
     $scope.travel = {};
-    $scope.form.TravelType = 'Party';
+    $scope.form.TravelType = 'Area';
     $scope.travelData = [];
     $scope.expense = {};
     $scope.travelForm = {};
@@ -24,46 +24,11 @@ app.controller('expenseCtrl', function ($scope, $rootScope, searchSelect, $ionic
     
     let currentDate = new Date();
     $scope.minMonthDate = moment().format('YYYY-MM') + '-01';
-    $scope.today = moment().format('YYYY-MM-DD');
-    $scope.maxMonthDate = moment().add(6, 'months').format('YYYY-MM-DD');
+    $scope.maxMonthDate = moment().add(3, 'months').format('YYYY-MM') + '-31';
     $scope.expenseMaxDate = moment().format('YYYY-MM-DD');
     
     $rootScope.expImgUrl = uploadURL + 'expense';
     
-    
-    $scope.onSeachActionHandler = function(type) {
-        
-        if(type == 'open') {
-            
-            $scope.isSearchBarOpen = true;
-            
-            setTimeout(() => {
-                
-                $('#searchData').focus();
-                
-            }, 1000);
-        }
-        
-        if(type == 'close') {
-            
-            $scope.data.search = '';
-            $scope.isSearchBarOpen = false;
-            // $scope.onSetCurrentPageHandler();
-            
-            // $scope.getOrderListData('onLoad');
-        }
-    }
-    
-    $scope.travelFilter = function(search)
-    {
-        search = search.toLowerCase();
-        
-        console.log(search);
-        
-        $scope.travelPlanData = $scope.tmpTravelListData.filter(row=>row.createdByName.toLowerCase().includes(search) || row.acStatus.toLowerCase().includes(search) || row.dateCreated.toLowerCase().includes(search));
-    }
-    
-    $scope.tmpTravelListData = [];
     $scope.getTravelList = function(status)
     {
         if(myAllSharedService.expense.modelPlanType)
@@ -87,7 +52,6 @@ app.controller('expenseCtrl', function ($scope, $rootScope, searchSelect, $ionic
             console.log(resp);
             $ionicLoading.hide();
             $scope.travelPlanData = resp.data.travel;
-            $scope.tmpTravelListData = $scope.travelPlanData 
         }, function (err)
         {
             $ionicLoading.hide();
@@ -367,23 +331,23 @@ app.controller('expenseCtrl', function ($scope, $rootScope, searchSelect, $ionic
         });
     }
     
-    // $scope.getDistributorData = function()
-    // {
-    //     $ionicLoading.show({
-    //         template: '<ion-spinner icon="android"></ion-spinner><p>Loading...</p>'
-    //     });
-    //     myRequestDBService.getDistributorData()
-    //     .then(function (resp)
-    //     {
-    //         $ionicLoading.hide();
-    //         console.log(resp);
-    //         $scope.distributorData = resp.data;
-    //     }, function (err)
-    //     {
-    //         $ionicLoading.hide();
-    //         console.error(err);
-    //     });
-    // }
+    $scope.getDistributorData = function()
+    {
+        $ionicLoading.show({
+            template: '<ion-spinner icon="android"></ion-spinner><p>Loading...</p>'
+        });
+        myRequestDBService.getDistributorData()
+        .then(function (resp)
+        {
+            $ionicLoading.hide();
+            console.log(resp);
+            $scope.distributorData = resp.data;
+        }, function (err)
+        {
+            $ionicLoading.hide();
+            console.error(err);
+        });
+    }
     
     $scope.max_date = '';
     $scope.min_date = '';
@@ -421,8 +385,6 @@ app.controller('expenseCtrl', function ($scope, $rootScope, searchSelect, $ionic
     
     $scope.addPlan = function()
     {
-        console.log($scope.form);
-        
         if(!$scope.form.visitDate)
         {
             $ionicPopup.alert({
@@ -433,58 +395,6 @@ app.controller('expenseCtrl', function ($scope, $rootScope, searchSelect, $ionic
         }
         
         if($scope.form.TravelType == 'Area')
-        {
-            
-            if(!$scope.search.drName.length && !$scope.search.dealerName.length)
-            {
-                $ionicPopup.alert({
-                    title: 'Error!',
-                    template: 'Please Select Distributor or Dealer !',
-                });
-                return;
-            }
-            
-            if(!$scope.form.remark)
-            {
-                $ionicPopup.alert({
-                    title: 'Error!',
-                    template: 'Please Add Purpose of visit!',
-                });
-                return;
-            }
-            
-            if($scope.selectedDr.length > 0)
-            {
-                $scope.selectedDr.forEach(data => {
-                    var tmp_obj={};
-                    tmp_obj.drId = data.dr_id;
-                    tmp_obj.drName = data.dr_name;
-                    tmp_obj.remark = $scope.form.remark;
-                    tmp_obj.TravelType = 'Party';
-                    tmp_obj.visitDate = moment($scope.form.visitDate).format("YYYY-MM-DD");
-                    console.log(data);
-                    
-                    if($scope.travelData.length == 0)
-                    {
-                        $scope.travelData.unshift(tmp_obj);
-                    }
-                    else
-                    {
-                        var index =  $scope.travelData.find(row=> row.drId == tmp_obj.drId && row.visitDate == tmp_obj.visitDate );
-                        if(index == undefined)
-                        {
-                            $scope.travelData.unshift(tmp_obj);
-                        }
-                    }
-                });
-                
-                $scope.search.dealerName = [];
-                $scope.search.drName = [];
-            }
-            
-        }
-        
-        if($scope.form.TravelType == 'New Area')
         {
             if(!$scope.search.stateName.Value)
             {
@@ -517,7 +427,7 @@ app.controller('expenseCtrl', function ($scope, $rootScope, searchSelect, $ionic
             {
                 $ionicPopup.alert({
                     title: 'Error!',
-                    template: 'Please Add Purpose of visit!',
+                    template: 'Please Insert Purpose of visit!',
                 });
                 return;
             }
@@ -526,7 +436,7 @@ app.controller('expenseCtrl', function ($scope, $rootScope, searchSelect, $ionic
             {
                 $scope.selectedCity.forEach(element => {
                     var tmp_obj={};
-                    if($scope.form.TravelType == 'New Area')
+                    if($scope.form.TravelType == 'Area')
                     {
                         tmp_obj.state = element.state;
                         tmp_obj.district = element.district;
@@ -549,15 +459,15 @@ app.controller('expenseCtrl', function ($scope, $rootScope, searchSelect, $ionic
                     }
                 });
             }
+            
         }
-        
         if($scope.form.TravelType == 'Party')
         {
-            if(!$scope.search.drName.length && !$scope.search.dealerName.length)
+            if(!$scope.search.drName.length)
             {
                 $ionicPopup.alert({
                     title: 'Error!',
-                    template: 'Please Select Distributor or Dealer !',
+                    template: 'Please Select Distributor!',
                 });
                 return;
             }
@@ -566,7 +476,7 @@ app.controller('expenseCtrl', function ($scope, $rootScope, searchSelect, $ionic
             {
                 $ionicPopup.alert({
                     title: 'Error!',
-                    template: 'Please Add Purpose of visit!',
+                    template: 'Please Insert Purpose of visit!',
                 });
                 return;
             }
@@ -595,9 +505,6 @@ app.controller('expenseCtrl', function ($scope, $rootScope, searchSelect, $ionic
                         }
                     }
                 });
-                
-                $scope.search.dealerName = [];
-                $scope.search.drName = [];
             }
         }
         
@@ -664,7 +571,6 @@ app.controller('expenseCtrl', function ($scope, $rootScope, searchSelect, $ionic
                     .then(function (resp)
                     {
                         console.log(resp);
-                        $state.go('tab.travel');
                         
                         $ionicLoading.hide();
                         if($scope.travel.id)
@@ -687,6 +593,7 @@ app.controller('expenseCtrl', function ($scope, $rootScope, searchSelect, $ionic
                             });
                         }
                         
+                        $state.go('tab.travel');
                         
                     }, function (err)
                     {
@@ -1240,7 +1147,6 @@ app.controller('expenseCtrl', function ($scope, $rootScope, searchSelect, $ionic
     
     $scope.onGetSearchSelectDataHandler = function (type_info, searchKey, pagenumber)
     {
-        
         if(!searchKey) {
             
             $ionicLoading.show({
@@ -1283,56 +1189,6 @@ app.controller('expenseCtrl', function ($scope, $rootScope, searchSelect, $ionic
     };
     
     
-    $scope.getAreaWisePart = function()
-    {
-        $scope.search.dealerName = [];
-        $scope.search.drName = [];
-        $scope.selectedDr = [];
-        $scope.All_distributors = [];
-        $scope.allDealerList =[];
-        $ionicLoading.show({
-            template: '<p>Loading...</p><ion-spinner icon="android"></ion-spinner>',
-            duration: 100
-        });
-        
-        var data = {
-            'state_name':$scope.search.stateName.Value,
-            'districts':$scope.search.districtName,
-            'cities': $scope.search.city
-        };
-        
-        console.log($scope.search.districtName);
-        myRequestDBService.onGetPostRequest('/App_Expense/getAreaWiseParty',data)
-        .then(function (resp)
-        {
-            console.log(resp);
-            
-            $scope.All_distributors = resp.distribitor_list;
-            $scope.allDealerList = resp.dealer_list;
-            
-            for (var i = 0; i < $scope.All_distributors.length; i++) 
-            {
-                $scope.search.drName.push($scope.All_distributors[i].Key);
-                $scope.selectedDr.push({"dr_id":$scope.All_distributors[i].id,"dr_name":$scope.All_distributors[i].Key});
-            }
-            
-            for (var j = 0; j < $scope.allDealerList.length; j++) 
-            {
-                $scope.search.dealerName.push($scope.allDealerList[j].Key);
-                $scope.selectedDr.push({"dr_id":$scope.allDealerList[j].id,"dr_name":$scope.allDealerList[j].Key});
-                
-            }
-            
-            console.log($scope.All_distributors);
-            $ionicLoading.hide();
-        }, function (err)
-        {
-            $ionicLoading.hide();
-            console.error(err);
-        });
-    }
-    
-    
     $scope.$watch('search.stateName', function (newValue, oldValue) {
         
         if (newValue && newValue.Value && newValue.Value != oldValue.Value) {
@@ -1345,13 +1201,27 @@ app.controller('expenseCtrl', function ($scope, $rootScope, searchSelect, $ionic
             $scope.districtList = [];
             $scope.Allcities = [];
             $scope.onGetSearchSelectDataHandler('fetchDistrictData', '', 1);
-            $scope.getAreaWisePart();
         }
     });
     
     
     
-    
+    if($location.path() == '/tab/travel-add' || $location.path() == '/tab/travel-edit')
+    {
+        if($location.path() == '/tab/travel-add')
+        {
+            $scope.travelData = [];
+            $scope.travel = {};
+            $scope.group_by_date($scope.travelData);
+        }
+        $scope.getDistributorData();
+        $scope.search.stateName = { Key: "Select State Name *", Value: "" };
+        $scope.search.districtName = { Key: "Select District Name *", Value: "" };
+        $scope.onGetSearchSelectDataHandler('fetchStateData', '', 1);
+        console.log("Travel Add");
+        
+        console.log($scope.search.stateName);
+    }
     
     $ionicPopover.fromTemplateUrl('travel-popover.html', {
         scope: $scope,
@@ -1413,7 +1283,6 @@ app.controller('expenseCtrl', function ($scope, $rootScope, searchSelect, $ionic
             $scope.search.districtName.splice(idx,1);
         }
         $scope.get_cities();
-        $scope.getAreaWisePart();
     };
     
     $scope.remove_mul_district = function (data)
@@ -1421,8 +1290,6 @@ app.controller('expenseCtrl', function ($scope, $rootScope, searchSelect, $ionic
         var idx = $scope.search.districtName.indexOf(data);
         $scope.search.districtName.splice(idx,1);
         $scope.get_cities();
-        $scope.getAreaWisePart();
-        
     };
     
     $scope.search.city = [];  
@@ -1448,9 +1315,6 @@ app.controller('expenseCtrl', function ($scope, $rootScope, searchSelect, $ionic
         {
             $scope.selectedCity.splice(idx2,1);
         }
-        $scope.getAreaWisePart();
-        
-        
     };
     
     $scope.remove_mul_city = function (data)
@@ -1459,16 +1323,12 @@ app.controller('expenseCtrl', function ($scope, $rootScope, searchSelect, $ionic
         var idx = $scope.search.city.indexOf(data);
         $scope.search.city.splice(idx,1);
         $scope.selectedCity.splice(idx,1);
-        $scope.getAreaWisePart();
-        
     };
     
     $scope.search.drName = [];
     $scope.selectedDr = [];
     $scope.select_mul_dr = function(data)
     {
-        console.log(data);
-        
         var idx = $scope.search.drName.findIndex(row=>row == data.Key);
         if(idx == -1)
         {
@@ -1493,35 +1353,6 @@ app.controller('expenseCtrl', function ($scope, $rootScope, searchSelect, $ionic
         console.log($scope.selectedDr);
     }
     
-    $scope.search.selectedDealer = [];
-    $scope.select_mul_dealer = function(data)
-    {
-        console.log(data);
-        
-        var idx = $scope.search.dealerName.findIndex(row=>row == data.Key);
-        if(idx == -1)
-        {
-            $scope.search.dealerName.push(data.Key);
-        }
-        else
-        {
-            $scope.search.dealerName.splice(idx,1);
-        }
-        
-        var idx2 = $scope.selectedDr.findIndex(row=>row.dr_name == data.Key);
-        if(idx2 == -1)
-        {
-            $scope.selectedDr.push({"dr_id":data.id,"dr_name":data.Key});
-        }
-        else
-        {
-            $scope.selectedDr.splice(idx2,1);
-        }
-        
-        console.log($scope.search.dealerName);
-        console.log($scope.selectedDr);
-    }
-    
     $scope.remove_mul_district = function (data)
     {
         var idx = $scope.search.drName.indexOf(data);
@@ -1532,18 +1363,12 @@ app.controller('expenseCtrl', function ($scope, $rootScope, searchSelect, $ionic
     $scope.All_distributors = [];
     $scope.get_distributor = function()
     {
-        $ionicLoading.show({
-            template: '<p>Loading...</p><ion-spinner icon="android"></ion-spinner>',
-            duration: 100
-        });
         $scope.search.drName = [];
         $scope.All_distributors = [];
         console.log($scope.search.districtName);
-        myRequestDBService.onGetPostRequest('/App_Expense/getDistributorData','')
+        myRequestDBService.getDistributorData()
         .then(function (resp)
         {
-            console.log(resp);
-            
             $scope.All_distributors = resp.data;
             console.log($scope.All_distributors);
             $ionicLoading.hide();
@@ -1553,98 +1378,6 @@ app.controller('expenseCtrl', function ($scope, $rootScope, searchSelect, $ionic
             console.error(err);
         });
     }
-    
-    $scope.allDealerList = [];
-    $scope.getAllDealer = function()
-    {
-        
-        $ionicLoading.show({
-            template: '<p>Loading...</p><ion-spinner icon="android"></ion-spinner>',
-            duration: 100
-        });
-        
-        
-        myRequestDBService.onGetPostRequest('/App_Expense/getDealerData','')
-        .then(function (result)
-        {
-            console.log(result);
-            $scope.search.dealerName = [];
-            
-            $scope.allDealerList = result.data;
-            
-            fetchingRecords = false;
-            
-        }, function (errorMessage) {
-            console.log(errorMessage);
-            window.console.warn(errorMessage);
-            $ionicLoading.hide();
-            fetchingRecords = false;
-        });
-        
-    }
-    
-    $scope.removeTravelPlan = function(travelId)
-    {
-        
-        $ionicPopup.confirm({
-            title: 'Are You Sure,Want to Delete Plan ?',
-            buttons: [{
-                
-                text: 'YES',
-                type: 'button-block button-outline button-stable',
-                onTap: function (e) {
-                    $ionicLoading.show({
-                        template: '<p>Loading...</p><ion-spinner icon="android"></ion-spinner>',
-                        duration: 100
-                    });
-                    
-                    myRequestDBService.onGetPostRequest('/App_Expense/deleteTravelPlan/'+travelId,'')
-                    .then(function (result)
-                    {
-                        $ionicLoading.hide();
-                        
-                        $scope.getTravelList($scope.travelPlanStatus);
-                        console.log(result);
-                        
-                    }, function (errorMessage) {
-                        console.log(errorMessage);
-                        window.console.warn(errorMessage);
-                        $ionicLoading.hide();
-                    });
-                    
-                }
-            }, {
-                text: 'NO',
-                type: 'button-block button-outline button-stable',
-                onTap: function (e) {
-                    console.log('You Are Not Sure');
-                }
-            }]
-        });
-        
-        
-        
-    }
-    
-    if ($location.path() == '/tab/travel-add' || $location.path() == '/tab/travel-edit') {
-        if ($location.path() == '/tab/travel-add') {
-            $scope.travelData = [];
-            $scope.travel = {};
-            $scope.group_by_date($scope.travelData);
-        }
-        // $scope.getDistributorData();
-        $scope.search.stateName = { Key: "Select State Name *", Value: "" };
-        $scope.search.districtName = { Key: "Select District Name *", Value: "" };
-        $scope.onGetSearchSelectDataHandler('fetchStateData', '', 1);
-        console.log("Travel Add");
-        
-        console.log($scope.search.stateName);
-        
-        $scope.get_distributor();
-        $scope.getAllDealer();
-    }
-    
-    
 })
 
 

@@ -3,6 +3,7 @@
 
     <ion-header-bar class="opr_ion_header">
         <div class="cs-left">
+            <button class="back-button" ng-click="goToBackPageHandler()"><i class="material-icons">arrow_back</i></button>
             <h1 class="orp_title">Gallery</h1>
         </div>
     </ion-header-bar>
@@ -12,136 +13,85 @@
         
         <div class="cs-tabs gltabs">
             <div class="tab_container">
-                <button class="active"><img src="img/p_video_icon.svg" alt=""><p>Product Video</p></button>
-                <button><img src="img/news_event_icon.svg" alt=""><p>News & Events</p></button>
-                <button><img src="img/testimonial_icon.svg" alt=""><p>Testimonials</p></button>
-                <button><img src="img/tvc_icon.svg" alt=""><p>TVC</p></button>
+                <button ng-class="{'active':galleryActiveTab==1}" ng-click="galleryActiveTab=1;getProductVideoList()"><img src="img/p_video_icon.svg" alt=""><p class="text-clr">TVC & Video</p></button>
+                <button ng-class="{'active':galleryActiveTab==2}" ng-click="galleryActiveTab=2;getNewsEventImages()"><img src="img/news_event_icon.svg" alt=""><p class="text-clr">News & Events</p></button>
+                <button ng-class="{'active':galleryActiveTab==3}" ng-click="galleryActiveTab=3;getOrpTestimonalsData()"><img src="img/testimonial_icon.svg" alt=""><p class="text-clr">Testimonials</p></button>
+                <!-- <button ng-class="{'active':galleryActiveTab==4}" ng-click="galleryActiveTab=4;GET_TVC_IMAGE_DATA()"><img src="img/tvc_icon.svg" alt=""><p class="text-clr">TVC</p></button> -->
             </div>
         </div>
         
-        <!-- 
-            ++++++++++++++++
-            ++++++++++++++++ Tab 1 Data Start - "Product Video" 
-            ++++++++++++++++
-        -->
-        <div class="vd_img_listing">
-            <div class="figure">
+        <div ng-if="galleryActiveTab==1" class="vd_img_listing">
+            <div class="figure" ng-repeat = "row in productVideoDataList">
                 <div class="thumb">
-                    <iframe src="https://www.youtube.com/embed/BX9izhyLg_E?controls=0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    <iframe src="{{row.url | trusted}}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                 </div>
                 <div class="naming">
-                    <h1>The spirit of Okaya</h1>
+                    <h1>{{row.title}}</h1>
+                </div>
+            </div>
+            <div class="data-not-found" ng-if="!sendRequest && productVideoDataList.length == 0" >
+                <div class="outer">
+                    <div class="innear">
+                        <img src="img/data-not-found.svg" alt="">
+                        <h2>Temporarily , No Data Available!</h2>
+                    </div>
+                </div>
+            </div>
+           
+        </div>
+       
+        <div ng-if="galleryActiveTab==2" class="vd_img_listing" >
+            <div class="figure" ng-repeat = "row in newsEventImagesData" ng-click="getEventImages(row.id,row.title,row.description)">
+                <div  class="thumb"><img src="{{orpURL}}/{{row.doc.doc}}" alt=""></div>
+                <div  class="naming">
+                    <h1>{{row.title}}</h1>
+                </div>
+            </div>
+            <div class="data-not-found" ng-if="!sendRequest && newsEventImagesData.length == 0" >
+                <div class="outer">
+                    <div class="innear">
+                        <img src="img/data-not-found.svg" alt="">
+                        <h2>Temporarily , No Data Available!</h2>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        
+        <div ng-if="galleryActiveTab==3" class="orp_testimonial" >
+            <div class="figure" ng-repeat = "row in orpTestimonalsData">
+                <div class="nm"><h1>{{row.testimonial_by }}</h1> <span>{{row.date_created | date:'d-MMM-y'}}</span></div>
+                <p><span>Description :</span>{{row.description}}</p>
+            </div>
+
+            <div class="data-not-found" ng-if=" !sendRequest && orpTestimonalsData.length == 0" >
+                <div class="outer">
+                    <div class="innear">
+                        <img src="img/data-not-found.svg" alt="">
+                        <h2>Temporarily , No Data Available!</h2>
+                    </div>
                 </div>
             </div>
             
-            <div class="figure">
-                <div class="thumb">
-                    <iframe src="https://www.youtube.com/embed/fy-0BPFlwOU?controls=0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                </div>
-                <div class="naming">
-                    <h1>Okaya E-Richshaw Battery. Ab zyada chale, shaan se chale.</h1>
-                </div>
-            </div>
-            
-            <div class="figure">
-                <div class="thumb">
-                    <iframe src="https://www.youtube.com/embed/m39XkX2zGFk?controls=0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                </div>
-                <div class="naming">
-                    <h1>Okaya Solar and Normal Battery || ये Solar Battery सबसे अच्छे Solar Battery में से एक है</h1>
+        </div>
+        
+        <div ng-if="galleryActiveTab==4">
+            <div  class="tvc_gallery" >
+                <div ng-click="showImages($index)" class="thumb" ng-repeat="row in tvc_image_list">
+                    <img src="{{orpURL}}{{row.image}}" alt="">
                 </div>
             </div>
-            
-            <div class="figure">
-                <div class="thumb">
-                    <iframe src="https://www.youtube.com/embed/deeEnbg6IGU?controls=0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                </div>
-                <div class="naming">
-                    <h1>Okaya Power Group Corp - - Video</h1>
+            <div class="data-not-found" ng-if=" !sendRequest && tvc_image_list.length == 0"  >
+                <div class="outer">
+                    <div class="innear">
+                        <img src="img/data-not-found.svg" alt="">
+                        <h2>Temporarily , No Data Available!</h2>
+                    </div>
                 </div>
             </div>
         </div>
-        <!-- 
-            ++++++++++++++++
-            ++++++++++++++++ Tab 1 Data End ------
-            ++++++++++++++++
-        -->
+
         
-        
-        <!-- 
-            ++++++++++++++++
-            ++++++++++++++++ Tab 2 Data Start - "News & Events" 
-            ++++++++++++++++
-        -->
-        <div class="vd_img_listing" style="display: none;">
-            <div class="figure">
-                <div class="thumb"><img src="img/ok_1.jpg" alt=""></div>
-                <div class="naming">
-                    <h1>Renewable Energy India Expo, SEP, 2019 Greater Noida, India</h1>
-                </div>
-            </div>
-            
-            <div class="figure">
-                <div class="thumb"><img src="img/ok_2.jpg" alt=""></div>
-                <div class="naming">
-                    <h1>Lorem Ipsum is simply dummy text of the printing and typesetting industry</h1>
-                </div>
-            </div>
-        </div>
-        <!-- 
-            ++++++++++++++++
-            ++++++++++++++++ Tab 2 Data End ------
-            ++++++++++++++++
-        -->
-        
-        
-        <!-- 
-            ++++++++++++++++
-            ++++++++++++++++ Tab 3 Data Start - "Testimonials" 
-            ++++++++++++++++
-        -->
-        <div class="orp_testimonial" style="display: none;">
-            <div class="figure">
-                <div class="nm"><h1>Ram Batteries</h1> <span>12 May 2020</span></div>
-                <p><span>Description :</span> There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, </p>
-            </div>
-            
-            <div class="figure">
-                <div class="nm"><h1>Ram Batteries</h1> <span>12 May 2020</span></div>
-                <p>
-                    <span>Description :</span> There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour,  randomised words which don't look even slightly believable.
-                    <br>
-                    <br>
-                    If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text.
-                </p>
-            </div>
-        </div>
-        <!-- 
-            ++++++++++++++++
-            ++++++++++++++++ Tab 3 Data End ------
-            ++++++++++++++++
-        -->
-        
-        
-        <!-- 
-            ++++++++++++++++
-            ++++++++++++++++ Tab 4 Data Start - "TVC" 
-            ++++++++++++++++
-        -->
-        <div class="tvc_gallery" style="display: none;">
-            <div class="thumb"><img src="img/okaya-img/tvc_1.png" alt=""></div>
-            <a class="thumb"><img src="img/okaya-img/tvc_2.png" alt=""></a>
-            <button class="thumb"><img src="img/okaya-img/tvc_3.png" alt=""></button>
-            <button class="thumb"><img src="img/okaya-img/tvc_4.png" alt=""></button>
-            <button class="thumb"><img src="img/okaya-img/tvc_5.png" alt=""></button>
-            <button class="thumb"><img src="img/okaya-img/tvc_3.png" alt=""></button>
-            <div class="thumb"><img src="img/okaya-img/tvc_1.png" alt=""></div>
-        </div>
-        <!-- 
-            ++++++++++++++++
-            ++++++++++++++++ Tab 4 Data End ------
-            ++++++++++++++++
-        -->
     </ion-content>
 </ion-view>
 

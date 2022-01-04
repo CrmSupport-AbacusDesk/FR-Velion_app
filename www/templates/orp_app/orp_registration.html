@@ -4,145 +4,261 @@
             <div class="logo text-center">
                 <img src="img/okaya_orp_logo.png" alt="">
             </div>
-            
+
             <div class="login-form">
-                <div class="rg_form">
-                    <h2 class="b_head">Registration <a href="#/orp_login"> <i class="material-icons">trending_flat</i> <span>Back</span></a></h2>
-                    
-                    <div class="cs-add-form">
-                        
-                        <div class="rg_heading">
-                            <h1>Basic Info</h1>
-                        </div>
+                <form name="registerform" novalidate ng-submit="!registerform.$invalid && onSaveDrHandler()">
+                    <div class="rg_form white-label">
+                        <h2 class="b_head fff">Registration<a class="fff" href="#/orp_login"> <i class="material-icons fff">trending_flat</i> <span>Back</span></a></h2>
 
-                        <div class="who">
-                            <h1>Who Am I</h1>
+                        <div class="cs-add-form">
 
-                            <div class="field-input">
-                                <select class="browser-default" required>
-                                    <option value="" disabled selected>Select Type</option>
-                                    <option value="" >Dealer</option>
-                                    <option value="" >Distributor</option>
+                            <div class="rg_heading">
+                                <h1>Basic Info</h1>
+                            </div>
+
+                            <div class="who">
+                                <h1>Who Am I</h1>
+
+                                <div ng-class="{'has-error': registerform.type_name.$invalid && registerform.$submitted}" class="field-input">
+                                    <select class="browser-default" name="type_name"  id= "type_name" required ng-model="data.type_name">
+                                        <option value="" disabled selected>Select Type</option>
+                                        <option value="Dealer" >Retailer</option>
+                                        <option value="Electrician" >Electrician</option>
+                                    </select>
+                                    <span class="error-left relative" ng-show="registerform.$submitted && registerform.type_name.$error.required">Type Required</span>
+                                </div>
+                            </div>
+                            <div ng-class="{'has-error': registerform.mobile_no.$invalid && registerform.$submitted}" class="input-field field-input">
+                              <label class="fix-label">Mobile Number <span>*</span></label>
+                              <input type="number" required ng-model="data.mobile_no" name="mobile_no" id= "mobile_no" minlength = "10" maxlength ="10" limit-to = "10" ng-change='mobileNo_Handeler()'>
+                              <span class="error-left relative" ng-show="registerform.$submitted && registerform.mobile_no.$error.required">Mobile No. Required.</span>
+                              <span class="error-left relative" ng-show="registerform.$submitted && registerform.mobile_no.$error.minlength">Mobile No. Must be 10 Digit.</span>
+                              <span class="error-left relative" ng-show="registerform.$submitted && registerform.mobile_no.$error.maxlength">Mobile No. Must be 10 Digit.</span>
+                            </div>
+
+                            <div class="input-field field-input" ng-class="{'has-error': registerform.fname.$invalid && registerform.$submitted}">
+                                <label class="fix-label">First Name <span>*</span></label>
+
+                                <input type="text" name="fname" id="fname" ng-model="data.fname" required >
+
+                                <span class="error-left relative" ng-show="registerform.$submitted && registerform.fname.$error.minlength">First Name Must be Minimum 3 Letters.</span>
+                                <span class="error-left relative" ng-show="registerform.$submitted && registerform.fname.$error.required">First Name Required.</span>
+                                <span class="error-left relative" ng-show="registerform.$submitted && registerform.fname.$error.maxlength">First Name Must be 25 Letters.</span>
+                            </div>
+
+                            <div class="input-field field-input">
+                                <label class="fix-label">Last Name</label>
+                                <input type="text" name="lname" id="lname" ng-model="data.lname" >
+
+                                <span class="error-left relative" ng-show="registerform.$submitted && registerform.fname.$error.minlength">Last Name Must be Minimum 3 Letters.</span>
+
+                                <span class="error-left relative" ng-show="registerform.$submitted && registerform.lname.$error.maxlength">Last Name Must be 25 Letters.</span>
+                            </div>
+
+                            <div ng-class="{'has-error': registerform.firm_name.$invalid && registerform.$submitted}" class="input-field field-input" ng-if="data.type_name == 'Dealer' " >
+                                <label class="fix-label">Firm Name <span>*</span></label>
+                                <input type="text" name="firm_name"  id= "firm_name" required ng-model="data.firm_name">
+                                <span class="error-left relative" ng-show="registerform.$submitted && registerform.firm_name.$error.required">Firm Name Required</span>
+                                <span class="error-left relative" ng-show="registerform.$submitted && registerform.firm_name.$error.minlength">Firm Name Must be Minimum  5 Letters.</span>
+                                <span class="error-left relative" ng-show="registerform.$submitted && registerform.firm_name.$error.maxlength">Firm Name Must be 25 Letters.</span>
+                            </div>
+
+
+                            <div ng-class="{'has-error': registerform.email.$invalid && registerform.$submitted}" class="input-field ">
+                                <label class="fix-label">Email Id</label>
+                                <input type="email" name="email"  id= "email" ng-model="data.email">
+                                <span class="error-left relative" ng-show="registerform.$submitted && registerform.email.$invalid && !registerform.email.$error.required">Email Invalid.</span>
+                            </div>
+
+                            <div class="input-field" ng-show="data.type_name == 'Dealer'">
+                                <label class="fix-label">GST Number</label>
+                                <input type="text" name="gst"  id= "gst" ng-model="data.gst" minlength = "15" maxlength ="15" limit-to = "15" >
+                                <span class="error-left relative" ng-show="registerform.$submitted && registerform.gst.$error.minlength">GST No. Must be 15 Character.</span>
+                                <span class="error-left relative" ng-show="registerform.$submitted && registerform.gst.$error.maxlength">GST No. Must be 15 Character.</span>
+                            </div>
+
+
+                            <div class="field-input mt20" ng-show="data.type_name != 'Electrician'">
+                                <label for="last_name" class="fix-label">Category <span>*</span></label>
+                                <div class="add-css-select pt0 selectopt no-padding" >
+                                    <searchable-multiselect display-attr="Key" selected-items="search.categoryName" all-items="categoryList" add-item="select_mul_category(item)">
+                                    </searchable-multiselect>
+                                </div>
+                            </div>
+
+
+                            <div ng-class="{'has-error': registerform.dob.$invalid && registerform.$submitted}" class="input-field mt20 field-input">
+                                <label class="fix-label">Date of Birth <span>*</span></label>
+                                <input type="date" class="unstyled" name="dob" id= "dob" required ng-model="data.dob" max="{{today | date:'yyyy-MM-dd'}}">
+                                <span class="error-left relative" ng-show="registerform.$submitted && registerform.dob.$error.required">Date of Birth Required.</span>
+                            </div>
+
+                            <div class="input-field mt20 field-input" ng-show="data.type_name != 'Electrician'">
+                                <label class="fix-label">Date of Anniversary</label>
+                                <input type="date" class="unstyled" name="doa"  id= "doa" ng-model="data.doa" max="{{today | date:'yyyy-MM-dd'}}">
+                            </div>
+
+
+                            <div class="rg_heading mb20">
+                                <h1>Address Information</h1>
+                            </div>
+
+                            <div ng-class="{'has-error': registerform.pincode.$invalid && registerform.$submitted}" class="input-field mt5 field-input">
+                                <label class="fix-label">Pincode <span>*</span></label>
+                                <input type="tel" required name="pincode"  id= "pincode" ng-model="data.pincode" ng-change = "onSearchPincodeChangeHandler()" minlength = "6" maxlength ="6">
+                                <span class="error-left relative" ng-show="registerform.$submitted && registerform.pincode.$error.required">Pincode Required.</span>
+                                <span class="error-left relative" ng-show="registerform.$submitted && registerform.pincode.$error.minlength">Pincode Must be 6 Digit.</span>
+                                <span class="error-left relative" ng-show="registerform.$submitted && registerform.pincode.$error.maxlength">Pincode Must be 6 Digit.</span>
+                            </div>
+
+                            <div ng-class="{'has-error': registerform.state.$invalid && registerform.$submitted}" class="field-input mb20">
+                                <label for="last_name" class="fix-label">State <span>*</span></label>
+                                <div class="add-css-select flat-search-select  pt0 selectopt no-padding" >
+                                    <searchandselect selecteditem="search.stateName" values="stateList" key="Key"  totalrecords="totalStateRecords" onscroll="onGetSearchSelectDataHandler('fetchStateData', searchKey, pagenumber)"></searchandselect>
+                                </div>
+                            </div>
+
+                            <div ng-class="{'has-error': registerform.district.$invalid && registerform.$submitted}" class="field-input mb20">
+                                <label for="last_name" class="fix-label">District <span>*</span></label>
+                                <div class="add-css-select pt0 flat-search-select selectopt no-padding" >
+                                    <searchandselect selecteditem="search.districtName" id='district' values="districtList" key="Key"  totalrecords="totalDistrictRecords" onscroll="onGetSearchSelectDataHandler('fetchDistrictData', searchKey, pagenumber)"></searchandselect>
+                                </div>
+                                <span class="error-left relative" ng-show="registerform.$submitted && registerform.district.$error.required">District Required.</span>
+                            </div>
+                            <div ng-class="{'has-error': registerform.city.$invalid && registerform.$submitted}" class="input-field field-input">
+                                <label class="fix-label">City <span>*</span></label>
+                                <input type="text" name="city" id= "city" required ng-model="data.city">
+                                <span class="error-left relative" ng-show="registerform.$submitted && registerform.city.$error.required">City Required.</span>
+                            </div>
+
+                            <div ng-class="{'has-error': registerform.address.$invalid && registerform.$submitted}" class="input-field field-input">
+                                <textarea style="height: 70px !important;" name="address"  id= "address" required ng-model="data.address"></textarea>
+                                <label class="fix-label">Street <span>*</span></label>
+
+                                <span class="error-left relative" ng-show="registerform.$submitted && registerform.address.$error.required">Address Required.</span>
+                            </div>
+
+
+                            <div class="field-input mt20" ng-if="data.type_name == 'Dealer' ">
+                                <label for="last_name" class="fix-label">Distributor <span>*</span></label>
+                                <div class="add-css-select pt0 selectopt no-padding ">
+                                    <searchable-multiselect display-attr="Key" selected-items="search.drName" all-items="All_distributors" add-item="select_mul_dr(item)" remove-item="remove_mul_dr(item)" >
+                                    </searchable-multiselect>
+                                </div>
+                            </div>
+
+                            <div ng-if="data.type_name == 'Dealer'">
+                                <div class="rg_heading mb20" >
+                                    <h1>Bank Detail</h1>
+                                </div>
+
+                                <div
+                                ng-class="{'has-error': registerform.acc_type.$invalid && registerform.$submitted}" class="field-input">
+                                <select class="browser-default" name="acc_type" id="acc_type" required ng-model="data.acc_type">
+                                    <option disabled>Account Type</option>
+                                    <option value="Saving">Saving</option>
+                                    <option value="Current">Current</option>
                                 </select>
+                                <label class="fix-label">Account Type <span>*</span></label>
+                                <span class="error-left relative" ng-show="registerform.$submitted && registerform.acc_type.$error.required">Account
+                                    Type Required.</span>
+                                </div>
+
+                                <div
+                                ng-class="{'has-error': registerform.acc_holder_name.$invalid && registerform.$submitted}"
+                                class="input-field field-input">
+                                <input name="acc_holder_name" placeholder="Account Holder Name" id="acc_holder_name" required
+                                ng-model="data.acc_holder_name"></input>
+                                <label class="fix-label">Account Holder Name <span>*</span></label>
+                                <span class="error-left relative"
+                                ng-show="registerform.$submitted && registerform.acc_holder_name.$error.required">Account Holder Name
+                                Required.</span>
+                            </div>
+
+                            <div
+                            ng-class="{'has-error': registerform.acc_no.$invalid && registerform.$submitted}" class="input-field field-input">
+                            <input name="acc_no" id="acc_no" required ng-model="data.acc_no"></input>
+                            <label class="fix-label">Account Number <span>*</span></label>
+                            <span class="error-left relative" ng-show="registerform.$submitted && registerform.acc_no.$error.required">Account
+                                Number Required.</span>
+                            </div>
+
+                            <div
+                            ng-class="{'has-error': registerform.ifsc_code.$invalid && registerform.$submitted}"
+                            class="input-field field-input">
+                            <input name="ifsc_code" id="ifsc_code" required ng-model="data.ifsc_code"></input>
+                            <label class="fix-label">IFSC Code <span>*</span></label>
+                            <span class="error-left relative" ng-show="registerform.$submitted && registerform.ifsc_code.$error.required">IFSC
+                                Code Required.</span>
+                            </div>
+
+                            <div class="or_upload grid-item" >
+                                <label ng-click="onImageTypeHandler('cancel_check')">
+                                    <img src="img/upload_camera-icon.svg" alt="" class="camera_icon">
+                                    <p>Upload Cancel cheque</p>
+                                </label>
+
+                                <label ng-repeat="row in data.cancel_check">
+                                    <button ng-click="remove_check($index)"><i class="material-icons">delete_sweep</i></button>
+                                    <img src="{{row.src}}" alt="">
+                                </label>
                             </div>
                         </div>
 
-                        <div class="input-field">
-                            <label>First Name</label>
-                            <input type="text">
-                        </div>
-                        
-                        <div class="input-field">
-                            <label>Last Name</label>
-                            <input type="text">
+
+                        <div class="rg_heading mb20">
+                            <h1>Document Details</h1>
                         </div>
 
-                        <div class="input-field">
-                            <label>Firm Name <span>*</span></label>
-                            <input type="text">
-                        </div>
+                        <div class="field-input mt0">
+                            <select class="browser-default" name="doc_type"  id= "doc_type"  ng-model="data.doc_type">
+                                <option value="" disabled selected>Select Document Type</option>
+                                <option ng-value="row.title" ng-repeat="row in docList" >{{row.title}}</option>
 
-                        <div class="input-field">
-                            <label>GST Number</label>
-                            <input type="text">
-                        </div>
-
-                        <div class="input-field">
-                            <label>PAN number</label>
-                            <input type="text">
-                        </div>
-
-                        <div class="input-field">
-                            <label>Pollution Cert. Number</label>
-                            <input type="text">
-                        </div>
-
-                        <div class="field-input">
-                            <select class="browser-default" required>
-                                <option value="" disabled selected>Select Brand <span>*</span></option>
-                                <option value="" >Brand 1</option>
                             </select>
                         </div>
 
-                        <div class="field-input">
-                            <select class="browser-default">
-                                <option value="" disabled selected>Select Category</option>
-                                <option value="" >Category 1</option>
-                            </select>
+                        <div ng-if="data.doc_type" class="input-field field-input">
+                            <label class="fix-label">Enter Document Number <span>*</span></label>
+                            <input type="text" name="document_no" placeholder="Document number" id= "document_no" ng-model="data.document_no">
                         </div>
 
-                        <div class="field-input">
-                            <select class="browser-default" required>
-                                <option value="" disabled selected>Select Distributor <span>*</span></option>
-                                <option value="" >Distributor 1</option>
-                            </select>
-                        </div>
-                        
-                        <div class="input-field">
-                            <label>Date of Birth <span>*</span></label>
-                            <input type="date">
+                        <div class="or_upload grid-item" ng-if="data.doc_type && data.document_no">
+                            <label ng-click="onImageTypeHandler('document')" >
+                                <img src="img/upload_camera-icon.svg" alt="" class="camera_icon">
+                                <p>Upload {{data.doc_type}}</p>
+                            </label>
                         </div>
 
-                        <div class="input-field">
-                            <label>Date of Anniversary</label>
-                            <input type="date">
+                        <div class="scheme_en-ds registration_change" ng-if="mediaData.length">
+                            <div class="sc_container">
+                                <div class="sc_head_info">
+                                    <div class="sc_info multi-schmes">
+                                        <div class="al-item" ng-repeat="row in mediaData">
+                                            <div class="thumb">
+                                                <img src="{{row.src}}" alt="">
+                                            </div>
+                                            <div class="desc">
+                                                <h1>{{row.doc_type}}</h1>
+                                                <p>{{row.doc_number}}</p>
+                                            </div>
+                                            <button ng-click="delete_img($index)" ><i class="material-icons">delete_sweep</i></button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
                         </div>
-                        
-                        <div class="input-field">
-                            <label>Mobile Number </label>
-                            <input type="text">
-                        </div>
-
-                        <div class="input-field">
-                            <label>Email</label>
-                            <input type="email">
-                        </div>
-
-
-                        <div class="rg_heading">
-                            <h1>Address Information</h1>
-                        </div>
-
-                        <div class="input-field mt5">
-                            <label>PIN Code <span>*</span></label>
-                            <input type="text">
-                        </div>
-
-                        <div class="field-input">
-                            <select class="browser-default" required>
-                                <option value="" disabled selected>State <span>*</span></option>
-                                <option value="" >Haryana</option>
-                            </select>
-                        </div>
-
-                        <div class="field-input">
-                            <select class="browser-default" required>
-                                <option value="" disabled selected>District <span>*</span></option>
-                                <option value="" >Faridabad</option>
-                            </select>
-                        </div>
-
-                        <div class="input-field">
-                            <label>City <span>*</span></label>
-                            <input type="text">
-                        </div>
-
-                        <div class="input-field">
-                            <textarea style="height: 70px !important;" required></textarea>
-                            <label>Address</label>
-                        </div>
-
-
                     </div>
-                    
-                    
-                    <div class="btnn mt32">
-                        <a href="#/orptab/orp_dashboard" class="active">SAVE</a>
-                        <!-- <input type="submit" value="LOGIN"/ class="active"> -->
+
+                    <!-- ng-if="data.type_name == 'Dealer' " -->
+                    <div  class="btnn arrow-btn mt32">
+                        <button type="submit">SAVE</button>
                     </div>
-                    
+
                 </div>
-            </div>
+            </form>
         </div>
-    </ion-content>
+    </div>
+</ion-content>
 </ion-view>

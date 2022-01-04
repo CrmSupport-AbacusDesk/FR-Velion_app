@@ -1,81 +1,78 @@
 <ion-view view-title="FollowUp">
-    
+
     <!-- BACKBTN ICON START -->
     <ion-nav-buttons side="left">
         <a ng-click = "goToBackPageHandler()" class="cs-backbtn button button-icon icon ion-android-arrow-back font18 fff"></a>
     </ion-nav-buttons>
     <!-- BACKBTN ICON END-->
-    
+
     <!-- HUMBURGER ICON START-->
-    <!-- <ion-nav-buttons side="right" class="custom-right-btn">
+    <ion-nav-buttons side="right" class="custom-right-btn">
         <div ng-click="onShowPopUpHandler($event, drDetail.drData.id, 'leadDetail')" class="right-nav-btn nav-search" ng-if="drDetail.drData.type_id != '6' && drDetail.drData.type_id != '12'">
             <a ><i class="material-icons">more_vert</i></a>
         </div>
-    </ion-nav-buttons> -->
+    </ion-nav-buttons>
     <!-- HUMBURGER ICON END-->
-    
+
     <ion-content>
-        
-        <div class="sticky-column bdr-botm" ng-if=dr_data.dr_id>
-            <div  class="coman-list margin0 radius0 no-shadow">
-                <div class="center-item padding10">
-                    <div class="cs-icon">{{dr_data.dr_name[0]}}</div>
-                    <div class="cs-content">
-                        <p>{{dr_data.dr_name}}</p>
-                        <span>{{dr_data.contact_mobile_no}}</span>
-                    </div>
-                    
-                    <a href="tel: {{dr_data.contact_mobile_no}}" class="dialer"><i class="material-icons">call</i></a>
+
+        <div class="coman-list clrd-bg sticky">
+            <div class="center-item">
+                <div class="cs-icon">{{drDetail.drData.dr_name[0]}}</div>
+                <div class="cs-content">
+                    <p>{{drDetail.drData.dr_name}}</p>
+                    <span>{{drDetail.drData.contact_name}}</span>
+                    <a ng-if="drDetail.drData.email" class="icon-content"><i class="material-icons">email</i> {{drDetail.drData.email}}</a>
                 </div>
+
+                <a href="tel: {{drDetail.drData.contact_mobile_no}}" class="dialer"><i class="material-icons">call</i></a>
+
             </div>
         </div>
-        
-        <div ng-repeat = "row in leadFollowupData" class="coman-list">
+
+        <div ng-repeat = "row in drDetail.followUpData" class="coman-list">
+
             <div class="top-head">
                 <ul>
-                    <li>
-                        <p>{{dateFormat(row.date_created)}}</p>
-                        <span>Date Created</span>
-                    </li>
-                    
+
                     <li>
                         <p>{{row.created_by_name}}</p>
                         <span>Created By</span>
                     </li>
+
+                    <li>
+                        <p>{{row.followUpDateInFormat}}</p>
+                        <span>Followup Date</span>
+                    </li>
+
                 </ul>
-                <!-- <a ng-cli  ck="onShowFollowUpOptionModelHandler($event, row.id, row.dr_id)" class="dialer"><i class="material-icons" style="color: #888888;">more_vert</i></a> -->
+
+                <a ng-click="onShowFollowUpOptionModelHandler($event, row.id, row.dr_id)" class="dialer"><i class="material-icons" style="color: #888888;">more_vert</i></a>
+
             </div>
-            
+
             <div class="center-item">
                 <div class="cs-icon">{{row.dr_name[0]}}</div>
                 <div class="cs-content">
                     <p>{{row.dr_name}}</p>
                     <span>{{row.dr_type_name}}</span>
                 </div>
-                <a href="tel: {{row.mobile_no}}" class="dialer"><i class="material-icons">call</i></a>
-            </div>
-            
-            <div class="pdlr">
-                <div class="cs-flex">
-                    <div class="bdr-field wp100">
-                        <span>FollowUp Date</span>
-                        <p>{{row.followup_date}}</p>
-                    </div>
-                    <div class="bdr-field wp100">
-                        <span>FollowUp Type</span>
-                        <p>{{row.followup_type}}</p>
-                    </div>
-                </div>
 
-                <div ng-if="row.followup_remark"class="bdr-field mr0">
-                    <span>Remark</span>
-                    <p>{{row.followup_remark}}</p>
-                </div>
+             </div>
+
+            <div ng-if="row.followup_remark"class="bdr-field">
+                <span>Remark</span>
+                <p>{{row.followup_remark}}</p>
             </div>
-            
+
+            <div class="bdr-field">
+                <span>Address</span>
+                <p>{{row.street}} {{row.state_name}}, {{row.district_name}}, {{row.city}}, {{row.pincode}}</p>
+            </div>
+
         </div>
-        
-        <div class="data-not-found" ng-if="leadFollowupData == 0">
+
+        <div class="data-not-found" ng-if="!isRequestInProcess && followUpList.length == 0">
             <div class="outer">
                 <div class="innear">
                     <img src="img/data-not-found.svg" alt="">
@@ -83,49 +80,49 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="h50"></div>
-        
+
     </ion-content>
-    
+
     <div class="fix-add">
-        <a ng-click = "gotoPage(dr_data.dr_id,dr_data.dr_name,dr_data.contact_mobile_no,'add-lead-followup')">
+        <a ng-click = "onGoToActionHandler('leadAddFollowUp')">
             <i class="material-icons">add</i>
         </a>
     </div>
-    
+
     <script id="add-remark" type="text/ng-template">
-        <ion-modal-view style="background: rgba(0, 0, 0, 0.7);">
-            
-            <ion-content class="padding">
-                <div class="modal-outer">
-                    <div class="modal-cs">
-                        
-                        <div class="modal-head">
-                            <h2 class="title">Add Remark</h2>
-                            <button class="button button-clear button-primary" ng-click="data.remarkModel.hide()"><i class="material-icons">clear</i></button>
-                        </div>
-                        
-                        <form>
-                            <div class="ledmd">
-                                <div class="cs-add-form">
-                                    <div class="input-field field-input mt0">
-                                        
-                                        <textarea ng-model = "data.remark"  name = "remark" class="validate" style="height: 100px !important;" required></textarea>
-                                        
-                                        <label for="last_name">Remark</label>
-                                        
-                                    </div>
+      <ion-modal-view style="background: rgba(0, 0, 0, 0.7);">
+
+          <ion-content class="padding">
+              <div class="modal-outer">
+                  <div class="modal-cs">
+
+                      <div class="modal-head">
+                          <h2 class="title">Add Remark</h2>
+                          <button class="button button-clear button-primary" ng-click="data.remarkModel.hide()"><i class="material-icons">clear</i></button>
+                      </div>
+
+                      <form>
+                          <div class="ledmd">
+                            <div class="cs-add-form">
+                                <div class="input-field field-input mt0">
+
+                                    <textarea ng-model = "data.remark"  name = "remark" class="validate" style="height: 100px !important;" required></textarea>
+
+                                    <label for="last_name">Remark</label>
+
                                 </div>
                             </div>
-                            <div class="sgsave">
-                                <button ng-click="onSaveFollowUpRemarkHandler()" ng-disabled = "!data.remark" >SAVE<i class="material-icons">arrow_right_alt</i></button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </ion-content>
-        </ion-modal-view>
+                          </div>
+                          <div class="sgsave">
+                              <button ng-click="onSaveFollowUpRemarkHandler()" ng-disabled = "!data.remark" >SAVE<i class="material-icons">arrow_right_alt</i></button>
+                          </div>
+                      </form>
+                  </div>
+              </div>
+          </ion-content>
+      </ion-modal-view>
     </script>
-    
+
 </ion-view>

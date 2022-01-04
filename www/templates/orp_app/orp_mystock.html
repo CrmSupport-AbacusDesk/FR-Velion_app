@@ -1,4 +1,4 @@
-<ion-view view-title="My Stock" name="Scan-view" hide-nav-bar="true">
+<ion-view view-title="My Stock" name="Scan-view" hide-nav-bar="true" ng-init = "getStockData()">
 
     <ion-header-bar class="opr_ion_header">
         <div class="cs-left">
@@ -11,13 +11,26 @@
         
         <div class="cs-tabs">
             <div class="tab_container">
-                <button class="active"><p>In Stock</p> <span>04</span></button>
-                <button><p>Out Of Stock</p> <span>08</span></button>
+                <button ng-click="getStockData() ;data.myStock = 'inStock'" ng-class="{'active':data.myStock == 'inStock'}"><p>In Stock</p> <span>{{data.instock}}</span></button>
+                <button ng-click="getStockData(); data.myStock = 'outOfStock'" ng-class="{'active':data.myStock == 'outOfStock'}"><p>Out Of Stock</p> <span>{{data.outstock}}</span></button>
             </div>
         </div>
 
-        <div class="bx-listing">
-            <a href="#/">
+        <div class="bx-listing" ng-repeat="row in my_stock">
+            <a >
+                <div class="qty">
+                    <p>{{row.qty}}</p>
+                    <p>QTY</p>
+                </div>
+                <div class="description">
+                    <div class="cs-left">
+                        <h1>{{row.product_name}}</h1>
+                        <p><span>{{row.product_code}}</span> <span>last update :{{dateFormat(row.last_updated_date)}}</span></p>
+                    </div>
+                </div>
+            </a>
+
+            <!-- <a href="#/">
                 <div class="qty">
                     <p>252</p>
                     <p>QTY</p>
@@ -67,21 +80,17 @@
                         <p><span>#$84758</span> <span>last update : 18 Jul 2019</span></p>
                     </div>
                 </div>
-            </a>
-
-            <a href="#/">
-                <div class="qty">
-                    <p>252</p>
-                    <p>QTY</p>
-                </div>
-                <div class="description">
-                    <div class="cs-left">
-                        <h1>Product Name #001</h1>
-                        <p><span>#$84758</span> <span>last update : 18 Jul 2019</span></p>
-                    </div>
-                </div>
-            </a>
+            </a> -->
         </div>
+
+        <div class="data-not-found" ng-if="my_stock.length == 0" >
+                <div class="outer">
+                    <div class="innear">
+                        <img src="img/data-not-found.svg" alt="">
+                        <h2>Stock Data Not Available</h2>
+                    </div>
+                </div>
+            </div>
         
     </ion-content>
 </ion-view>

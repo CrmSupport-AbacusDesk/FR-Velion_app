@@ -1,4 +1,4 @@
-<ion-view view-title="Select Serial No." name="Scan-view" hide-nav-bar="true">
+<ion-view view-title="Select Serial No." name="Scan-view" hide-nav-bar="true" ng-init = "getManualCode()">
 
     <ion-header-bar class="opr_ion_header">
         <div class="cs-left">
@@ -11,71 +11,39 @@
         
         <div class="orp_seacrh">
             <div class="figure">
-                <input type="text" placeholder="Search ">
-                <button><i class="material-icons">clear</i></button>
+                <input type="text" placeholder="Search Serial No." name="coupon_search" ng-model = "data.coupon_search" ng-change="getManualCode()">
+                <button ng-click="data.coupon_search= '';getManualCode()"><i class="material-icons">clear</i></button>
             </div>
         </div>
 
-        <div class="bx-listing">
-            <a href="#/">
-                <div class="description">
+        <div class="bx-listing" >
+            <a ng-repeat="row in manual_codes">
+                <div class="description des-height" ng-click = "startScan('manual',row.coupon_code)">
                     <div class="cs-left">
-                        <h1>Product Name <span>#001</span></h1>
-                        <p>SR No. : OKAYA#$84THY75815266</p>
+                        <h1>{{row.product_name}}<span>{{row.product_code}}</span></h1>
+                        <p>SR No. : {{row.coupon_code}}</p>
                     </div>
                     <div class="cs-right">
                         <i class="material-icons">navigate_next</i>
                     </div>
                 </div>
             </a>
+        </div>
 
-            <a href="#/">
-                <div class="description">
-                    <div class="cs-left">
-                        <h1>Product Name <span>#001</span></h1>
-                        <p>SR No. : OKAYA#$84THY75815266</p>
-                    </div>
-                    <div class="cs-right">
-                        <i class="material-icons">navigate_next</i>
-                    </div>
-                </div>
-            </a>
+        <!-- <div class="data-not-found" ng-if="!isRequestInProcess && manual_codes.length == 0 && data.coupon_search != ''" >
+            <div class="outer">
+                <div class="innear">
+                    <img src="img/data-not-found.svg" alt="">
+                    <h2>Cuopon Code not found!</h2>
+            </div>
+        </div> -->
 
-            <a href="#/">
-                <div class="description">
-                    <div class="cs-left">
-                        <h1>Product Name <span>#001</span></h1>
-                        <p>SR No. : OKAYA#$84THY75815266</p>
-                    </div>
-                    <div class="cs-right">
-                        <i class="material-icons">navigate_next</i>
-                    </div>
-                </div>
-            </a>
-
-            <a href="#/">
-                <div class="description">
-                    <div class="cs-left">
-                        <h1>Product Name <span>#001</span></h1>
-                        <p>SR No. : OKAYA#$84THY75815266</p>
-                    </div>
-                    <div class="cs-right">
-                        <i class="material-icons">navigate_next</i>
-                    </div>
-                </div>
-            </a>
-
-            <a href="#/">
-                <div class="description">
-                    <div class="cs-left">
-                        <h1>Product Name <span>#001</span></h1>
-                        <p>SR No. : OKAYA#$84THY75815266</p>
-                    </div>
-                    <div class="cs-right">
-                        <i class="material-icons">navigate_next</i>
-                    </div>
-                </div>
-            </a>
+        <div class="data-not-found" ng-if="!isRequestInProcess && manual_codes.length == 0 " >
+           <div class="outer">
+              <div class="innear">
+                    <img src="img/data-not-found.svg" alt="">
+                    <h2>Coupon Code Not Available for Selection!</h2>
+             </div>
         </div>
         
     </ion-content>

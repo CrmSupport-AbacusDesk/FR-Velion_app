@@ -1,63 +1,58 @@
 <ion-view view-title="Activities">
-    
+
     <ion-nav-buttons side="left">
         <a ng-click="goToBackPageHandler()" class="cs-backbtn button button-icon icon ion-android-arrow-back font18 fff"></a>
     </ion-nav-buttons>
-    
-    <!-- <ion-nav-buttons side="right" class="custom-right-btn">
+
+    <ion-nav-buttons side="right" class="custom-right-btn">
         <div ng-if="drDetail.drData.type_id != '6' && drDetail.drData.type_id != '12'" ng-click="onShowPopUpHandler($event, drDetail.drData.id, 'leadDetail')" class="right-nav-btn nav-search">
             <a ><i class="material-icons">more_vert</i></a>
         </div>
-    </ion-nav-buttons> -->
-    
+    </ion-nav-buttons>
+
     <ion-content>
-        
-        <div class="sticky-column bdr-botm" ng-if="dr_data.dr_id !=0">
-            <div  class="coman-list margin0 radius0 no-shadow">
-                <div class="center-item padding10">
-                    <div class="cs-icon">{{dr_data.dr_name[0]}}</div>
-                    <div class="cs-content">
-                        <p>{{dr_data.dr_name}}</p>
-                        <span>{{dr_data.contact_mobile_no}}</span>
-                    </div>
-                    
-                    <a href="tel: {{dr_data.contact_mobile_no}}" class="dialer"><i class="material-icons">call</i></a>
+
+        <div class="coman-list clrd-bg sticky">
+            <div class="center-item">
+                <div class="cs-icon">{{drDetail.drData.dr_name[0]}}</div>
+                <div class="cs-content">
+                    <p>{{drDetail.drData.dr_name}} {{drDetail.drData.dr_code ? '(' + drDetail.drData.dr_code+')' : ''}}</p>
+                    <span>{{drDetail.drData.contact_name}}</span>
+                    <a ng-if="drDetail.drData.email" class="icon-content"><i class="material-icons">email</i> {{drDetail.drData.email}}</a>
                 </div>
-            </div>
-        </div>
-        
-        <div class="coman-list" ng-repeat="row in leadActivityData">
-            <div class="top-head">
-                <ul>
-                    <li>
-                        <p>{{dateFormat(row.date_created)}}</p>
-                        <span>Date Created</span>
-                    </li>
-                    <li>
-                        <p>{{row.created_by_name}}</p>
-                        <span>Created By</span>
-                    </li>
-                </ul>
-            </div>
-            <div class="cs-secation pt10">
-                <p><span>Activity Type :</span> {{row.activity_type}}</p>
-                <p><span>Status :</span> {{row.status}}</p>
-            </div>
-            <div  class="pdlr">
-                <div class="bdr-field">
-                    <span>Remark</span>
-                    <p>{{row.remark}}</p>
-                </div>
-            </div>
-            <div ng-if="row.activity_type =='Meeting'" class="pdlr">
-                <div class="bdr-field">
-                    <span>GEO Location</span>
-                    <p>{{row.start_address}}</p>
-                </div>
+
+                <a href="tel: {{drDetail.drData.contact_mobile_no}}" class="dialer"><i class="material-icons">call</i></a>
             </div>
         </div>
 
-        <div class="data-not-found center" ng-if="leadActivityData.length == 0">
+        <a ng-repeat = "row in drDetail.checkInData.checkInData" >
+            <div class="coman-list">
+                <div class="top-head">
+                    <ul>
+                        <li>
+                            <p>{{row.checkInDateInFormat}}</p>
+                            <span>{{row.activity_type}}</span>
+                        </li>
+                        <li>
+                            <p>{{row.checkInTimeInFormat}}</p>
+                            <span>Start Time</span>
+                        </li>
+                        <li ng-show="row.activity_type == 'Meeting'">
+                            <p>{{row.checkOutTimeInFormat}}</p>
+                            <span>End Time</span>
+                        </li>
+                    </ul>
+                </div>
+                <div ng-if="row.remark" class="pdlr">
+                    <div class="bdr-field mt10">
+                        <span>Remark</span>
+                        <p>{{row.remark}}</p>
+                    </div>
+                </div>
+            </div>
+        </a>
+
+        <div class="data-not-found" ng-if="!isRequestInProcess && (!drDetail.checkInData.checkInData || drDetail.checkInData.checkInData.length == 0)">
             <div class="outer">
                 <div class="innear">
                     <img src="img/data-not-found.svg" alt="">
@@ -65,25 +60,28 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="h50"></div>
-        
+
     </ion-content>
-    
-    
-    <!-- <div class="fix-add">
-        <a ng-click = "gotoPage(dr_data.dr_id,dr_data.dr_name,dr_data.contact_mobile_no,'add-lead-activity')">
+
+
+    <ion-footer class="csm-footer-tabs cs-footerr bg-none">
+
+        <a ng-if="drDetail.checkInData.canNewMeetingStart && data.canNewMeetingStart == 'No' && drDetail.drData.id == drDetail.checkInData.drId"  href="#/tab/activity-meeting-end">
+
+            <div class="cs-save-btn no-padding">
+                <button class="wp100">End Meeting With {{drDetail.checkInData.drName}}</button>
+            </div>
+
+        </a>
+
+    </ion-footer>
+
+    <div class="fix-add">
+        <a ng-click = "onGoToActionHandler('leadAddActivity')">
             <i class="material-icons">add</i>
         </a>
-    </div> -->
+    </div>
 
-
-    <ion-footer class="ft2_btns csm-footer-tabs cs-footerr bg-none cs-save-btn">
-        <a class="wp100 h35 padding0" style="line-height: 35px;"  ng-if="!isNewMeetingStart"  href="#/tab/lead-meeting-end">
-            End Meeting with {{dr_data.dr_name}}
-        </a>
-    
-        <div class="fix-add" ng-click = "gotoPage(dr_data.dr_id,dr_data.dr_name,dr_data.contact_mobile_no,'add-lead-activity')"><i class="material-icons">add</i></div>
-    </ion-footer>
-    
 </ion-view>

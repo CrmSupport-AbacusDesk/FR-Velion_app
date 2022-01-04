@@ -1,9 +1,9 @@
 <ion-view view-title="{{data.drId ? 'Update Lead' : 'Add Lead'}}">
+
     <ion-nav-buttons side="left">
-        <a ng-click="goToBackPageHandler()"
-        class="cs-backbtn button button-icon icon ion-android-arrow-back font18 fff"></a>
+        <a ng-click = "goToBackPageHandler()" class="cs-backbtn button button-icon icon ion-android-arrow-back font18 fff"></a>
     </ion-nav-buttons>
-    
+
     <!-- commented -->
     <!-- <ion-nav-buttons side="right" class="custom-right-btn">
         <div ng-click="popover.show($event)" class="right-nav-btn nav-search">
@@ -12,173 +12,295 @@
     </ion-nav-buttons> -->
     <ion-content>
         <div class="padding16">
-            <form name="Addform" novalidate ng-submit="!Addform.$invalid && getleadAdd()">
+            <form ng-show="data.drFormCurrentStep==1" name="Addform" novalidate ng-submit="!Addform.$invalid && onGoToNextStepHandler()" >
+
                 <div class="cs-add-form">
-                    <div class="field-input" ng-class="{'has-error': Addform.typeId.$invalid && Addform.$submitted}">
-                        <select class="browser-default" ng-model="data.typeId" name="typeId" required>
-                        <option value="" disabled selected>Select Type <span>*</span></option>
-                        <option value="12">Dealer</option>
-                        <option value="6">Distributor</option>
-                        <option value="3">End User</option>
-                        <option value="26">Channel Partner</option>
-                        <option value="13">Retailer</option>
-                    </select>
+
+                    <div ng-class="{'has-error': Addform.typeId.$invalid && Addform.$submitted}" class="field-input">
+                        <select ng-model="data.typeId" name="typeId" ng-options="itemRow.id as itemRow.type for itemRow in typeList" class="browser-default" required>
+                            <option value="" disabled selected>Select Type <span>*</span></option>
+                        </select>
+                    </div>
+
+                    <div class="input-field field-input">
+                        <input name="companyName" ng-model="data.companyName" id="companyName" type="text" class="validate" replace="[^a-zA-Z]" with="">
+                        <label ng-class="data.drId ? 'active' : ''" for="last_name">Firm Name</label>
+                    </div>
+
+                    <div ng-class="{'has-error': Addform.customerName.$invalid && Addform.$submitted}" class="input-field field-input">
+                        <input ng-model="data.customerName" name="customerName" id="customerName" type="text"
+                        class="validate" replace="[^a-zA-Z]" with="" required>
+                        <label ng-class="data.drId ? 'active' : ''" for="last_name">Customer Name <span>*</span></label>
+                    </div>
+
+                    <div ng-class="{'has-error': Addform.customerMobile1.$invalid && Addform.$submitted}" class="input-field field-input">
+                        <input id="customerMobile1" ng-model="data.customerMobile1" type="number" name="customerMobile1" minlength = "10" maxlength ="10" limit-to = "10" class="validate" string-to-number required>
+                        <label ng-class="data.drId ? 'active' : ''" for="last_name">Mobile 1 <span>*</span></label>
+                        <span class="error-left relative" ng-show="Addform.$submitted && Addform.customerMobile1.$error.minlength">* Mobile No. Must be 10 Digit</span>
+                        <span class="error-left relative" ng-show="Addform.$submitted && Addform.customerMobile1.$error.maxlength">* Mobile No. Must be 10 Digit</span>
+                    </div>
+
+                    <div ng-class="{'has-error': Addform.customerMobile2.$invalid && Addform.$submitted}" class="input-field field-input">
+                        <input id="customerMobile2" ng-model="data.customerMobile2" type="number" name="customerMobile2" minlength = "10" maxlength ="10" limit-to = "10" class="validate" string-to-number>
+                        <label ng-class="data.drId ? 'active' : ''" for="last_name">Mobile 2</label>
+                        <span class="error-left relative" ng-show="Addform.$submitted && Addform.customerMobile2.$error.minlength">* Mobile No. Must be 10 Digit</span>
+                        <span class="error-left relative" ng-show="Addform.$submitted && Addform.customerMobile2.$error.maxlength">* Mobile No. Must be 10 Digit</span>
+                    </div>
+
+                    <div ng-class="{'has-error': Addform.landlineNo.$invalid && Addform.$submitted}" class="input-field field-input">
+                        <input id="landlineNo" ng-model="data.landlineNo" type="number" name="landlineNo" limit-to = "20" class="validate" string-to-number>
+                        <label ng-class="data.drId ? 'active' : ''" for="last_name">Landline No</label>
+                    </div>
+
+                    <div ng-class="{'has-error': Addform.email.$invalid && Addform.$submitted}" class="input-field field-input">
+                        <input id="email" type="email" ng-model="data.email" name="email" class="validate">
+                        <label ng-class="data.drId ? 'active' : ''" for="last_name">Email </label>
+                        <span class="error-left relative" ng-show="Addform.$submitted && Addform.email.$invalid && !Addform.email.$error.required">* Email Invalid</span>
+                    </div>
+
+                    <div ng-class="{'has-error': Addform.website.$invalid && Addform.$submitted}" class="input-field field-input">
+                        <input id="website" type="text" ng-model="data.website" name="website" class="validate wp100">
+                        <label ng-class="data.drId ? 'active' : ''" for="last_name">Website</label>
+                    </div>
+
+                  
+
+                    <div ng-class="{'has-error': Addform.category.$invalid && Addform.$submitted}" class="field-input">
+                        <select ng-model="data.category" name="category" ng-options="itemRow.name as itemRow.name for itemRow in categoryList" class="browser-default" ng-required="true">
+                            <option value="" disabled selected>Select Category <span>*</span></option>
+                        </select>
+                    </div>
+
+                    <div  class="field-input" ng-class="{ 'has-error':basic_lead_form.$submitted && basic_lead_form.source.$invalid }">
+                        <div ng-repeat="row in sourceList" class="area-border select-bg end-level-sel">
+                            <select name="source" ng-model="row.selectedId" ng-change="getLeadSource(row.selectedId, $index)" ng-options="itemRow.id as itemRow.name for itemRow in row.itemData" class="browser-default">
+                                <option value="" disabled selected>Select Lead Source  <span>*</span></option>
+                            </select>
+                        </div>
+                        <span class="help-block error" ng-show="basic_lead_form.source.$invalid && !basic_lead_form.source.$pristine">Required</span>
+                    </div>
+
+
+                    <!-- <div class="col-sm-6" ng-class="{ 'has-error':basic_lead_form.$submitted && basic_lead_form.source.$invalid }">
+                        <ul>
+                       
+                            <li>
+                                <div style="display: flex;">
+                                    <div ng-repeat="row in sourceList" class="area-border select-bg" class="field-input">
+                                        <select name="source" ng-model="row.selectedId" ng-change="getLeadSource(row.selectedId, $index)" ng-options="itemRow.id as itemRow.name for itemRow in row.itemData" class="browser-default">
+                                            <option value="" disabled selected>Select Lead Source  <span>*</span></option>
+                                        </select>
+                                    </div>
+                                    
+                                    <span class="help-block error" ng-show="basic_lead_form.source.$invalid && !basic_lead_form.source.$pristine">Required</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div> -->
+
+                    <div ng-if ="loginData.loginAccessLevel == '3'">
+                        <div class="form-space">
+                            <div class="add-css-select no-padding selectopt">
+                                <searchandselect selecteditem="search.insideAgentName" values="insideSalesList" key="Key"  totalrecords="totalInsideSalesRecords" onscroll="onGetSearchSelectDataHandler('fetchInsideSalesData', searchKey, pagenumber)"></searchandselect>
+                            </div>
+                        </div>
+                        <a ng-click = "onAddToInsideSalesListHandler()">Add To List</a>
+                        <ul>
+                            <li ng-repeat="row in dbInsideSelectedList">
+                                {{row.userName}} - ({{row.mobile}})
+                            </li>
+                            <li ng-repeat="row in insideSalesSelectedList">
+                                {{row.userName}}
+                                <a ng-click = "onDeleteInsideAgentHandler($index)" >Delete</a>
+                            </li>
+                        </ul>
+                        <div class="form-space">
+                            <div class="add-css-select no-padding selectopt" >
+                                <searchandselect selecteditem="search.fieldAgentName" values="fieldSalesList" key="Key" totalrecords="totalFieldSalesRecords" onscroll="onGetSearchSelectDataHandler('fetchFieldSalesData', searchKey, pagenumber)"></searchandselect>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div ng-if="data.drId" class="form-space">
+                        <label class="item-input item-select cs-select csm-input mb0">
+                            <div class="input-label">Update Lead Status</div>
+                            <select name="status" ng-model="data.status" required>
+                                <option value="" disabled selected>Select Lead Status <span>*</span></option>
+                                <option ng-repeat="row in statusList" value="{{row.name}}">{{row.name}}</option>
+                            </select>
+                        </label>
+                    </div>
+
+                    <div ng-if="data.status == 'Lost'" ng-class="{'has-error': Addform.lostReason.$invalid && Addform.$submitted}"  class="input-field field-input">
+                        <textarea ng-model = "data.lostReason"  name = "description" class="validate" style="height: 100px !important;" required></textarea>
+                        <label for="last_name">Lost Reason</label>
+                    </div>
                 </div>
-                
-                <div class="input-field field-input">
-                    <input name="companyName" ng-model="data.companyName" id="companyName" type="text"
-                    class="validate" replace="[^a-zA-Z]" with="">
-                    <label>Firm Name</label>
+
+                <div class="upload-doc">
+                    <div class="">
+                        Attachment <span class="redc">*</span>
+                    </div>
+                    <ul class="no-padding">
+                        <li class="image-upload" ng-if="attachment.length > 0" ng-repeat="row in attachment">
+                            <img src="{{uploadURL+row.image_name}}">
+                            <button class="del" ng-click="hard_delete($index,row)"><i class="material-icons">delete_sweep</i></button>
+                        </li>
+                        <li class="image-upload" ng-repeat="mediadatas in mediaData">
+                            <img src="{{mediadatas.src}}">
+                            <button class="del" ng-click="delete_img($index)"><i class="material-icons">delete_sweep</i></button>
+                        </li>
+                        <li class="add-image" ng-click="open_camera();">
+                            <i class="material-icons">add</i>
+                        </li>
+                    </ul>
                 </div>
-                
-                <div class="input-field field-input"
-                ng-class="{'has-error': Addform.customerName.$invalid && Addform.$submitted}">
-                <input ng-model="data.customerName" name="customerName" id="customerName" type="text"
-                class="validate" required>
-                <label>Customer Name <span>*</span></label>
-            </div>
-            
-            <div class="input-field field-input"
-            ng-class="{'has-error': Addform.customerMobile.$invalid && Addform.$submitted}">
-            <input id="customerMobile" ng-model="data.customerMobile" type="number" name="customerMobile"
-            minlength="10" maxlength="10" limit-to="10" class="validate" string-to-number required>
-            <label>Mobile<span>*</span></label>
-            <span class="error-left relative"
-            ng-show="Addform.$submitted && Addform.customerMobile.$error.minlength">* Mobile No. Must be
-            10 Digit</span>
+
+                <div class="cs-save-btn  mt20 text-right">
+                    <button type="submit" class="outline">Next</button>
+                </div>
+            </form>
+
+            <form ng-show="data.drFormCurrentStep==2" name="addressForm" novalidate ng-submit="onGoToNextStepHandler()">
+
+                <div class="cs-add-form">
+                    <div ng-class="{'has-error': addressForm.street.$invalid && addressForm.$submitted}" class="input-field field-input">
+                        <textarea ng-model="data.street" name="street" style="height: 80px !important;" ></textarea>
+                        <label ng-class="data.drId ? 'active' : ''" for="last_name">Address</label>
+                    </div>
+
+                    <div ng-class="{'has-error': addressForm.stateName.$invalid && addressForm.$submitted}" class="field-input">
+                        <div class="add-css-select pt0 selectopt no-padding pb16 add2">
+                            <searchandselect selecteditem="search.stateName" values="stateList" key="Key"  totalrecords="totalStateRecords" onscroll="onGetSearchSelectDataHandler('fetchStateData', searchKey, pagenumber)"></searchandselect>
+                        </div>
+                    </div>
+
+                    <div ng-class="{'has-error': addressForm.districtName.$invalid && addressForm.$submitted}" class="field-input">
+                        <div class="add-css-select pt0 selectopt no-padding pb16 add2">
+                            <searchandselect selecteditem="search.districtName" values="districtList" key="Key"  totalrecords="totalDistrictRecords" onscroll="onGetSearchSelectDataHandler('fetchDistrictData', searchKey, pagenumber)"></searchandselect>
+                        </div>
+                    </div>
+
+                    <div ng-class="{'has-error': addressForm.city.$invalid && addressForm.$submitted}" class="input-field field-input">
+                        <input ng-model="data.city" name="city"  id="city" type="text" class="validate" replace="[^a-zA-Z]" with="" required>
+                        <label ng-class="data.drId ? 'active' : ''" for="last_name">City <span>*</span></label>
+                    </div>
+
+                    <div ng-class="{'has-error': addressForm.pincode.$invalid && addressForm.$submitted}" class="input-field field-input">
+                        <input ng-model="data.pincode" name="pincode"  id="pincode" type="number" class="validate" limit-to = "6" maxlength="6" minlength = "6" string-to-number required>
+                        <label ng-class="data.drId ? 'active' : ''" for="last_name">Pincode <span>*</span></label>
+                        <span class="error-left relative" ng-show="addressForm.$submitted && addressForm.pincode.$invalid && !addressForm.pincode.$error.required">* Pincode Must be 6 Digit!</span>
+                    </div>
+                </div>
+
+                <div class="cs-add-form">
+                    <p>Contact Person Information</p>
+                    <div ng-class="{'has-error': addressForm.contactName.$invalid && addressForm.$submitted}" class="input-field field-input">
+                        <input ng-model="data.contactName" name="contactName" id="contactName" type="text" class="validate" replace="[^a-zA-Z]" with="">
+                        <label ng-class="data.drId ? 'active' : ''" for="last_name">Contact Name </label>
+                    </div>
+                    <div ng-class="{'has-error': addressForm.contactMobile.$invalid && addressForm.$submitted}" class="input-field field-input">
+                        <input id="contactMobile" ng-model="data.contactMobile" type="number" name="contactMobile" minlength = "10" maxlength ="10" limit-to = "10" class="validate">
+
+                        <label ng-class="data.drId ? 'active' : ''" for="last_name">Contact Mobile </label>
+                        <span class="error-left relative" ng-show="addressForm.$submitted && addressForm.contactMobile.$error.minlength">* Mobile No. Must be 10 Digit</span>
+                        <span class="error-left relative" ng-show="addressForm.$submitted && addressForm.contactMobile.$error.maxlength">* Mobile No. Must be 10 Digit</span>
+                    </div>
+                    <div ng-class="{'has-error': addressForm.contactDesignation.$invalid && addressForm.$submitted}" class="input-field field-input">
+                        <input id="contactDesignation" ng-model="data.contactDesignation" type="text" name="contactDesignation" class="validate" replace="[^a-zA-Z]" with="">
+                        <label ng-class="data.drId ? 'active' : ''" for="last_name">Contact Designation </label>
+                    </div>
+
+                    <div ng-class="{'has-error': addressForm.contactEmail.$invalid && addressForm.$submitted}" class="input-field field-input">
+                        <input id="contactEmail" type="email" ng-model="data.contactEmail" name="contactEmail" class="validate">
+                        <label ng-class="data.drId ? 'active' : ''" for="last_name">Contact Email </label>
+                        <span class="error-left relative" ng-show="addressForm.$submitted && addressForm.contactEmail.$invalid && !addressForm.contactEmail.$error.required">* Email Invalid</span>
+                    </div>
+                </div>
+
+                <div class="cs-save-btn  mt20">
+
+                    <button type="button" ng-click="data.drFormCurrentStep=1" class="outline" style="border-color: #002341; color: #002341;">Back</button>
+
+                    <button type="submit" class="outline">Next</button>
+
+                </div>
+
+            </form>
+
+
+            <form ng-show="data.drFormCurrentStep==3" name="requirementForm" novalidate>
+
+                    <div class="cs-add-form">
+
+                        <div class="field-input">
+
+                            <div class="add-css-select pt0 selectopt no-padding pb16 add2">
+                                <searchandselect selecteditem="search.categoryName" values="cartCategoryList" key="Key"  totalrecords="totalCategoryRecords" onscroll="onGetCartItemDataHandler('fetchCategoryData', searchKey, pagenumber)"></searchandselect>
+                            </div>
+
+                        </div>
+
+                        <div class="field-input">
+                            <div class="add-css-select pt0 selectopt no-padding pb16 add2">
+                                <searchandselect selecteditem="search.subCategoryName" values="subCategoryList" key="Key"  totalrecords="totalSubCategoryRecords" onscroll="onGetCartItemDataHandler('fetchSubCategoryData', searchKey, pagenumber)"></searchandselect>
+                            </div>
+                        </div>
+
+                        <div class="field-input">
+                            <div class="add-css-select pt0 selectopt no-padding pb16 add2">
+                                <searchandselect selecteditem="search.product" values="productList" key="Key"  totalrecords="totalStateRecords" onscroll="onGetCartItemDataHandler('fetchProductData', searchKey, pagenumber)"></searchandselect>
+                            </div>
+                        </div>
+
+                        <div class="flex-input">
+
+                            <div class="input-field field-input wp100">
+                                <input ng-model="data.qty" name="qty" id="qty" type="number" class="validate">
+                                <label for="last_name">QTY</label>
+                            </div>
+
+                            <a ng-click = "onAddToCartHandler('Requirement')" class="cs-btn">
+                                <i class="material-icons">add</i>
+                            </a>
+
+                        </div>
+
+                    </div>
+
+
+                    <div ng-if="cartItemData.length > 0" class="cs-bg-heading">
+                        <h2>Requirment Detail</h2>
+                    </div>
+
+                    <div class="cart-card">
+
+                      <div ng-repeat = "row in cartItemData" class="cs-count-list cart-list">
+
+                          <div class="cs-content">
+                              <p>{{row.categoryName}}, {{row.subCategoryName}}, {{row.productName}}</p>
+                              <span>#{{row.productCode}}</span>
+                          </div>
+
+                          <div class="action-item">
+                              <span class="qty">{{row.qty}}</span>
+                              <a ng-click = "onDeleteFromCartHandler($index)" class="action-btn"><i class="material-icons">delete_sweep</i></a>
+                          </div>
+
+                      </div>
+
+                    </div>
+
+                    <div class="cs-save-btn space-btn mt20">
+
+                        <button type="button" ng-click="data.drFormCurrentStep=2" class="outline" style="border-color: #002341; color: #002341;">Back</button>
+
+                        <button ng-click="onSaveDrHandler()" class="outline">Save</button>
+
+                    </div>
+            </form>
+
         </div>
-        
-        <div class="input-field field-input"
-        ng-class="{'has-error': Addform.email.$invalid && Addform.$submitted}">
-        <input class="validate" id="email" type="email" ng-model="data.email" name="email">
-        <label>Email<span>*</span></label>
-        <span class="error-left relative"
-        ng-show="Addform.$submitted && Addform.email.$invalid && Addform.email.$error.required">*
-        Email Invalid</span>
-    </div>
-</div>
 
-<div class="cs-bg-heading padding0">
-    <h2>Address Information</h2>
-</div>
-
-<div class="cs-add-form">
-    <div class="input-field field-input"
-    ng-class="{'has-error': addressForm.pincode.$invalid && addressForm.$submitted}">
-    <input name="pincode" type="number" ng-model="data.pincode" id="pincode" class="validate"
-    limit-to="6" maxlength="6" minlength="6" string-to-number
-    ng-change="getPincodeAddess(data.pincode)" required>
-    <label class="fix-label">Pincode <span>*</span></label>
-    <span class="error-left relative"
-    ng-show="addressForm.$submitted && addressForm.pincode.$invalid && !addressForm.pincode.$error.required">*
-    Pincode Must be 6 Digit!</span>
-</div>
-
-<div class="input-field field-input"
-ng-class="{'has-error': addressForm.state_name.$invalid && addressForm.$submitted}">
-<label class="fix-label">State<span>*</span></label>
-<input name="state_name" type="text" ng-model="data.state_name" id="state_name" class="validate"
-readonly required>
-</div>
-
-<div class="input-field field-input"
-ng-class="{'has-error': addressForm.district_name.$invalid && addressForm.$submitted}">
-<label class="fix-label">District<span>*</span></label>
-<input name="district_name" ng-model="data.district_name" id="district_name" type="text"
-class="validate" readonly required>
-</div>
-
-<div class="input-field field-input"
-ng-class="{'has-error': addressForm.city.$invalid && addressForm.$submitted}">
-<label class="fix-label">City <span>*</span></label>
-<input ng-model="data.city" name="city" id="city" type="text" class="validate"
-replace="[^a-zA-Z]" with="" required>
-</div>
-
-<div class="input-field field-input"
-ng-class="{'has-error': addressForm.area.$invalid && addressForm.$submitted}">
-<textarea ng-model="data.area" name="area" style="height: 80px !important;"></textarea>
-<label class="fix-label">Street</label>
-</div>
-</div>
-
-<div class="cs-bg-heading padding0">
-    <h2>Requirment Information</h2>
-</div>
-
-<div class="cs-add-form">
-    
-    <div class="field-input mt20"
-    ng-class="{'has-error': Addform.category.$invalid && Addform.$submitted}">
-    <labelclass="fix-label">Select Category</label>
-    <select class="browser-default" ng-model="data.category" name="category"
-    ng-change="getProductSubCategoryList(data.category)"
-    ng-options="itemRow.category as itemRow.category for itemRow in ProductCategoryList"
-    required>
-    <option value="" disabled selected>Select Category<span>*</span></option>
-</select>
-</div>
-
-<div class="field-input mt20" ng-if="data.category"
-ng-class="{'has-error': Addform.sub_category.$invalid && Addform.$submitted}">
-<label class="fix-label">Select Sub Category</label>
-<select class="browser-default" ng-model="data.sub_category" name="sub_category"
-ng-change="getProductList(data.category,data.sub_category,data.product_name)"
-ng-options="itemRow.sub_category as itemRow.sub_category for itemRow in ProductSubCategoryList"
-required>
-<option value="" disabled selected>Select Sub Category<span>*</span></option>
-</select>
-</div>
-
-<div class="field-input mt20" ng-if="data.sub_category"
-ng-class="{'has-error': Addform.product_name.$invalid && Addform.$submitted}">
-<label class="fix-label">Select Product</label>
-<select class="browser-default" ng-model="data.id" name="product_name"
-ng-change="productDetails(data.id)"
-ng-options="itemRow.id as itemRow.product_name for itemRow in ProductList">
-<option value="" disabled selected>Select Product<span>*</span></option>
-</select>
-</div>
-
-<div class="flex-input" style="margin-top: -10px;">
-    <div class="input-field field-input wp100">
-        <input ng-model="data.qty" name="qty" id="qty" type="number" class="validate">
-        <label for="last_name">QTY</label>
-    </div>
-    
-    <button class="cs-btn" ng-disabled="!data.qty || !data.id" ng-click="onRequirementAddToList()">
-        <i class="material-icons">add</i>
-    </button>
-</div>
-</div>
-
-
-<div class="cart-card">
-    <div class="cs-count-list cart-list" ng-repeat="row in requiredata">
-        <div class="cs-content">
-            <p class="mb0">{{row.categoryName}} / {{row.subcategoryName}} / {{row.productName}}</p>
-            <!-- <span>{{requiredata.product_code}}</span> -->
-        </div>
-        
-        <div class="action-item">
-            <span class="qty">{{row.qty}}</span>
-            <a class="action-btn" ng-click="listdelete($index)"><i
-                class="material-icons">delete_sweep</i></a>
-            </div>
-        </div>
-    </div>
-    
-    <div class="input-field field-input mt30"
-    ng-class="{'has-error': addressForm.description.$invalid && addressForm.$submitted}">
-    <textarea ng-model="data.description" name="description"
-    style="height: 80px !important;"></textarea>
-    <label class="fix-label">Description</label>
-</div>
-
-<div class="cs-save-btn space-btn mt20">
-    <button class="outline">Save</button>
-</div>
-</form>
-</div>
-</ion-content>
+    </ion-content>
 </ion-view>

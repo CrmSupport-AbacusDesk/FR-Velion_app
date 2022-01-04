@@ -1,150 +1,87 @@
-<ion-view view-title="Wallet History" name="Wallet-History-view" hide-nav-bar="true">
-    
+<ion-view view-title="Wallet History" name="Wallet-History-view" hide-nav-bar="true" >
+
     <ion-nav-buttons side="left">
         <a ng-click="goToBackPageHandler()" class="cs-backbtn button button-icon icon ion-android-arrow-back font18 fff"></a>
     </ion-nav-buttons>
-
-
-
     <ion-header-bar class="opr_ion_header">
-        <div class="cs-left">
+        <div class="cs-left wp100">
             <button class="back-button" ng-click="goToBackPageHandler()"><i class="material-icons">arrow_back</i></button>
             <h1 class="orp_title">Wallet History</h1>
+            <button ng-show="(!data.date_from && !data.date_to) && dateFilter==false" class="back-button right" ng-click="dateFilter=true"><i class="material-icons">date_range</i> Filter</button>
+            <button ng-show="(data.date_from || data.date_to) && dateFilter==false"  class="back-button right" ng-click="data.date_from='';data.date_to='';getCategoryWiseData('IB')"><i class="material-icons">date_range</i> Clear</button>
+
         </div>
     </ion-header-bar>
 
-
-
-    
     <ion-content>
-        
+
         <div class="stc-section">
             <div class="wallet_info">
                 <h2>Wallet Points</h2>
-                <h1>2512</h1>
-                <p>Last transaction 14 mins ago</p>
-                <p class="ttp"><span>"242"</span> Product Total Scan</p>
+                <h1>{{wallet_data.orp_wallet_point}}</h1>
+                <p class="sm-font" ng-if="wallet_data.orp_wallet_update_date !='0000-00-00 00:00:00'">Last transaction {{dateTimeFormat(wallet_data.orp_wallet_update_date)}}</p>
+                <p class="ttp"><span>"{{wallet_data.product_count}}"</span> Product Total Scan</p>
             </div>
-            
+
             <div class="cat-route">
                 <div class="figure">
                     <ul>
-                        <li>DLR Purchase History</li>
+                        <li ng-if="wallet_data.type == 'purchase'" ng-click="goToBackPageHandler()">Purchase History</li>
+                        <li ng-if="wallet_data.type == 'sale'" ng-click="goToBackPageHandler()">Sale History</li>
                         <li class="ar"><i class="material-icons">chevron_right</i></li>
-                        <li>Inverter Battery</li>
+                        <li>{{wallet_list[0].category}} {{wallet_list.length}}</li>
                     </ul>
-                    <p class="point"><span>Points</span><span>2653</span></p>
+                    <p class="point"><span>Points</span><span>{{wallet_data.total}}</span></p>
                 </div>
             </div>
         </div>
-        
-        <div class="wl_update pt0">
-            <div class="figure">
-                <div class="thumb"><img src="img/redeem-points.svg" alt=""></div>
-                <div class="description">
-                    <p><span>DLR Purchase Wallet Points</span> <span>Update : 12 Feb 2019</span></p>
-                    <h1>2652</h1>
-                </div>
-            </div>
-        </div>
-        
-        
-        
+
         <div class="wallet_points">
-            
-            <a href="" class="figure">
+            <a class="figure" ng-repeat="row in wallet_list">
                 <div class="pt-top">
                     <div class="thumb dflt"></div>
                     <div class="points">
-                        <p>Get Point</p>
-                        <h1>252514</h1>
+                        <p>Point</p>
+                        <h1>{{row.points}}</h1>
                     </div>
                 </div>
+
                 <div class="pt-infos">
-                    <div class="name">
-                        <p>Product Name</p>
-                        <p><span>#002587</span></p>
+                    <div class="name af-none">
+                        <p>{{row.product_name}} </p>
+                        <p><span>{{row.product_code}}</span></p>
+                        <p>{{row.coupon_code}}</p>
                     </div>
-                    <div class="date"><p>Scan Date | <span>15 April 2019</span></p></div>
+                    <div class="date"><p>Scan Date | <span>{{dateFormat(row.date)}}</span></p></div>
                 </div>
+                <div ng-if="wallet_data.type == 'sale' && loginData.loginTypeId=='6'" class="dlname"><p>Retailer : {{row.distributor_sale_dealer_name}}</p></div>
+                <div ng-if="wallet_data.type == 'purchase' && loginData.loginTypeId=='12'" class="dlname"><p>Distributor : {{row.distributor_name}}</p></div>
             </a>
-            
-            <a href="" class="figure">
-                <div class="pt-top">
-                    <div class="thumb dflt"></div>
-                    <div class="points">
-                        <p>Get Point</p>
-                        <h1>252514</h1>
-                    </div>
-                </div>
-                <div class="pt-infos">
-                    <div class="name">
-                        <p>Product Name</p>
-                        <p><span>#002587</span></p>
-                    </div>
-                    <div class="date"><p>Scan Date | <span>15 April 2019</span></p></div>
-                </div>
-            </a>
-            
-              
-            <a href="" class="figure">
-                <div class="pt-top">
-                    <div class="thumb dflt"></div>
-                    <div class="points">
-                        <p>Get Point</p>
-                        <h1>252514</h1>
-                    </div>
-                </div>
-                <div class="pt-infos">
-                    <div class="name">
-                        <p>Product Name</p>
-                        <p><span>#002587</span></p>
-                    </div>
-                    <div class="date"><p>Scan Date | <span>15 April 2019</span></p></div>
-                </div>
-            </a>
-            
-            <a href="" class="figure">
-                <div class="pt-top">
-                    <div class="thumb dflt"></div>
-                    <div class="points">
-                        <p>Get Point</p>
-                        <h1>252514</h1>
-                    </div>
-                </div>
-                <div class="pt-infos">
-                    <div class="name">
-                        <p>Product Name</p>
-                        <p><span>#002587</span></p>
-                    </div>
-                    <div class="date"><p>Scan Date | <span>15 April 2019</span></p></div>
-                </div>
-            </a>
-            
-            
-            <!-- <a href="" class="figure">
-                <div class="pt-top">
-                    <div class="thumb dflt"></div>
-                    <div class="points">
-                        <p>Get Point</p>
-                        <h1>252514</h1>
-                    </div>
-                </div>
-                <div class="pt-infos">
-                    <div class="name">
-                        <p>Product Name</p>
-                        <p><span>#002587</span></p>
-                    </div>
-                    <div class="date"><p>Scan Date | <span>15 April 2019</span></p></div>
-                </div>
-                
-                <div class="dlname"><p>Dealer : Ram Batteries</p></div>
-            </a> -->
         </div>
-        
-        
-        
-        
-        
     </ion-content>
+
+    <div class="dialog-modal" ng-class="{'active' : dateFilter==true}">
+        <div class="dialog">
+            <div class="dialog-head">
+                <h6>Date Filter</h6>
+                <a class="clear" ng-click="dateFilter=false"><i class="material-icons">clear</i></a>
+            </div>
+            <div class="dialog-body">
+                <div class="cs-fillter">
+                    <div class="fields-input">
+                        <label>Date From</label>
+                        <input type="date" name="date_from" ng-model="data.date_from">
+                    </div>
+                    <div class="fields-input">
+                        <label>Date To</label>
+                        <input type="date" name="date_to" ng-model="data.date_to">
+                    </div>
+                </div>
+            </div>
+            <div class="dialog-footer">
+                <button ng-click="data.date_from='';data.date_to='';">Clear</button>
+                <button ng-click=" data.type = wallet_data.type;dateFilter=false;getCategoryWiseData('IB')">GO</button>
+            </div>
+        </div>
+    </div>
 </ion-view>

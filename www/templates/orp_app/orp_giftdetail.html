@@ -7,16 +7,13 @@
         </div>
     </ion-header-bar>
 
-
-
-    
     <ion-content>
         <div class="wl_update pt0 offbg">
             <div class="figure">
                 <div class="thumb"><img src="img/redeem-points.svg" alt=""></div>
                 <div class="description">
-                    <p><span>Wallet Points</span> <span>Update : 12 Feb 2019</span></p>
-                    <h1>2652</h1>
+                    <p><span>Wallet Points</span> <span>Last Updated :{{dateFormat(offer_data.orp_wallet_update_date)}}</span></p>
+                    <h1>{{offer_data.orp_wallet_point}}</h1>
                 </div>
             </div>
         </div>
@@ -24,73 +21,105 @@
 
         <div class="gift_slide">
             <div class="nm_point">
-                <h1>Wrist Watch</h1>
-                <h2>23 Points</h2>
+                <h1>{{gift_data.gift_title}}</h1>
+                <h2>{{gift_data.points_required}} Points</h2>
             </div>
 
-            <div class="orp-slider">
+            <!-- <ion-slide-box auto-play="">
+                <ion-slide>1</ion-slide>
+                <ion-slide>2</ion-slide>
+            </ion-slide-box> -->
+
+            <!-- <ion-slide-box class="cs-slide" ng-if ="gift_data.images.length > 0" on-slide-changed="slideHasChanged($index)" auto-play="true" does-continue="true" slide-interval="3800">
+                <ion-slide ng-repeat="row in gift_data.images">
+                    <div class="box">
+                        <img src="{{uploadURL+row.url}}" >
+                        <button ng-click="nextSlide()">Next slide!</button>
+                    </div>
+                </ion-slide>
+            </ion-slide-box> -->
+
+            <div class="orp-slider" ng-if ="!gift_data.img && gift_data.img ==''">
                 <img src="img/dft_product.svg" alt="">
             </div>
-            
+            <div class="orp-slider" ng-if ="gift_data.img && gift_data.img !=''" >
+                <img src="{{uploadURL+gift_data.img}}" alt="">
+            </div>
+
         </div>
 
-        <div class="offerlist giftdetail giftlist">
-            <div class="figure">
-                <div class="desc">
-                    <div class="off">
-                        <h1>Holi Lover Offer #0001</h1>
-                        <p>Valid Upto : 5 April 2020</p>
+        <div class="gf_description pt16">
+            <h1>Scheme Info :</h1>
+            <div class="offerlist giftdetail giftlist pl0 pr0 pb0">
+                <div class="figure mt5">
+                    <div class="desc">
+                        <div class="off">
+                            <h1>{{offer_data.title}} {{offer_data.offer_code}}</h1>
+                            <p>Valid Upto : {{dateFormat(offer_data.end_date)}}</p>
+                        </div>
                     </div>
+                    <div class="thumb" ng-if="offer_data.offer_image == ''"><img src="img/dft_product.svg" alt=""></div>
+                    <div class="thumb" ng-if="offer_data.offer_image != ''"><img src="{{uploadURL+offer_data.offer_image}}" alt=""></div>
                 </div>
-                <div class="thumb"><img src="img/holi_banner.jpg" alt=""></div>
             </div>
         </div>
 
         <div class="gf_description">
             <h1>Description :</h1>
-            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy.</p>
-            <p><strong>1.</strong> Lorem Ipsum is simply dummy text of the.</p>
-            <p><strong>2.</strong> It is a long established fact that.</p>
+            <p>{{gift_data.description}}</p>
+            <!-- <p><strong>1.</strong> Lorem Ipsum is simply dummy text of the.</p>
+                <p><strong>2.</strong> It is a long established fact that.</p> -->
+
         </div>
 
-        <div class="cs_orp-bttn padding16">
-            <a class="active" ng-click="otpgiftOpenModel();">SEND REDEEM REQUEST</a>
-        </div>
+        <a href="#/orptab/orp_term_condition" ng-click="otpgiftCloseModel()" class="ml5">Terms & Condition</a>
 
-    </ion-content>
-
-    <script id="gift_otp" type="text/ng-template">
-        <ion-modal-view>
-            
-            <div class="orp_model">
-                <div class="model_container">
-                    <button ng-click="otpgiftCloseModel()" class="model_cancel"><i class="material-icons">cancel</i></button>
-                    
-                    <div class="mini_container">
-                        <div class="md_heading"><h1>Okaya</h1></div>
-                        
-                        <div class="md_body">
-                            <p>Are you sure to redeem your 500 points?</p>
-                            <p>Enter your 6 digit OTP number that sent to <span>91+ 98568547845</span></p>
-                            
-                            <div class="orp-input">
-                                <input type="text" placeholder="Enter OTP">
-                            </div>
-
-                            <div class="term">
-                                <label><input type="checkbox"> I have read <a href="#/">Terms & Condition</a></label>
-                            </div>
-                        </div> 
-                    </div>
-                    
-                    <div class="md_footer">
-                        <button>SAVE</button>
-                    </div>
-                    
-                    
-                </div>
+            <div class="cs_orp-bttn padding16" ng-if="offer_data.orp_wallet_point > gift_data.points_required || offer_data.orp_wallet_point == gift_data.points_required">
+                <a class="active" ng-click="redeemRequest();">SEND REDEEM REQUEST</a>
             </div>
-        </ion-modal-view>
-    </script>  
 
-</ion-view>
+        </ion-content>
+
+        <!-- <script id="gift_otp" type="text/ng-template">
+            <ion-modal-view>
+
+                <div class="orp_model">
+                    <div class="model_container">
+                        <button ng-click="otpgiftCloseModel()" class="model_cancel"><i class="material-icons">cancel</i></button>
+                        <form name="form1" novalidate ng-submit="!form1.$invalid && checkOtp()">
+
+
+                            <div class="mini_container">
+                                <div class="md_heading"><h1>Microtek International Pvt Ltd</h1></div>
+
+                                <div class="md_body">
+                                    <p>Are you sure to redeem your {{gift_data.points_required}} points?</p>
+                                    <p>Enter your 6 digit OTP number that sent to <span>91+ {{loginData.loginMobile}}</span></p>
+
+                                    <div class="orp-input" ng-class="{'has-error': form1.otp.$invalid && form1.$submitted}">
+                                        <input type="text" placeholder="Enter OTP" ng-model="data.otp" minlength = "6" maxlength ="6" required limit-to = "6" name="otp" id= "otp" >
+                                        <span class="error-left relative" ng-show="form1.$submitted && form1.otp.$error.required" >*Otp Required</span>
+                                        <span class="error-left relative" ng-show="form1.$submitted && form1.otp.$error.minlength">*Otp Must be 6 Digit</span>
+                                        <span class="error-left relative" ng-show="form1.$submitted && form1.otp.$error.maxlength">*Otp Must be 6 Digit</span>
+                                    </div>
+
+                                    <div class="term df ac" >
+                                        <label>
+                                            <input type="checkbox" ng-model="data.check"> I have read
+                                        </label>
+                                        <a class="ml5">Terms & Condition</a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="md_footer" ng-style="{'opacity':data.check != true? 0.4 : 1}">
+                                <button type = "submit" ng-disabled="data.check != true" >SAVE</button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </ion-modal-view>
+        </script> -->
+
+    </ion-view>

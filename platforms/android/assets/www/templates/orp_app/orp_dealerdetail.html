@@ -1,107 +1,57 @@
-<ion-view view-title="Dealer Detail" hide-nav-bar="true">
+<ion-view view-title="Retailer Detail" hide-nav-bar="true">
 
     <ion-header-bar class="opr_ion_header">
         <div class="cs-left">
             <button class="back-button" ng-click="goToBackPageHandler()"><i class="material-icons">arrow_back</i></button>
-            <h1 class="orp_title">Dealer Detail</h1>
+            <h1 class="orp_title">Retailer Detail</h1>
         </div>
     </ion-header-bar>
 
-    
+
     <ion-content>
         <div class="dealer-list dealer-detail">
             <div class="figure">
                 <div class="dl_info">
                     <div class="cs-left">
-                        <div class="fl">g</div>
+                        <div class="fl">{{my_dealer_data.dr_name?my_dealer_data.dr_name.substring(0,1).toUpperCase():''}}</div>
                         <div class="naming">
-                            <p>Geeta Foundation Charitable Trust</p>
-                            <p><span>Last Order :</span> 07 Jan 2020 / 5 day ago</p>
+                            <p>{{my_dealer_data.dr_name}}</p>
+                            <p><span>Contact Person Name:</span> {{my_dealer_data.contact_name}}</p>
+                            <p><span>Contact Mobile Number :</span> {{my_dealer_data.contact_mobile_no?my_dealer_data.contact_mobile_no : my_dealer_data.sfa_contact_no}}</p>
                         </div>
                     </div>
                     <div class="cs-right">
-                        <a href="#/"><i class="material-icons">call</i></a>
+                        <a href="tel: {{my_dealer_data.contact_mobile_no?my_dealer_data.contact_mobile_no :my_dealer_data.sfa_contact_no}}" ><i class="material-icons">call</i></a>
                     </div>
                 </div>
                 <div class="dl-add">
-                    <p><span>Address</span><br>5E/7 , B.P., Railway Road, Near Neelam Chowk, NIT Faridabad, Haryana 121001</p>
+                    <p><span>Address</span><br>{{my_dealer_data.street}} {{my_dealer_data.city}} {{my_dealer_data.district_name}} {{my_dealer_data.state_name}} {{my_dealer_data.pincode}}</p>
                 </div>
             </div>
         </div>
-        
+
         <div class="cs-tabs">
             <div class="tab_container">
-                <button class="active"><p>In Stock</p> <span>04</span></button>
-                <button><p>Out Of Stock</p> <span>08</span></button>
+                <button ng-click="dealerData(my_dealer_data.id) ;data.type = 'inStock'" ng-class="{'active':data.type == 'inStock'}"><p>In Stock</p> <span>{{my_dealer_data.instock}}</span></button>
+                <button ng-click="dealerData(my_dealer_data.id); data.type = 'outOfStock'" ng-class="{'active':data.type == 'outOfStock'}"><p>Out Of Stock</p> <span>{{my_dealer_data.outstock}}</span></button>
             </div>
         </div>
-        
-        
+
+
         <div class="bx-listing">
-            <a href="#/">
+            <a  ng-repeat="row in my_dealer_data.stock">
                 <div class="qty">
-                    <p>252</p>
+                    <p>{{row.qty}}</p>
                     <p>QTY</p>
                 </div>
                 <div class="description">
                     <div class="cs-left">
-                        <h1>Product Name #001</h1>
-                        <p><span>#$84758</span> <span>last update : 18 Jul 2019</span></p>
+                        <h1>{{row.product_name}}</h1>
+                        <p><span>{{row.product_code}}</span> <span>last update : {{dateFormat(row.last_updated_date)}}</span></p>
                     </div>
                 </div>
             </a>
-            
-            <a href="#/">
-                <div class="qty">
-                    <p>252</p>
-                    <p>QTY</p>
-                </div>
-                <div class="description">
-                    <div class="cs-left">
-                        <h1>Product Name #001</h1>
-                        <p><span>#$84758</span> <span>last update : 18 Jul 2019</span></p>
-                    </div>
-                </div>
-            </a>
-            
-            <a href="#/">
-                <div class="qty">
-                    <p>252</p>
-                    <p>QTY</p>
-                </div>
-                <div class="description">
-                    <div class="cs-left">
-                        <h1>Product Name #001</h1>
-                        <p><span>#$84758</span> <span>last update : 18 Jul 2019</span></p>
-                    </div>
-                </div>
-            </a>
-            
-            <a href="#/">
-                <div class="qty">
-                    <p>252</p>
-                    <p>QTY</p>
-                </div>
-                <div class="description">
-                    <div class="cs-left">
-                        <h1>Product Name #001</h1>
-                        <p><span>#$84758</span> <span>last update : 18 Jul 2019</span></p>
-                    </div>
-                </div>
-            </a>
-            
-            <a href="#/">
-                <div class="qty">
-                    <p>252</p>
-                    <p>QTY</p>
-                </div>
-                <div class="description">
-                    <div class="cs-left">
-                        <h1>Product Name #001</h1>
-                        <p><span>#$84758</span> <span>last update : 18 Jul 2019</span></p>
-                    </div>
-                </div>
-            </a>
+
         </div>
     </ion-content>
 

@@ -1,0 +1,28 @@
+<ion-view view-title="Survey List" hide-nav-bar="true">
+
+    <ion-header-bar class="opr_ion_header">
+        <div class="cs-left">
+            <button class="back-button" ng-click="goToBackPageHandler()"><i class="material-icons">arrow_back</i></button>
+            <h1 class="orp_title">Survey List</h1>
+        </div>
+    </ion-header-bar>
+
+    <ion-content>
+        <div class="padding16">
+            <div class="sur-list" ng-repeat="row in surveyListData">
+                <a ng-click="gotoQuestionPage(row.id,row.title)">{{row.title}}
+                <i class="material-icons">keyboard_arrow_right</i>
+                </a>
+            </div>
+        </div>
+
+        <div class="data-not-found" style="height: calc(100vh - 120px);" ng-if="surveyListData.length == 0">
+            <div class="outer">
+                <div class="innear">
+                    <img src="img/data-not-found.svg" alt="">
+                    <h2>Temporarily , No Data Available!</h2>
+                </div>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

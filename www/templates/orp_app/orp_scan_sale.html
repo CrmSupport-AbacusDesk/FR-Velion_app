@@ -1,130 +1,269 @@
 <ion-view view-title="Scan - DLR Sale" hide-nav-bar="true">
     
-
+    
     <ion-header-bar class="opr_ion_header">
         <div class="cs-left">
-            <button class="back-button" ng-click="goToBackPageHandler()"><i class="material-icons">arrow_back</i></button>
-            <h1 class="orp_title">DealScan - DLR Sale</h1>
-        </div>
-    </ion-header-bar>
-
-
-
-
-    <ion-content>
+            <button class="back-button" ng-click="goToBackPageHandler()"><i
+                class="material-icons">arrow_back</i></button>
+                <h1 class="orp_title">Retailer Sale Scan</h1>
+            </div>
+        </ion-header-bar>
         
-        <div class="scn-topbg">
-            <div class="orp-select">
+        <ion-content>
+            <form name="saleform" novalidate ng-submit="!saleform.$invalid && openWarrantySection()" >
+                <div class="login-form scn-topbg pb2">
+                    <div class="rg_form rg_flat_form">
+                        
+                        <div class="field-input" ng-class="{'has-error': saleform.type_id.$invalid && saleform.$submitted}" >
+                            <select class="browser-default" ng-model="customer_data.type_id" name="type_id" id="type_id" style="margin-bottom: 15px !important;" ng-change="customerData('0')">
+                                <option value="" disabled>Select Type</option>
+                                <option ng-repeat="row in customer_type" value="{{row.id}}">{{row.type}}</option>
+                            </select>
+                            <span class="error-left relative" ng-show="saleform.$submitted && saleform.type_id.$error.required">* Type Required</span>
+                        </div>
+                        
+                        <div class="input-field" ng-class="{'has-error': saleform.mobile_no.$invalid && saleform.$submitted}">
+                            <label ng-class="{'fix-label':customer_data.mobile_no}">Moblie Number</label>
+                            <input type="number" required ng-model="customer_data.mobile_no" name="mobile_no" id="mobile_no" minlength = "10" maxlength ="10" limit-to = "10" ng-change="customerData('1')" >
+                            <span class="error-left relative" ng-show="saleform.$submitted && saleform.mobile_no.$error.required ">* Mobile No. Required</span>
+                            <span class="error-left relative" ng-show="saleform.$submitted && saleform.mobile_no.$error.minlength ">* Mobile No. Must be 10 Digit</span>
+                            <span class="error-left relative" ng-show="saleform.$submitted && saleform.mobile_no.$error.maxlength">* Mobile No. Must be 10 Digit</span>
+                        </div>
+                        
+                        <div class="input-field" ng-class="{'has-error': saleform.customer_name.$invalid && saleform.$submitted}">
+                            <label ng-class="{'fix-label':customer_data.customer_name}">Name</label>
+                            <input type="text" required ng-model="customer_data.customer_name" name="customer_name" id="customer_name" minlength = "3" ng-change="customerData('0')">
+                            
+                            <span class="error-left relative" ng-show="saleform.$submitted && saleform.customer_name.$error.required" >* Name required!</span>
+                            <span class="error-left relative" ng-show="saleform.$submitted && saleform.customer_name.$error.minlength ">*Name  Must be Minimum 3 Letters!</span>
+                        </div>
+                        
+                        
+                        <div class="input-field" ng-class="{'has-error': saleform.pincode.$invalid && saleform.$submitted}">
+                            <label ng-class="{'fix-label':customer_data.pincode}">Pincode</label>
+                            <input type="number" required ng-model="customer_data.pincode" name="pincode" id="pincode" ng-change="onSearchPincodeChangeHandler();customerData('0');" minlength="6" maxlength="6" limit-to="6">
+                            <span class="error-left relative" ng-show="saleform.$submitted && saleform.pincode.$error.required">* Pincode Required</span>
+                            <span class="error-left relative" ng-show="saleform.$submitted && saleform.pincode.$error.minlength">* Pincode Must be 6 Digit</span>
+                            <span class="error-left relative" ng-show="saleform.$submitted && saleform.pincode.$error.maxlength">* Pincode Must be 6 Digit</span>
+                        </div>
+                        
+                        <div class="field-input mt25" ng-class="{'has-error': saleform.address.$invalid && saleform.$submitted}">
+                            <label class="fix-label">State</label>
+                            <div class="add-css-select flat-search-select  pt0 selectopt no-padding" >
+                                <searchandselect selecteditem="search.stateName" values="stateList" key="Key"
+                                totalrecords="totalStateRecords" ng-click ="customerData()" onscroll=" onGetSearchSelectDataHandler('fetchStateData', searchKey, pagenumber)">
+                            </searchandselect>
+                        </div>
+                    </div>
+                    <div class="field-input mt25" ng-class="{'has-error': saleform.address.$invalid && saleform.$submitted}">
+                        <label class="fix-label">District</label>
+                        <div class="add-css-select flat-search-select  pt0 selectopt no-padding" >
+                            <searchandselect selecteditem="search.districtName" id='district' values="districtList"
+                            key="Key" totalrecords="totalDistrictRecords" ng-click ="customerData()" onscroll=" onGetSearchSelectDataHandler('fetchDistrictData', searchKey, pagenumber)" >
+                        </searchandselect>
+                    </div>
+                </div>
+                <div class="input-field mt15" ng-class="{'has-error': saleform.address.$invalid && saleform.$submitted}">
+                    <label ng-class="{'fix-label':customer_data.address}">Address</label>
+                    <textarea ng-model="customer_data.address" name="address" id="address" style="height: 70px !important;" ng-change="customerData()">
+                    </textarea>
+                    <span class="error-left relative" ng-show="saleform.$submitted && saleform.address.$error.required ">*Address Required</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- <div class="scn-topbg" style="display: none;">
+            <div class="orp-select" ng-class="{'has-error': saleform.type_id.$invalid && saleform.$submitted}" >
                 <label>
                     <p>Select Type</p>
-                    <select>
-                        <option value="1">End User</option>
-                        <option value="2">Re-seller</option>
-                        <option value="3">Electrician</option>
+                    <select ng-model="customer_data.type_id" name="type_id" id="type_id">
+                        <option ng-repeat="row in customer_type" value="{{row.id}}">{{row.type}}</option>
                     </select>
                 </label>
             </div>
             
-            <div class="orp-input mt10">
-                <input type="text" placeholder="Name">
-                <input type="text" placeholder="Mobile No.">
-                <input type="text" placeholder="Pin Code">
+            <div class="orp-input mt10" ng-class="{'has-error': saleform.customer_name.$invalid && saleform.$submitted}">
+                <input type="text" placeholder="Name" required ng-model="customer_data.customer_name" name="customer_name" id="customer_name" minlength = "3">
+                
+                <span class="error-left relative" ng-show="saleform.$submitted && saleform.customer_name.$error.required" >* Name required!</span>
+                <span class="error-left relative" ng-show="saleform.$submitted && saleform.customer_name.$error.minlength ">*Name  Must be Minimum 3 Letters!</span>
+            </div>
+            
+            <div class="orp-input mt10" ng-class="{'has-error': saleform.mobile_no.$invalid && saleform.$submitted}">
+                <input type="number" placeholder="Mobile No." required ng-model="customer_data.mobile_no" name="mobile_no" id="mobile_no" minlength = "10" maxlength ="10" limit-to = "10" >
+                <span class="error-left relative" ng-show="saleform.$submitted && saleform.mobile_no.$error.required">* Mobile No. Required</span>
+                <span class="error-left relative" ng-show="saleform.$submitted && saleform.mobile_no.$error.minlength">* Mobile No. Must be 10 Digit</span>
+                <span class="error-left relative" ng-show="saleform.$submitted && saleform.mobile_no.$error.maxlength">* Mobile No. Must be 10 Digit</span>
+            </div>
+            
+            <div class="orp-input mt10" ng-class="{'has-error': saleform.pincode.$invalid && saleform.$submitted}">
+                <input type="number" placeholder="Pin Code" required ng-model="customer_data.pincode" name="pincode" id="pincode" ng-change="onSearchPincodeChangeHandler()" minlength="6" maxlength="6" limit-to="6">
+                <span class="error-left relative" ng-show="saleform.$submitted && saleform.pincode.$error.required">* Pincode Required</span>
+                <span class="error-left relative" ng-show="saleform.$submitted && saleform.pincode.$error.minlength">* Pincode Must be 6 Digit</span>
+                <span class="error-left relative" ng-show="saleform.$submitted && saleform.pincode.$error.maxlength">* Pincode Must be 6 Digit</span>
             </div>
             
             <div class="orp-select mt10">
-                <label>
-                    <p>State <span>*</span></p>
-                    <select>
-                        <option value="1">Select An Option</option>
-                    </select>
-                </label>
-                
-                <label>
-                    <p>District <span>*</span></p>
-                    <select>
-                        <option value="1">Select An Option</option>
-                    </select>
-                </label>
-            </div>
-            
-            <div class="orp-textarea mt10"><textarea placeholder="Address"></textarea></div>
-            
-        </div>
-        
-        
-        <div class="op_pr_heading mt16">
-            <h1>Product Information</h1>
-        </div>
-        
-        
-        <div class="product_info pb0">
-            <div class="figure">
-                <div class="code_info">
-                    <p>QR Code</p>
-                    <p>REFTG7854785TG</p>
-                </div>
-                
-                <div class="prt">
-                    <div class="cs-left">
-                        <h1>Product #0011</h1>
-                        <p>Code#2544</p>
-                    </div>
-                    <div class="cs-right">
-                        <h1>5000</h1>
-                        <p>Points</p>
-                    </div>
-                </div>
-                
-                <div class="orp-date">
-                    <label>
-                        <p>Date of Sale</p>
-                        <input type="date">
-                    </label>
-                </div>
+                <div class="add-css-select flat-search-select  pt0 selectopt no-padding">
+                    <searchandselect selecteditem="search.stateName" values="stateList" key="Key"
+                    totalrecords="totalStateRecords"
+                    onscroll="onGetSearchSelectDataHandler('fetchStateData', searchKey, pagenumber)">
+                </searchandselect>
             </div>
         </div>
         
-        <div class="scn_more padding16" style="padding-top: 6px !important;">
-            <a href="#/">
-                <div class="thumb"><img src="img/qr_code_barcode.svg" alt=""></div>
-                <div class="desc"><h1>Scan More Product</h1></div>
-            </a>
+        <div class="orp-select mt10">
+            <div class="add-css-select pt0 flat-search-select selectopt no-padding">
+                <searchandselect selecteditem="search.districtName" id='district' values="districtList"
+                key="Key" totalrecords="totalDistrictRecords"
+                onscroll="onGetSearchSelectDataHandler('fetchDistrictData', searchKey, pagenumber)">
+            </searchandselect>
         </div>
-        
-        <div class="cs_orp-bttn padding16">
-            <a class="active" ng-click="otpOpenModel();">SAVE</a>
-        </div>
-        
-    </ion-content>    
+    </div>
     
-    <script id="warranty_section_otp" type="text/ng-template">
-        <ion-modal-view>
-            
-            <div class="orp_model">
-                <div class="model_container">
-                    <button ng-click="otpCloseModel()" class="model_cancel"><i class="material-icons">cancel</i></button>
+    <div class="orp-textarea mt10">
+        <textarea placeholder="Address" ng-model="customer_data.address" name="address" id="address"></textarea>
+    </div>
+    
+</div> -->
+
+
+<div class="op_pr_heading mt16" ng-if="code_list.length > 0">
+    <h1>Product Information</h1>
+</div>
+
+
+<div class="product_info pb0">
+    <div class="figure" ng-repeat="row in code_list">
+        <div class="code_info">
+            <p>QR Code</p>
+            <p>{{row.coupon_code}}</p>
+        </div>
+        
+        <div class="prt">
+            <div class="cs-left">
+                <h1>Product {{row.product_name}}</h1>
+                <p>Code {{row.product_code}}</p>
+            </div>
+            <div class="cs-right">
+                <h1>{{row.points}}</h1>
+                <p>Points</p>
+            </div>
+        </div>
+        
+        <div class="orp-date">
+            <label>
+                <p>Date of Sale</p>
+                <input type="date" ng-model=row.sale_date max="{{currentDate}}">
+            </label>
+        </div>
+    </div>
+</div>
+
+<div class="go-btn mt20 mb20 scan-btn"  >
+    <a ng-click="startScan('scan','')">
+        <img src="img/barcode.svg" alt="">
+        <div class="g-content">
+            <h1 ng-if="code_list.length > 0" >Scan More Product</h1>
+            <h1 ng-if="code_list.length == 0" >Scan Product</h1>
+        </div>
+    </a>
+    
+    <!-- <a class="qr-blur-bdr" >
+        <p>Click here to select serial number manually</p>
+    </a> -->
+    <!-- <a class="qr-blur-bdr" href="#/orptab/orp_manual_serialno">
+        <p>Click here to select serial number manually</p>
+    </a> -->
+</div>
+
+<!-- <div class="scn_more padding16" style="padding-top: 6px !important;" ng-click="startScan('scan','')">
+    <a >
+        <div class="thumb"><img src="img/qr_code_barcode.svg" alt=""></div>
+        <div class="desc">
+            <h1 ng-if="code_list.length > 0">Scan More Product</h1>
+            <h1 ng-if="code_list.length == 0">Scan Product</h1>
+        </div>
+    </a>
+</div> -->
+<!-- ng-click="otpOpenModel();" -->
+<div class="cs_orp-bttn padding16">
+    <!-- <a class="active" type="submit">SAVE</a> -->
+    <input type="submit" value="SAVE" class="active wp100">
+    
+</div>
+
+<!-- <div class="btnn mt32">
+    <input type="submit" value="SAVE" class="active">
+</div> -->
+
+</form>
+
+</ion-content>
+
+<script id="warranty_section_otp" type="text/ng-template">
+    <ion-modal-view>
+        
+        <div class="orp_model">
+            <div class="model_container">
+                <button ng-click="otpCloseModel()" class="model_cancel"><i class="material-icons">cancel</i></button>
+                
+                <form name="form1" novalidate ng-submit="!form1.$invalid && checkOtp()">
                     
                     <div class="mini_container">
-                        <div class="md_heading"><h1>Warranty Section</h1></div>
+                        <!-- <div class="md_heading"><h1>Warranty Section</h1></div> -->
                         
                         <div class="md_body">
-                            <p>Set the product warranty please enter first OTP then submit</p>
-                            <p>Enter your 6 digit OTP number that sent to <span>91+ 98568547845</span></p>
+                            <!-- <p>Set the product warranty please enter first OTP then submit</p> -->
+                            <p>Enter your 6 digit OTP number that sent to <span>+91 {{customer_data.mobile_no}}</span></p>
                             
-                            <div class="orp-input">
-                                <input type="text" placeholder="Enter OTP">
+                            <div class="orp-input" ng-class="{'has-error': form1.otp.$invalid && form1.$submitted}" >
+                                <input type="text" placeholder="Enter OTP" ng-model="data.otp" minlength = "6" maxlength ="6" required limit-to = "6" name="otp" id= "otp">
+                                
+                                <span class="error-left relative" ng-show="form1.$submitted && form1.otp.$error.required" >*Otp Required</span>
+                                <span class="error-left relative" ng-show="form1.$submitted && form1.otp.$error.minlength">*Otp Must be 6 Digit</span>
+                                <span class="error-left relative" ng-show="form1.$submitted && form1.otp.$error.maxlength">*Otp Must be 6 Digit</span>
                             </div>
-                        </div> 
+                        </div>
                     </div>
                     
                     <div class="md_footer">
-                        <button class="fill full">SUBMIT</button>
-                        <button class="trns mt10">Continue Without OTP </button>
+                        <button class="fill full" type = "submit">SUBMIT</button>
+                        <!-- <button class="trns mt10" ng-click="saveDealerSale()">Continue Without OTP </button> -->
                     </div>
-                    
-                    
+                </form>
+                <div class="md_footer">
+                    <!-- <button class="fill full" type = "submit">SUBMIT</button> -->
+                    <button class="trns mt10" ng-click="saveDealerSale('2')">Continue Without OTP </button>
                 </div>
             </div>
-        </ion-modal-view>
-    </script>
+        </div>
+    </ion-modal-view>
+</script>
+<script id="scan-success-model" type="text/ng-template">
+    <ion-modal-view style="background: rgba(0, 0, 0, 0.7);">
+        <ion-content class="padding">
+            <div class="modal-outer padding0">
+                <div class="orp_alerts padding10" ng-class="{'success':result_data.status=='Success'}">
+                    <div class="al_container">
+                        <div class="icon">
+                            <i ng-show="result_data.status=='Success'" class="material-icons">done</i>
+                            <i ng-show="result_data.status=='Error'" class="material-icons">clear</i>
+                        </div>
+                        <div class="al_body">
+                            <h1>{{result_data.status}}</h1>
+                            <h2 ng-show="result_data.status=='Success'" >{{result_data.total_point}}<span> Points Added in Your Wallet</span></h2>
+                            <h2 ng-show="result_data.status=='Error'" ><span> {{result_data.error_message}}</span></h2>
+                        </div>
+                        <div class="al_footer">
+                            <button ng-show="result_data.status=='Success'" ng-click="scanSuccessCloseModel();startScan('scan','')" class="blue_btn">Scan More Product</button>
+                            <button ng-show="result_data.status=='Error'"  ng-click="scanSuccessCloseModel();startScan('scan','')" class="red_btn">Try Again</button>
+                            <a class="green_btn" style="width: 130px; margin-left: 16px;" ng-click="scanSuccessCloseModel()">Close</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ion-content>
+    </ion-modal-view>
+</script>
 </ion-view>

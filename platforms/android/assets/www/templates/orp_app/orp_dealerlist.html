@@ -1,52 +1,52 @@
-<ion-view view-title="My Dealer" name="menu-view" hide-nav-bar="true">
+<ion-view view-title="My Retailer" name="menu-view" hide-nav-bar="true" ng-init = "getDealerList()">
 
-    <ion-header-bar class="opr_ion_header">
-        <div class="cs-left">
-            <button class="back-button" ng-click="goToBackPageHandler()"><i class="material-icons">arrow_back</i></button>
-            <h1 class="orp_title">My Dealer</h1>
-        </div>
-    </ion-header-bar>
+  <ion-header-bar class="opr_ion_header">
+    <div class="cs-left">
+      <a href="#/orptab/orp_dashboard" class="cs-backbtn button button-icon icon ion-android-arrow-back font18 fff"></a>
+      <h1 class="orp_title">My Retailer</h1>
+    </div>
+    <div ng-click="onSeachActionHandler('open')" class="right-nav-btn nav-search">
+      <a menu-toggle="left"><i class="material-icons">search</i></a>
+  </div>
+  <div ng-class="isSearchBarOpen ? 'active' : ''" class="search-filter">
+    <input ng-model = "data.search" type="text" id = "searchData" ng-change = "onSetCurrentPageHandler(); getOrderListData('onLoad')">
+    <a ng-click = "onSeachActionHandler('close')" placeholder = "Search" class="close-filter"><i class="material-icons">keyboard_backspace</i></a>
+  </div>
+</ion-header-bar>
 
+  <ion-content>
 
-    
-    <ion-content>
-        <div class="dealer-list">
-            <div class="figure">
-                <div class="dl_info">
-                    <a class="cs-left" href="#/orptab/orp_dealerdetail">
-                        <div class="fl">g</div>
-                        <div class="naming">
-                            <p>Geeta Foundation Charitable Trust</p>
-                            <p><span>Last Order :</span> 07 Jan 2020 / 5 day ago</p>
-                        </div>
-                    </a>
-                    <div class="cs-right">
-                        <a href="#/"><i class="material-icons">call</i></a>
-                    </div>
-                </div>
-                <a class="dl-add" href="#/orptab/orp_dealerdetail">
-                    <p><span>Address</span><br>5E/7 , B.P., Railway Road, Near Neelam Chowk, NIT Faridabad, Haryana 121001</p>
-                </a>
+    <div class="dealer-list" ng-repeat="row in dealer_list">
+      <div class="figure" ng-click = "dealerData(row.id)" >
+        <div class="dl_info">
+          <!-- href="#/orptab/orp_dealerdetail" -->
+          <a class="cs-left" >
+            <div class="fl">{{row.dr_name?row.dr_name.substring(0,1).toUpperCase():''}}</div>
+            <div class="naming">
+              <p>{{row.dr_name}}</p>
+              <p><span>Contact Person Name:</span> {{row.contact_name}}</p>
+              <p><span>Contact Mobile Number :</span> {{row.contact_mobile_no?row.contact_mobile_no : row.sfa_contact_no}}</p>
             </div>
-
-            <div class="figure">
-                <div class="dl_info">
-                    <a class="cs-left" href="#/orptab/orp_dealerdetail">
-                        <div class="fl">g</div>
-                        <div class="naming">
-                            <p>Geeta Foundation Charitable Trust</p>
-                            <p><span>Last Order :</span> 07 Jan 2020 / 5 day ago</p>
-                        </div>
-                    </a>
-                    <div class="cs-right">
-                        <a href="#/"><i class="material-icons">call</i></a>
-                    </div>
-                </div>
-                <a class="dl-add" href="#/orptab/orp_dealerdetail">
-                    <p><span>Address</span><br>5E/7 , B.P., Railway Road, Near Neelam Chowk, NIT Faridabad, Haryana 121001</p>
-                </a>
-            </div>
-            
+          </a>
+          <div class="cs-right">
+            <a href="tel: {{row.contact_mobile_no?row.contact_mobile_no :row.sfa_contact_no}}" ><i class="material-icons">call</i></a>
+            <!-- href="#/" -->
+          </div>
         </div>
-    </ion-content>
+        <!-- href="#/orptab/orp_dealerdetail" -->
+        <a class="dl-add">
+          <p><span>Address</span><br>{{row.street}} {{row.city}} {{row.district_name}} {{row.state_name}} {{row.pincode}}</p>
+        </a>
+      </div>
+
+    </div>
+    <div class="data-not-found" ng-if="dealer_list.length == 0" >
+      <div class="outer">
+        <div class="innear">
+          <img src="img/data-not-found.svg" alt="">
+          <h2>Data Not Available!</h2>
+        </div>
+      </div>
+    </div>
+  </ion-content>
 </ion-view>

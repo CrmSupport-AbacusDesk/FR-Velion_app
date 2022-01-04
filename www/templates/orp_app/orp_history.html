@@ -1,13 +1,11 @@
-<ion-view view-title="History" hide-nav-bar="true">   
-    
-    
-    <ion-header-bar class="opr_ion_header no_boxshadow">
-        <div class="cs-left">
-            <h1 class="orp_title">History</h1>
-        </div>
+<ion-view view-title="History" hide-nav-bar="true" ng-init = "getHistoryList()">
+
+  <ion-header-bar class="opr_ion_header no_boxshadow">
+    <div class="cs-left">
+      <button class="back-button" ng-click="goToBackPageHandler()"><i class="material-icons">arrow_back</i></button>
+      <h1 class="orp_title">History</h1>
+    </div>
     </ion-header-bar>
-
-
 
 
     <ion-content>
@@ -15,34 +13,59 @@
             <div class="figure">
                 <div class="thumb"><img src="img/redeem-points.svg" alt=""></div>
                 <div class="description">
-                    <p><span>Wallet Points</span> <span>Update : 12 Feb 2019</span></p>
-                    <h1>2652</h1>
+                    <p><span>Wallet Points</span> <span>Update : {{history_list_data.orp_wallet_update_date != '0000-00-00 00:00:00'?dateFormat(history_list_data.orp_wallet_update_date):dateFormat(todaysDate)}}</span></p>
+                    <h1>{{history_list_data.orp_wallet_point}}</h1>
                 </div>
             </div>
         </div>
-        
-        <div class="red_history">
-            <div class="figure">
+
+        <div class="red_history" ng-repeat="row in history_list_data.history_list">
+            <div class="figure" ng-if="(row.status == 'Pending' || row.status == 'Approved') && row.gift_status == 'Pending'" >
                 <div class="top-info">
                     <div class="cs-left">
                         <div class="icon"><i class="material-icons">call_made</i></div>
                         <div class="info">
                             <p>Requested Send</p>
-                            <p>Wrist watch</p>
+                            <p>{{row.offer_gift_name}}</p>
                         </div>
                     </div>
                     <div class="cs-right">
-                        <h1>500</h1>
+                        <h1>{{row.offer_gift_points}}</h1>
                         <p>Points</p>
                     </div>
                 </div>
                 <div class="date-info">
-                    <p>12 April 2019</p>
-                    <p class="pending">Pending</p>
+                    <p>{{dateFormat(row.date_created)}}</p>
+                    <p ng-if="row.status == 'Pending' " class="pending">Pending</p>
+                    <p ng-if="row.status == 'Approved'" class="received">Approved</p>
                 </div>
             </div>
 
-            <div class="figure">
+            <div class="figure" ng-if=" row.status == 'Reject'">
+                <div class="top-info">
+                    <div class="cs-left">
+                        <div class="icon"><i class="material-icons">call_received</i></div>
+                        <div class="info">
+                            <p>Received Points</p>
+                            <p>{{row.offer_gift_name}}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="cs-right">
+                        <h1>{{row.offer_gift_points}}</h1>
+                        <p>Points</p>
+                    </div>
+                </div>
+                <div class="date-info">
+                    <p>{{dateFormat(row.date_created)}}</p>
+                    <p class="reject">Rejected</p>
+                </div>
+                <div class="rsn-info">
+                    <p>{{row.reject_reason}}</p>
+                </div>
+            </div>
+
+            <!-- <div class="figure" ng-if=" row.status == 'Reject'">
                 <div class="top-info">
                     <div class="cs-left">
                         <div class="icon"><i class="material-icons">call_received</i></div>
@@ -52,57 +75,65 @@
                         </div>
                     </div>
                     <div class="cs-right">
-                        <h1>25</h1>
+                        <h1>{{row.offer_gift_points}}</h1>
                         <p>Points</p>
                     </div>
                 </div>
                 <div class="date-info">
                     <p>11 April 2018 | 11 : 30 am</p>
                 </div>
-            </div>
+            </div> -->
 
-            <div class="figure">
-                <div class="top-info">
+            <div class="figure" ng-if=" row.gift_status == 'Received'">
+                <div class="top-info" ng-click="getHistoryDetail(row.id)">
                     <div class="cs-left">
                         <div class="icon"><img src="img/dft_product.svg" alt=""></div>
                         <div class="info">
-                            <p>Wrist watch</p>
-                            <p>Offer Name #0001</p>
+                            <p>{{row.offer_gift_name}}</p>
+                            <p>{{row.offer_name}}</p>
                         </div>
                     </div>
                     <div class="cs-right">
-                        <h1>500</h1>
+                        <h1>{{row.offer_gift_points}}</h1>
                         <p>Points</p>
                     </div>
                 </div>
                 <div class="date-info">
-                    <p>Received on : 14 April 2019</p>
+                    <p>Received on : {{dateFormat(row.received_date)}}</p>
                     <p class="received">Received </p>
                 </div>
             </div>
 
-            <div class="figure">
-                <div class="top-info">
+            <div class="figure" ng-if="row.gift_status == 'Shipped'">
+                <div class="top-info"  ng-click="getHistoryDetail(row.id)">
                     <div class="cs-left">
                         <div class="icon"><img src="img/dft_product.svg" alt=""></div>
                         <div class="info">
-                            <p>Wrist watch</p>
-                            <p>Offer Name #0001</p>
+                            <p>{{row.offer_gift_name}}</p>
+                            <p>{{row.offer_name}}</p>
                         </div>
                     </div>
                     <div class="cs-right">
-                        <h1>500</h1>
+                        <h1>{{row.offer_gift_points}}</h1>
                         <p>Points</p>
                     </div>
                 </div>
                 <div class="date-info">
-                    <a href="#/orptab/orp_shipped_detail"><i class="material-icons">done</i> Received</a>
+                    <a ng-click="changeStatus(row.id)"><i class="material-icons">done</i> Received</a>
                     <p class="shipped">Shipped</p>
                 </div>
             </div>
 
         </div>
-        
+        <div class="data-not-found" ng-if="!isRequestInProcess && history_list_data.history_list.length == 0" >
+            <div class="outer">
+                <div class="innear">
+                    <img src="img/data-not-found.svg" alt="">
+                    <h2>No Transaction History Found!</h2>
+                </div>
+            </div>
+        </div>
+
     </ion-content>
 </ion-view>
 

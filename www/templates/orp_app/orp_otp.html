@@ -4,26 +4,45 @@
             <div class="logo text-center">
                 <img src="img/okaya_orp_logo.png" alt="">
             </div>
-            
+
             <div class="login-form">
-                <div class="list">
-                    <h2 class="b_head">Verify Phone Number <a href="#/orp_login"> <i class="material-icons">trending_flat</i> <span>Back</span></a></h2>
-                    <p>Check your SMS message. We've sent you the OTP at <strong style="color: #FFA200">+91 8657485963</strong></p>
-                   
-                    
+                <div class="list" ng-if="showMobile==true">
+                    <h2 class="b_head">Change Password <a href="#/orp_login"> <i class="material-icons fff">trending_flat</i> <span class="fff">Back</span></a></h2>
+                    <p>Enter your mobile number, we will send you OTP to verify.</p>
+                    <form name="form1" novalidate ng-submit="!form1.$invalid && getOTP()">
+
+                        <label class="item item-input item-floating-label" ng-class="{'has-error': form1.typeId.$invalid && form1.$submitted}" >
+                            <i class="material-icons">person</i>
+                            <input type="number" placeholder="Mobile No." required ng-model="data.mobileNo" minlength = "10" maxlength ="10" limit-to = "10" name="mobileNo" id= "mobileNo">
+                        </label>
+                        <span class="error-left relative" ng-show="form1.$submitted && form1.mobileNo.$error.required" >* Mobile No. Required</span>
+                        <span class="error-left relative" ng-show="form1.$submitted && form1.mobileNo.$error.minlength">* Mobile No. Must be 10 Digit</span>
+                        <span class="error-left relative" ng-show="form1.$submitted && form1.mobileNo.$error.maxlength">* Mobile No. Must be 10 Digit</span>
+
+                        <div class="btnn mt45 arrow-btn">
+                            <!-- <input type="submit" ng-click="getOTP()" value="CONFIRM"/> -->
+                            <button  type="submit">CONFIRM</button>
+                        </div>
+                    </form>
+
+
+                </div>
+
+                <div class="list" ng-show="showMobile==false">
+
+                    <h2 ng-if="!loginData && !loginData.loginId" class="b_head">Verify Phone Number <a href="#/orp_login">
+                      <i class="material-icons">trending_flat</i> <span>Back</span></a>
+                    </h2>
+
+                    <p>Check your SMS message. We've sent you the OTP at <strong style="color: #FFA200">+91 {{data.mobileNo}}</strong></p>
                     <div class="otp_input">
-                        <input type="tel" tabindex="1">
-                        <input type="tel" tabindex="2">
-                        <input type="tel" tabindex="3">
-                        <input type="tel" tabindex="4">
-                        <input type="tel" tabindex="5">
-                        <input type="tel" tabindex="6">
+                        <input type="tel" ng-model="data.otp" limit-to = "6" placeholder="Enter OTP">
                     </div>
 
-                    <p>Didn't receive SMS ? <a href="" style="color: #0044FF; font-weight: 600;">Resend Code</a></p>
-                    
-                    <div class="btnn mt45">
-                        <input type="submit" value="CONFIRM"/>
+                    <p >Didn't receive SMS ? <a style="color: #0044FF; font-weight: 600;" ng-click="getOTP()">Resend Code</a></p>
+
+                    <div class="btnn arrow-btn mt45">
+                        <button type="submit" ng-click="checkOtp()">CONFIRM</button>
                     </div>
 
                 </div>

@@ -1,0 +1,53 @@
+<ion-view view-title="Contact Us" hide-nav-bar="true">
+
+
+    <ion-header-bar class="opr_ion_header">
+        <div class="cs-left">
+            <button class="back-button" ng-click="goToBackPageHandler()"><i class="material-icons">arrow_back</i></button>
+            <h1 class="orp_title">Contact Us</h1>
+        </div>
+    </ion-header-bar>
+
+    <ion-content>
+        <div class="hp100">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7000.528017681682!2d77.08140062490808!3d28.68174814201328!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390d0472aa47d411%3A0xa0f0a6e04ca9080!2sMicrotek%20International%20Pvt%20Ltd%20(Head%20Office)!5e0!3m2!1sen!2sin!4v1614325971474!5m2!1sen!2sin"  width="600" height="100%" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+        </div>
+        <!-- <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d224346.6552779072!2d77.207881!3d28.5271986!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390d0412dc3ffffb%3A0x398775a97277a2f8!2sOkaya%20Power%20Pvt.%20Ltd.!5e0!3m2!1sen!2sin!4v1594029223821!5m2!1sen!2sin" width="600" height="100%" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe> -->
+
+        <div class="contact_us">
+            <div class="contact_us_bg">
+                <div class="contact-info">
+                    <i class="material-icons">room</i>
+                    <div>
+                        <h2>Microtek International Pvt. Ltd</h2>
+                        <p>H-57, Udyog Nagar, Rohtak Road, Delhi-110041</p>
+                    </div>
+                </div>
+                <div class="saprater"></div>
+
+                <div class="contact-info">
+                    <p><strong>Microtek Contact</strong></p>
+                </div>
+
+                <ng-container ng-repeat='row in AssignExecutiveList' >
+                  <div class="contact-info">
+                      <i class="material-icons">person</i>
+                      <p>{{row.name}}</p>
+                  </div>
+
+
+                  <div class="contact-info">
+                    <a href="tel: {{row.mobile_no}}" >
+                      <i class="material-icons">call</i>
+                      <span class="blue-clr">{{row.mobile_no}}</span>
+                  </a>
+                  </div>
+
+                </ng-container>
+
+
+
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

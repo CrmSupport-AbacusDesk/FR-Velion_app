@@ -5,16 +5,13 @@
     </ion-nav-buttons>
     
     <ion-nav-buttons side="right" class="custom-right-btn">
-        <div ng-click = "onSeachActionHandler('open')" class="right-nav-btn nav-search">
-            <a menu-toggle="left"><i class="material-icons">search</i></a>
-        </div>
-        <div ng-class="isSearchBarOpen ? 'active' : ''" class="search-filter">
-            <input ng-model = "data.search" type="text" id = "searchData" ng-change = "travelFilter(data.search)">
-            <a ng-click = "onSeachActionHandler('close')" placeholder = "Search" class="close-filter"><i class="material-icons">keyboard_backspace</i></a>
+        <div  class="right-nav-btn nav-search">
+            <a menu-toggle="left" ng-click="onShowModel($event, 'travel')"><i class="material-icons">more_vert</i></a>
         </div>
     </ion-nav-buttons>
+    
     <ion-content>
-        <div class="sticky bg-white" ng-if="loginData.designation_id > 1">
+        <div class="sticky bg-white">
             <div ng-if="loginData.loginTeamExist == 'Yes'" class="round-tab">
                 <ul>
                     <li ng-click = "onModifyTypeHandler('myTravelPlan')" ng-class = "$root.modelPlanType == 'myTravelPlan' ? 'active' : ''" >
@@ -39,16 +36,12 @@
                         <span>Travel Date</span>
                     </li>
                 </ul>
-               
-                <div class="left-auto" ng-if="$root.modelPlanType == 'myTravelPlan'">
-                    <!-- <a class="claim-btn" ng-click="goToExpDetail(val.expenseId)" ng-if="val.expenseId != '0'">Expense Detail</a> -->
-                    <a ng-click="removeTravelPlan(val.id)" class="del-btn set-pos"><i class="material-icons">delete_sweep</i></a>
+                <div class="left-auto">
+                    <a class="claim-btn" ng-click="goToExpDetail(val.expenseId)" ng-if="val.expenseId != '0'">Expense Detail</a>
                 </div>
             </div>
             <div class="pdlr" ng-click="getTravelPlanDetail(val.id)">
-                <div ng-if="$root.modelPlanType == 'teamTravelPlan'" class="cs-text">
-                    <p>Created By: <strong>{{val.createdByName}}</strong></p>
-                </div>
+                
                 <div class="cs-grid pt10">
                     <div ng-if="val.approval.length == 0" class="bdr-field wp100">
                         <span>No Approval Data Found!</span>
